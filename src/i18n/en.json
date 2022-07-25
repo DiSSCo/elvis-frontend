@@ -1,0 +1,237 @@
+{
+  "approve": "Approve",
+  "undo_approval": "Undo approval",
+  "cancel": "Cancel",
+  "save": "Save",
+  "update": "Update",
+  "delete": "Delete",
+  "remove": "Remove",
+  "withdraw": "Withdraw",
+  "logout": "Log Out",
+  "login": "Log In",
+  "password": "Password",
+  "password_repeat": "Repeat Password",
+  "more_info": "More info...",
+  "per_page": "per page",
+  "close": "Close",
+  "status": {
+    "available": "Available",
+    "draft": "Draft",
+    "being_handled": "Being handled",
+    "approved": "Approved",
+    "submitted": "To be evaluated",
+    "toBeChecked": "To be checked",
+    "withdrawn": "Withdrawn",
+    "ended": "Ended",
+    "closed": "Closed",
+    "scoring": "Scored",
+    "class": {
+      "available": "is-available",
+      "ended": "is-ended",
+      "being_handled": "is-handled",
+      "draft": "is-draft",
+      "approved": "is-approved",
+      "submitted": "is-submitted",
+      "withdrawn": "is-withdrawn",
+      "toBeChecked": "is-to-be-checked",
+      "scoring": "is-scored"
+    }
+  },
+  "no_results": "No results...",
+
+  "footer": {
+    "privacy_statement": "Privacy Statement",
+    "version": "Version"
+  },
+
+  "profile": {
+    "gender": "Gender",
+    "name": "Name",
+    "birthday": "Date of birth",
+    "email": "Email address",
+    "institution": "Institution",
+    "employed_by": "Employed by participating institution",
+    "nationality" : "Nationality",
+    "home_institution" : "Employed by other institution",
+    "country_other_institution" : "Country of other institution",
+    "orcid": "ORCID iD",
+    "my_profile": "My Profile",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email_address": "Email address",
+    "application_role": "Application Role",
+    "status": "Status",
+    "save": "Save profile",
+    "edit": "Edit profile"
+  },
+  "admin": {
+    "settings": "Administrator settings"
+  },
+  "navigation": {
+    "institutions": "Institutions",
+    "requesters": "Requesters",
+    "collections": "Collections",
+    "facilities": "Facilities",
+    "calls": "Calls",
+    "requests": "Requests"
+  },
+  "search": {
+    "request": "Search for requests",
+    "requester": "Search for requesters",
+    "institution": "Search for institutions",
+    "calls": "Search for calls",
+    "facilities": "Search for facilities and instruments"
+  },
+  "tooltip": {
+    "file_upload": "File uploads are limited with a maximum size of 4 Mb"
+  },
+  "registration": {
+    "register": "Register",
+    "register_now": "Register now",
+    "thank_you": "Thank you for registering.",
+    "SUCCESS": "User succesfully registered",
+    "USER_ALREADY_EXISTS": "User with the specified email address already exists",
+    "INCORRECT_PARAMETERS": "User with the specified email address already exists",
+    "steps": "Registration steps",
+    "step1": "Register in the form on the left",
+    "step2": "You will receive a confirmation email",
+    "step3": "Sign into ELViS"
+  },
+  "request": {
+    "va": "Virtual Access",
+    "ta": "Transnational Access",
+    "requests": "Requests",
+    "show_all_requests": "All requests",
+    "show_requests_my_institution": "Requests assigned to me",
+    "show_my_requests": "My own requests",
+    "request_by": "Request by",
+    "back_to_request": "Back to request",
+    "back_to_requests": "Back to requests",
+    "comments": "Comments",
+    "comments_section_closed": "Comments section closed",
+    "add_comment": "Add comment",
+    "score": "Score application",
+    "view_scores": "View scores",
+    "costs": "Costs",
+    "download_costs": "Download Costs calculation (document)",
+    "upload_costs": "Upload Costs calculation (document)",
+    "download_costs_template": "Download the template",
+    "impact": "Impact",
+    "impact_info": "Information on the impact of the request",
+    "request_info": "All information you fill in here is stored in real time.",
+    "request_va_more_info": "<p>All information you fill in here is stored in real time, so you can always come back to this form and finish it at a later stage. Only after you hit the 'Submit'-button at the end of the form the request gets forwarded to VA Coordinators for evaluation. Keep in mind that the limit for text fields is 2000 characters.</p><p>After submitting the form, the registered request will be available in the overview of all requests, which can be reached via the 'Requests'-option in the main menu. Then VA coordinators involved will be able to react on it in order to fine-tune the request in cooperation with the requester. During this evaluation process the original requester stays in the lead for changing/adding information in the request registration. When the VA coordinators are satisfied with the information provided for their institution and have accepted the part of the request for their institution, the request is accepted and processed.</p>",
+    "request_ta_more_info": "<p>All information you fill in here is stored in real time, so you can always come back to this form and finish it at a later stage. Only after you hit the 'Submit'-button at the end of the form the request gets forwarded to TA Coordinators for evaluation. Keep in mind that the limit for text fields is 2000 characters.</p><p>After submitting the form, the registered request will be available in the overview of all requests, which can be reached via the 'Requests'-option in the main menu. Then TA coordinators involved will be able to react on it in order to fine-tune the request in cooperation with the requester. During this evaluation process the original requester stays in the lead for changing/adding information in the request registration. When the TA coordinators are satisfied with the information provided for their institution and have accepted the part of the request for their institution, the request is accepted and processed.</p>",
+    "institutions_involved": "Institutions involved",
+    "add_institution": "Add another institution",
+    "request_status": "Status",
+    "submit_update_title": "Is your request ready to be updated?",
+    "submit_update_text_va": "If you have corrected and/or completed your request according to the instructions of the VA coordinators as provided via their comments, you can submit your changed request for approval again via the “Update request”-button. This is NOT yet the final submission. The final Submission will be dealt with via peer review after all VA coordinators from the digitising institutes involved have approved your request.",
+    "submit_update_text_ta": "If you have corrected and/or completed your request according to the instructions of the TA coordinators as provided via their comments, you can submit your changed request for approval again via the “Update request”-button. This is NOT yet the final submission. Your request has to be approved by TA coordinators. Until then you still can update your request according to his/her comments. The final assessment of your request will be dealt with via scoring after the call has been closed.",
+    "update_request": "Update request",
+    "submit_title": "Is your request ready to be made public?",
+    "submit_text": "If you submit, than your submission will become available for the VA coordinators to comment on and to approve. This is NOT yet the final submission. The final submission will be dealt with via review after all VA coordinators from the digitising institutions involved have approved your request.",
+    "submit_request": "Submit for evaluation",
+    "no_requests_found": "No requests found",
+    "request_approve_question": "Are you sure you approve this request?",
+    "request_unapprove_question": "Are you sure you no longer approve this request?"
+  },
+
+  "scores": {
+    "reviewer": "Reviewer",
+    "methodology": "Methodology",
+    "research_excellence": "Research Excellence",
+    "support_statement": "Support Statement",
+    "justification": "Justification",
+    "gains_outputs": "Expected Gains",
+    "merit": "Scientific Merit",
+    "societal_challenge": "Societal Challenge",
+    "comments": "Comments",
+    "total": "Total",
+    "average_weighted_total": "Weighted Total",
+    "request_title": "Request Title"
+  },
+
+  "call": {
+    "new_request": "Create new request",
+    "calls": "Calls",
+    "new_call": "New call",
+    "no_calls_found": "No calls found",
+    "call_save": "Save call",
+    "va": "Virtual Access",
+    "ta": "Transnational Access",
+    "back_to_calls": "Back to calls"
+  },
+  "institution": {
+    "institutions": "Institutions",
+    "name": "Name",
+    "cetaf": "CETAF identifier",
+    "coordinators": "Coordinator(s)",
+    "no_institutions_found": "No institutions found",
+    "no_people_found": "No people found",
+    "institution_save": "Save institution",
+    "back_to_institutions": "Back to institutions"
+  },
+  "facility": {
+    "facilities": "Research & Digitisation facilities",
+    "no_facilities_found": "No facilities found",
+    "no_instruments_found": "No instruments found",
+    "new_facility": "Create new facility",
+    "facility_save": "Save facility"
+  },
+  "requester": {
+    "requesters": "Requesters",
+    "no_requesters_found": "No requesters found",
+    "back_to_requesters": "Back to requesters"
+  },
+  "help": {
+    "title": "Questions and Feedback",
+    "sub1": "The helpdesk is a separate system from ELViS. Your email will be turned into a ticket in the helpdesk, and you will receive an automated confirmation message that your ticket has been received and that it will be dealt with as soon as possible. The message will contain a link for viewing the progress status of your ticket.",
+    "sub2": "The helpdesk team are committed to answering your queries in a timely and efficient manner (at least within 3 days of submitting your request), but please be aware that response times may vary during busy times.",
+    "sub3": "Please be aware of which types of queries the helpdesk deals with before submitting(see table below).",
+    "elaboration": "What happens when I have emailed the helpdesk?",
+    "extra_note": "Note before submitting your ticket",
+    "form_title": "You are welcome to use the form below to ask for help or to give your feedback.",
+    "subject": "Subject",
+    "comment": "Comment or question",
+    "submit": "Submit",
+    "footer": "Your suggestions for improvements or new functionality might be made public. For example they may be put in GitHub to aid further development of the service."
+  },
+  "file_handling": {
+    "choose_file": "Choose file",
+    "start_upload": "Start upload",
+    "drop_files": "Drop your file(s) here or click to upload",
+    "limit": "The filesize exceeds {limit} Mb, please upload a smaller file",
+    "upload_error": "Something went wrong uploading the form, please try again",
+    "by": "By"
+  },
+  "error_handling": {
+    "400": {
+      "title": "Bad request",
+      "description": "Your browser made a request that the server could not understand..."
+    },
+    "401": {
+      "title": "Not authorized",
+      "description": "You are not authorized to view this content..."
+    },
+    "403": {
+      "title": "Forbidden",
+      "description": "You don't have permission to access or edit this content..."
+    },
+    "404": {
+      "title": "Page not found",
+      "description": "The page you are looking for could not be found..."
+    },
+    "500": {
+      "title": "Server error",
+      "description": "The server encountered a temporary error and could not complete your request. Please refresh the page or try again in 30 seconds..."
+    },
+    "502": {
+      "title": "Server error",
+      "description": "The server encountered a temporary error and could not complete your request. Please refresh the page or try again in 30 seconds..."
+    },
+    "default": {
+      "title": "Error",
+      "description": "Something went wrong. You could try to refresh the page or use the Back button..."
+    }
+  }
+}

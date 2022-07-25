@@ -1,0 +1,98 @@
+{
+  "data": [
+    {
+      "type": "FieldRow",
+      "id": "email",
+      "label": "profile.email",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {
+          "editable": false
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "gender",
+      "label": "profile.gender",
+      "options": {
+        "field": "RadioField",
+        "fieldOptions": {
+          "options": ["other", "male", "female"]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "firstName",
+      "label": "profile.first_name",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {
+          "errorMessage": "Please enter a first name"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "lastName",
+      "label": "profile.last_name",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {
+          "errorMessage": "Please enter a last name"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "nationality",
+      "label": "profile.nationality",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "Choose a nationality",
+          "options": [],
+          "withEmptyOption": true
+        }
+      }
+    },   
+    {
+      "type": "FieldRow",
+      "id": "relatedInstitutionName",
+      "label": "profile.employed_by",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "Choose an institution",
+          "options": [],
+          "withEmptyOption": true
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "homeInstitutionName",
+      "label": "profile.home_institution",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {
+          "placeHolder": "Please enter the name of an institution"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "countryOtherInstitution",
+      "label": "profile.country_other_institution",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "Choose the country of your institution",
+          "options": [],
+          "withEmptyOption": true
+        }
+      }
+    }
+  ]
+}

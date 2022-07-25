@@ -1,0 +1,113 @@
+{
+  "general": [
+    {
+      "type": "FieldRow",
+      "id": "nameEng",
+      "label": "Facility name (English)",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {         
+          "errorMessage": "Please fill in a name for this facility"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "nameLocal",
+      "label": "Facility name (Local)",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {
+          "maxlength": 500
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "institution_address",
+      "label": "Facility address",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "Choose a facility address",
+          "options": []
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "facilityType",
+      "label": "Facility type",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "Choose a facility type",
+          "options": [
+            "Lab",
+            "Digitisation facility",
+            "Other scientific / R&D facilities"
+          ]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "facilityDescription",
+      "label": "Description",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4          
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "siteUrl",
+      "label": "Url to website (optional)",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 1,
+          "isHtml": true,
+          "maxlength": 500
+        }
+      }
+    }    
+  ],
+  
+  "instruments": [
+    {
+      "type": "FieldGroupRepeatable",
+      "id": "instruments",
+      "label": "Instruments and services",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "name",
+          "label": "Name (English)",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "description",
+          "label": "Description",
+          "options": {
+            "field": "TextField",
+            "fieldOptions": {
+              "rows": 4              
+            }
+          }
+        }
+      ],
+      "options": {
+        "asTable": true
+      }
+    }
+  ]
+}

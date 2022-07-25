@@ -1,0 +1,176 @@
+.box {
+  border-radius: 0;
+  color: $black;
+}
+
+input,
+textarea,
+select,
+.input,
+.taginput .taginput-container.is-focusable,
+.textarea,
+.select select,
+.datepicker .dropdown .input[readonly],
+.datepicker .dropdown .input[readonly]:focus {
+  border-radius: 0;
+  border: 1px solid $grey;
+  box-shadow: none;
+  height: 2.5em;
+  font-size: 1rem;
+  flex: 1;
+  outline: none;
+}
+
+[disabled]{
+  color: $grey-dark!important;
+}
+
+textarea {
+  padding: .5em;
+  height: auto;
+}
+
+.button {
+  &.is-rounded {
+    width: 2.5em;
+  }
+  &.is-primary {
+    background-color: $secondary;
+    border-color: transparent;
+    color: $black;
+
+    &:active,
+    &:hover,
+    &:focus {
+      color: $black;
+      background-color: darken($secondary, 20%);
+      box-shadow: none;
+    }
+  }
+
+  &.is-secondary {
+    background-color: $blue;
+    border-color: transparent;
+    color: $white !important;
+
+    &:active,
+    &:hover,
+    &:focus {
+      color: $white;
+      background-color: darken($blue-dark, 10%);
+      box-shadow: none;
+    }
+  }
+
+  &.is-primary[disabled],
+  &.is-secondary[disabled] {
+    background-color: $grey;
+  }
+}
+
+i {
+  font-family: 'feather';
+  font-style: normal;
+}
+
+::v-deep .row.disabled {
+  pointer-events: none;
+}
+
+.b-table {
+  .is-hoverable .row td {
+    cursor: pointer;
+  }
+
+  .row {
+    &:hover {
+      td {
+        background: $grey-xlight;       
+      }
+    }
+
+    td {
+      padding-top: 1em;
+      padding-bottom: 1em;
+      vertical-align: middle;
+      font-size: 14px;
+      flex-flow: column wrap;
+      word-break: break-word;
+
+      i {
+        color: $grey-dark;
+      }
+
+      .size-up-to-tablet & {
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+
+        .date,
+        .type {
+          text-align: right;
+          color: $grey-dark;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}
+
+.switch input[type=checkbox]+.check {
+  background: $grey;
+}
+
+input[type="search"i]::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.input:focus,
+.taginput .taginput-container.is-focusable:focus,
+.textarea:focus,
+.select select:focus,
+.is-focused.input,
+.taginput .is-focused.taginput-container.is-focusable,
+.is-focused.textarea,
+.select select.is-focused,
+.input:active,
+.taginput .taginput-container.is-focusable:active,
+.textarea:active,
+.select select:active,
+.is-active.input,
+.taginput .is-active.taginput-container.is-focusable,
+.is-active.textarea,
+.select select.is-active {
+  box-shadow: none;
+}
+
+
+.input::-webkit-input-placeholder,
+.taginput .taginput-container.is-focusable::-webkit-input-placeholder,
+.textarea::-webkit-input-placeholder,
+.select select::-webkit-input-placeholder {
+  color: $grey-xdark;
+}
+
+ .tabs li a {
+  border-bottom: 5px solid transparent;
+}
+.tabs li.is-active a,
+.tabs li:hover a {
+  border-bottom: 5px solid $yellow;
+}
+
+.control.has-icons-left .icon,
+.control.has-icons-right .icon {
+  color: $grey-dark;
+}
+
+.b-tooltip {
+  z-index: 99999;
+  &.is-dark .tooltip-content * {   
+    color: $white!important;
+  }
+}
+
+.loading-overlay {
+  z-index: 100000;
+}

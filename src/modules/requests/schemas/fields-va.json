@@ -1,0 +1,384 @@
+{
+  "general": [
+    {
+      "type": "FieldRow",
+      "id": "request_type",
+      "label": "Request type",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {
+          "editable": false,
+          "placeHolder": "Virtual Access"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "subject",
+      "label": "Request title",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {         
+          "errorMessage": "Please fill in a title for this request"
+        }
+      }
+    },    
+    {
+      "type": "FieldRow",
+      "id": "abstract",
+      "label": "Abstract",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "people_involved",
+      "label": "People involved",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    }
+  ],
+  "impact": [
+    {
+      "type": "FieldRow",
+      "id": "impact_1",
+      "label": "What field(s) of research or problem does your request support / address and how?",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "impact_2",
+      "label": "How does your request address the Horizon 2020 societal challenges?",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "impact_3",
+      "label": "Describe any areas of innovation in your proposal, either in workflows, data or the research it will enable.",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "impact_4",
+      "label": "Who do you expect to be the users of the data (please include all groups, not just scientific research users)?",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "impact_5",
+      "label": "How might you communicate with potential users of the data?",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    }
+  ],
+  "institutions": [
+    {
+      "type": "FieldGroupRepeatable",
+      "id": "collections",
+      "label": "Collection(s) involved",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "name",
+          "label": "Collection name",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "specimens_amount",
+          "label": "Number of specimens to digitise",
+          "options": {
+            "field": "NumberField",
+            "fieldOptions": {
+              "maxlength": 500
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "preservation_type",
+          "label": "Preservation type",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500
+            }
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "type": "FieldRow",
+      "id": "further_details",
+      "label": "Further details",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldGroupRepeatable",
+      "id": "facilities",
+      "label": "Facilities and workflow",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "titles",
+          "label": "Facilities required",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "workflow",
+          "label": "Proposed workflow",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500,
+              "tooltip": "Both the digitisation AND the data release are to be done by the digitising institution(s), not by the proposer(s). This is to ensure efficient and consistent workflows and data"
+            }
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "type": "FieldRow",
+      "id": "metadata",
+      "label": "Data and/or metadata fields and formats proposed as outputs",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldGroupRepeatable",
+      "id": "data_storage",
+      "label": "Data storage and release",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "platform_name",
+          "label": "Platform for public data release",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500,
+              "tooltip": "Data release should be on established institutional or global platforms with longevity, e.g. GBIF, Zenodo, GenBank. Data release cannot be via citizen science platforms (although they could be used to serve data for uses subsequent to VA projects)"
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "details",
+          "label": "Further details",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "cms",
+          "label": "Data Storage system(s)",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500,
+              "tooltip": "e.g. Collections Management and/or Media Asset Management systems"
+            }
+          }
+        },
+        {
+          "type": "FieldGroup",
+          "label": "File formats",
+          "fields": [
+            {
+              "type": "FieldRow",
+              "id": "formats_csv",
+              "label": "csv",
+              "options": {
+                "field": "CheckboxField",
+                "fieldOptions": {},
+                "showLabel": false
+              }
+            },
+            {
+              "type": "FieldRow",
+              "id": "formats_jpeg",
+              "label": "jpeg",
+              "options": {
+                "field": "CheckboxField",
+                "fieldOptions": {},
+                "showLabel": false
+              }
+            },
+            {
+              "type": "FieldRow",
+              "id": "formats_png",
+              "label": "png",
+              "options": {
+                "field": "CheckboxField",
+                "fieldOptions": {},
+                "showLabel": false
+              }
+            },
+            {
+              "type": "FieldRow",
+              "id": "formats_tiff",
+              "label": "tiff",
+              "options": {
+                "field": "CheckboxField",
+                "fieldOptions": {},
+                "showLabel": false
+              }
+            },
+            {
+              "type": "FieldRow",
+              "id": "formats_txt",
+              "label": "txt",
+              "options": {
+                "field": "CheckboxField",
+                "fieldOptions": {},
+                "showLabel": false
+              }
+            },
+            {
+              "type": "FieldRow",
+              "id": "formats_xlxs",
+              "label": "xlxs",
+              "options": {
+                "field": "CheckboxField",
+                "fieldOptions": {},
+                "showLabel": false
+              }
+            },
+            {
+              "type": "FieldRow",
+              "id": "formats_zip",
+              "label": "zip",
+              "options": {
+                "field": "CheckboxField",
+                "fieldOptions": {},
+                "showLabel": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "FieldRow",
+          "id": "other_format",
+          "label": "Other format",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "maxlength": 500
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "info",
+          "label": "Information on storage type(s)",
+          "options": {
+            "field": "TextField",
+            "fieldOptions": {
+              "rows": 4
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "additional_info",
+          "label": "Additional information",
+          "options": {
+            "field": "TextField",
+            "fieldOptions": {
+              "rows": 4
+            }
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "type": "FieldRow",
+      "id": "license",
+      "label": "License type",
+      "options": {
+        "field": "RadioField",
+        "fieldOptions": {
+          "options": [
+            "CC0",
+            "CC-BY"
+          ],
+          "external": [
+            "https://creativecommons.org/publicdomain/zero/1.0/",
+            "https://creativecommons.org/licenses/by/4.0"
+          ]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "license_timeline",
+      "label": "Proposed timeline for data release",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4,
+          "tooltip": "Data release should take place as projects proceed, or at the latest immediately after completion- reasons for longer timescales should be clearly stated. It is unlikely that projects will be prioritised if data release is subject to legal or other compliance restrictions (e.g. human remains), or is dependent on work outside the scope of the funded project (e.g. would not be released until substantial further work is undertaken)"
+        }
+      }
+    }
+  ]
+}

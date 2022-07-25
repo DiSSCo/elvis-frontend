@@ -1,0 +1,191 @@
+{
+  "name": [
+    {
+      "type": "FieldRow",
+      "id": "name",
+      "label": "Institution Name",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {}
+      }
+    }   
+  ],
+  "general": [
+    {
+      "type": "FieldRow",
+      "id": "coordinating_taf",
+      "label": "Coordinating TAF",
+      "options": {
+        "field": "RadioField",
+        "fieldOptions": {
+          "options": [
+            true,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "country",
+      "label": "Country",
+      "options": {
+        "field": "LinkField",
+        "fieldOptions": {
+          "isSingleLink": true,
+          "errorMessage": "Please select a country for this institution",         
+          "placeHolder": "Select country"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "description",
+      "label": "Description",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4,          
+          "isHtml": true
+        }
+      }
+    }
+  ],
+  "address": [
+    {
+      "type": "FieldRow",
+      "id": "street",
+      "label": "Street",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {}
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "number",
+      "label": "Street number",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {}
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "zipCode",
+      "label": "Zipcode",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {}
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "city",
+      "label": "City",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {}
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "contactPerson",
+      "label": "Contact person",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {}
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "contactPersonMail",
+      "label": "Contact person email",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {}
+      }
+    }
+  ],
+  "affiliatedLocations": [
+    {
+      "type": "FieldGroupRepeatable",
+      "id": "aff_address",
+      "label": "",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "name",
+          "label": "Location name",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "type",
+          "label": "Type of location",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "street",
+          "label": "Street",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "number",
+          "label": "Street number",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "zipcode",
+          "label": "Zipcode",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "city",
+          "label": "City",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "contact_person",
+          "label": "Contact person",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "contact_person_email",
+          "label": "Contact person email",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        }
+      ]
+    }
+  ]
+}

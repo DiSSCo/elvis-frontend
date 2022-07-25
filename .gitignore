@@ -1,0 +1,10 @@
+node_modules
+
+nginx
+
+src/modules/core/utils/README.md
+
+tests/coverage
+
+tests/e2e/screenshots
+tests/e2e/videos

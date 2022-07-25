@@ -1,0 +1,62 @@
+<template>
+  <div>
+    <h3 class="header">
+      Previous visits
+      <b-tooltip type="is-dark" size="is-large" multilined animated>
+        <b-icon custom-class="is-blue" size="is-small" icon="information" />
+        <template v-slot:content>
+          <p>
+            Have you had a visit to this or any other TAF(s) funded by the current H2020 SYNTHESYS+ project (February
+            2019 – January 2023)? If Yes, which TAF(s) and please give your application number(s) and describe the
+            output(s) delivered from your prior visit(s).
+          </p>
+        </template>
+      </b-tooltip>
+    </h3>
+    <form @submit.prevent>
+      <component
+        v-for="field in fields"
+        :is="field.type"
+        :key="field.id"
+        :value="field.fields ? formData.fieldValues : formData.fieldValues[field.id]"
+        :path="[field.id]"
+        :fields="field.fields"
+        :context="{ resource: 'requests' }"
+        :label="field.label"
+        :editable="editable"
+        v-bind="{ ...field.options }"
+      />
+    </form>
+  </div>
+</template>
+
+<script>
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup';
+import data from '../../schemas/fields-ta.json';
+
+export default {
+  components: {
+    FieldRow,
+    FieldGroup
+  },
+
+  props: {
+    formData: {
+      type: Object
+    },
+    editable: {
+      type: Boolean,
+      default: true
+    }
+  },
+
+  data() {
+    return {
+      fields: data.previousVisits
+    };
+  }
+};
+</script>
+
+<style lang="scss" scoped></style>

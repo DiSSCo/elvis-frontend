@@ -1,0 +1,35 @@
+{
+  "cetaf": "https://cetaf.org/london-natural-history-museum-0",
+  "coordinators": [
+    { 
+      "id": "10387d68-ab11-472f-b7c6-f5874889e9a8", 
+      "email": "ta_coordinator@picturae.com",
+      "firstName": "TA Coordinator",
+      "institutionId": "grid.35937.3b",
+      "lastName": "Picturae",
+      "type": "TA"
+    },
+    { 
+      "id": "17e99009-51b0-4c2b-9605-0735f3e16afa", 
+      "email": "va_coordinator@picturae.com",
+      "firstName": "VA Coordinator",
+      "institutionId": "grid.35937.3b",
+      "lastName": "Picturae",
+      "type": "VA"
+    },
+    {
+      "id": "34cfd289-a23a-45e9-a8c9-93f2c03217e2",
+      "email": "synthesys-va@nhm.ac.uk",
+      "firstName": "Louise",
+      "institutionId": "grid.35937.3b",
+      "lastName": "Allan",
+      "type": "VA"
+    }
+  ],
+  "fieldValues": {
+    "locationName": { "type": "string", "value": null },
+    "locationType": { "type": "string", "value": null }
+  },
+  "id": "grid.35937.3b",
+  "name": "Natural History Museum London"
+}

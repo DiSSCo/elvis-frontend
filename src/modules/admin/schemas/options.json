@@ -1,0 +1,122 @@
+{
+  "primary": [
+    {
+      "text": "Number of Eligible Requests by Requester Nationality",
+      "status": "submitted",
+      "group": "nationality"
+    },
+    {
+      "text": "Number of Accepted Requests by Requester Nationality",
+      "status": "accepted",
+      "group": "nationality"
+    },
+    {
+      "text": "Number of Eligible Requests by Home Institution Country",
+      "status": "submitted",
+      "group": "home_institution"
+    },
+    {
+      "text": "Number of Accepted Requests by Home Institution Country",
+      "status": "accepted",
+      "group": "home_institution"
+    }
+  ],
+  "secondary": [
+    {
+      "type": "FieldRow",
+      "id": "scoringEndDate",
+      "label": "Scoring end date",
+      "options": {
+        "field": "DateField",
+        "fieldOptions": {
+          "errorMessage": "Please select an end date for scoring",
+          "placeHolder": "Select end date for scoring"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "methodology",
+      "label": "Methodology",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "1",
+          "options": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "researchExcellence",
+      "label": "Research Excellence",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "1",
+          "options": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "supportStatement",
+      "label": "Supporting Statement",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "1",
+          "options": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "justification",
+      "label": "Justification",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "1",
+          "options": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "gainsOutputs",
+      "label": "Expected Gains",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "1",
+          "options": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "merit",
+      "label": "Scientific Merit",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "1",
+          "options": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "societalChallenge",
+      "label": "Societal Challenge",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "1",
+          "options": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+        }
+      }
+    }
+  ]
+}

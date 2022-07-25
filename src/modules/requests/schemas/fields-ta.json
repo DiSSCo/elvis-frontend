@@ -1,0 +1,505 @@
+{
+  "subject": [
+    {
+      "type": "FieldRow",
+      "id": "request_type",
+      "label": "Type of request",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {
+          "editable": false,
+          "placeHolder": "Visit"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "subject",
+      "label": "Request title",
+      "options": {
+        "field": "StringField",
+        "fieldOptions": {
+          "errorMessage": "Please fill in a title for this request"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "institution",
+      "label": "Which institution do you propose to visit",
+      "options": {
+        "field": "LinkField",
+        "fieldOptions": {
+          "placeHolder": "Select institution(s)"
+        }
+      }
+    }
+  ],
+  "projectDetails": [
+    {
+      "type": "FieldRow",
+      "id": "start_date",
+      "label": "Proposed start date",
+      "options": {
+        "field": "DateField",
+        "fieldOptions": {
+          "placeHolder": "Select start date",
+          "tooltip": "Arrival date, usually one day before the first working day"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "end_date",
+      "label": "Proposed end date",
+      "options": {
+        "field": "DateField",
+        "fieldOptions": {
+          "placeHolder": "Select end date",
+          "endOfDateRange": true,
+          "tooltip": "Departure date, usually one day after the last working day"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "visit_length",
+      "label": "Proposed length of visit (number of working days)",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "Amount of working days",
+          "options": [],
+          "suffix": "days",
+          "tooltip": "The visit length must match the number of working days between your chosen start and finish dates. Visits cannot exceed a limit of 60 days. The average visit length for awarded SYNTHESYS+ visits was 15 days."
+        }
+      }
+    },
+    {
+      "type": "FieldGroup",
+      "group": "team_details",
+      "label": "Researchers team details",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "team_leader",
+          "label": "User group leader",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {
+              "tooltip": "<p>You are the User Group Leader if you are applying with an individual project on your own, OR, if you are in charge of a team of researchers undertaking this project with you (please note that any other researchers wishing to apply for Transnational Access must also make their own applications, one request per person).</p><p>You are NOT the ‘user group leader’ if you are not the head of the research group applying for Access, or if you are a student – this ought to be your supervisor, even if they are not requesting access to the infrastructure.  Please contact synthesys@nhm.ac.uk  if you would like further clarification</p>"
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "other_researchers",
+          "label": "Other researcher(s) of your group",
+          "options": {
+            "field": "LinkField",
+            "fieldOptions": {
+              "tooltip": "Add a researcher by typing the name and pressing enter, or select one from the autocomplete list",
+              "placeHolder": "Type in a name and press enter, or select from the list",
+              "freeText": true
+            }
+          }
+        }
+      ],
+      "options": {
+        "subheader": true
+      }
+    },
+    {
+      "type": "FieldGroup",
+      "group": "project_information",
+      "label": "Project information",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "project_objectives",
+          "label": "Project objectives",
+          "options": {
+            "field": "TextField",
+            "fieldOptions": {
+              "tooltip": "This should be a summary of the scientific methods and objective(s) of the proposed work and be placed in the context of the work that you have completed to date. The future direction of your research may also be indicated. You will have more opportunity to expand on your methodology and workplan later in the Request",
+              "rows": 4
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "project_discipline",
+          "label": "Project discipline",
+          "options": {
+            "field": "SelectField",
+            "fieldOptions": {
+              "placeHolder": "Select discipline",
+              "options": [],
+              "withEmptyOption": true
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "project_specific_discipline",
+          "label": "Project specific discipline",
+          "options": {
+            "field": "SelectField",
+            "fieldOptions": {
+              "placeHolder": "Select specific discipline",
+              "options": [],
+              "withEmptyOption": true
+            }
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "project_summary",
+          "label": "Public project summary",
+          "options": {
+            "field": "TextField",
+            "fieldOptions": {
+              "rows": 4,
+              "maxlength": 2000,
+              "tooltip": "As part of our dedication to providing a FAIR and transparent collections access platform, completed Requests in ELViS may be searchable or discoverable in later versions of ELViS. Please write a short summary of what your project objectives are. There is no need to outline your methodology, career aspirations, or other data in this section. Please note that this description can be edited later."
+            }
+          }
+        }
+      ],
+      "options": {
+        "subheader": true
+      }
+    }
+  ],
+  "otherInstitutions": [
+    {
+      "type": "FieldRow",
+      "id": "other_institutions",
+      "label": "Do you need to access other institutions in order to complete this research project?",
+      "options": {
+        "field": "LinkField",
+        "fieldOptions": {
+          "placeHolder": "Select institutions",
+          "tooltip": "Please indicate if you will need access to another TAF to complete the proposed project outlined in this application. If you do, you will need to complete a separate application form for each TAF, as all projects across TAFs are scored and considered separately."
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "why_other_institutions",
+      "label": "Please briefly explain why you need access to these other institution(s)",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "visit_before",
+      "label": "Have you had a visit to this or any other institution(s) funded by the current H2020 SYNTHESYS+ project (February 2019 - January 2023)?",
+      "options": {
+        "field": "RadioField",
+        "fieldOptions": {
+          "options": [true, false]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "visit_before_institution",
+      "label": "If yes, which other institution(s)?",
+      "options": {
+        "field": "LinkField",
+        "fieldOptions": {
+          "placeHolder": "Select institutions"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "visit_before_request_number",
+      "label": "If yes, please give your request number(s) and describe the output(s) delivered from your prior visit(s)",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    }
+  ],
+  "projectMethodology": [
+    {
+      "type": "FieldRow",
+      "id": "context_methods",
+      "label": "Scientific context and methods",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "tooltip": "Please outline the context within which your project sits, and then how your project methodology would deliver your proposed project objectives.",
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "work_plan",
+      "label": "WorkPlan",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "tooltip": "<p>Please outline your proposed timetable for planned activities during the proposed project timeframe. Where appropriate, please include the number of specimens to be studied, details of any laboratory work plans (for example the number of days requested for laboratory work, what do you wish to do in the laboratory, number of samples to be processed, number of genes to be studied, do you have a preferred protocol to follow, is any pre-preparation required). <strong>It is recommended you discuss your WorkPlan with your Host before completing your Request.</strong></p>",
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "justification_for_request",
+      "label": "Justification for the request",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "tooltip": "Please explain why it is necessary to access facilities and expertise at your chosen TAF, to meet the scientific objective(s) stated in your project.",
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "advance_research",
+      "label": "How would this visit advance your research?",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "tooltip": "Please explain how completing this project would help advance your own research in this field, as well as contributions it may make to your developing research career.",
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "expected_output",
+      "label": "Expected outputs and dissemination plan",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "tooltip": "Please describe what outputs (e.g. publications, conference presentations), you would expect to produce from the completion of your project. If your results will contribute to one or more of <a href='//ec.europa.eu/programmes/horizon2020/en/h2020-section/societal-challenges' target='_blank'>the H2020 Societal Challenges</a> please state how and why. Please also describe how you will disseminate your research upon publication or presentation.",
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "training_requirements",
+      "label": "Do you have any training requirements?",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "tooltip": "If you require training in either taxonomic skills to interpret collections, or technical skills for operating facilities and research equipment, please specify. Please note that training <strong>cannot</strong> be the sole purpose of a SYNTHESYS+ visit.",
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "training_received",
+      "label": "Training the Requester already received",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "tooltip": "Please describe any training and experience you have already received which would help you deliver this project.",
+          "rows": 4
+        }
+      }
+    }
+  ],
+  "previousVisits": [
+    {
+      "type": "FieldRow",
+      "id": "first_application",
+      "label": "Is this your first application for access?",
+      "options": {
+        "field": "RadioField",
+        "fieldOptions": {
+          "options": [true, false]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "previous_project_acronyms",
+      "label": "If no, please give details including Project Acronyms",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "tooltip": "All funded SYNTHESYS visits have a unique identifying acronym detailing the destination TAF and project number, e.g., GB-TAF-0000. Please list your previous visits if you have received funding before from the SYNTHESYS project. Please note that all previous projects <a href='https://www.synthesys.info/access.html' target='_blank'>must have an output uploaded</a> (even if it is 'in progress') on the old SYNTHESYS portal, before funding will be considered again.",
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "first_visit_to_selected",
+      "label": "Is this your first visit to this institution?",
+      "options": {
+        "field": "RadioField",
+        "fieldOptions": {
+          "options": [true, false]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "previous_visit_details",
+      "label": "If no, please give details including dates and who your visit was funded by",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "facilities_home",
+      "label": "If no, was it related to this project?",
+      "options": {
+        "field": "RadioField",
+        "fieldOptions": {
+          "options": [true, false]
+        }
+      }
+    }
+  ],
+  "resourceNeeds": [
+    {
+      "type": "FieldRow",
+      "id": "facilities_home",
+      "label": "Do you have the requested facilities in your home country?",
+      "options": {
+        "field": "RadioField",
+        "fieldOptions": {
+          "options": [true, false]
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "access_explanation",
+      "label": "If yes, please explain why do you need access to similar facilities?",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 4
+        }
+      }
+    },
+    {
+      "type": "FieldGroup",
+      "id": "facility_list",
+      "label": "General",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "days_in_selected",
+          "label": "Access to the collections",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "collection",
+          "label": "Specify which collection",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "libraries_in_selected",
+          "label": "Access to the libraries",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        }
+      ],
+      "options": {
+        "subheader": true
+      }
+    }
+  ],
+  "supportingStatement": [
+    {
+      "type": "FieldGroup",
+      "id": "supporting_statement",
+      "label": "Supporter information",
+      "fields": [
+        {
+          "type": "FieldRow",
+          "id": "sup_name",
+          "label": "Supporter name",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "sup_institution",
+          "label": "Institution",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "sup_position",
+          "label": "Position",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "sup_email",
+          "label": "Email address",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "sup_phone",
+          "label": "Phone number",
+          "options": {
+            "field": "StringField",
+            "fieldOptions": {}
+          }
+        },
+        {
+          "type": "FieldRow",
+          "id": "sup_statement",
+          "label": "Supporting statement",
+          "options": {
+            "field": "TextField",
+            "fieldOptions": {
+              "rows": 4
+            }
+          }
+        }
+      ],
+      "options": {
+        "subheader": true
+      }
+    }
+  ]
+}

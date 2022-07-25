@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "id": "NL-TAF",
+      "name": "Naturalis Biodiversity Center",
+      "address": "The Netherlands, Leiden"
+    },
+    {
+      "id": "AT-TAF",
+      "name": "Natural History Museum Vienna (NHMW)",
+      "address": "Austria, Wien"
+    },
+    {
+      "id": "BE-TAF",
+      "name": "Royal Belgian Institute of Natural Sciences (RBINS)",
+      "address": "Belgium, Brussels"
+    },
+    {
+      "id": "CZ-TAF",
+      "name": "National Museum Prague",
+      "address": "Czech Republic, Prague"
+    },   
+    {
+      "id": 14863,
+      "name": "The University of Glasgow",
+      "address": "Scotland Glasgow"
+    },
+    {
+      "id": 11482,
+      "name": "The University Museum of Bergen",
+      "address": "Norway Bergen"
+    }
+  ]
+}

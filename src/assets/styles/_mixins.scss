@@ -1,0 +1,7 @@
+@charset 'UTF-8';
+
+@mixin IE11 {
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    @content;
+  }
+}

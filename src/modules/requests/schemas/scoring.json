@@ -1,0 +1,103 @@
+{
+  "data": [
+    {
+      "type": "FieldRow",
+      "id": "methodology",
+      "label": "Methodology",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "score",
+          "options": [],
+          "tooltip": "Benefit of the training AND/OR Does the project show a realistic methodological approach and work plan?"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "research_excellence",
+      "label": "Research excellence",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "score",
+          "options": [],
+          "tooltip": "Does the project contribute towards  the objectives of the ERA? Will there be benefit of mobility through the transfer of knowledge and improved collaborations? Will there be a contribution to research excellence and European competitiveness?"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "support_statement",
+      "label": "Value of support statement",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "score",
+          "options": []
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "justification",
+      "label": "Justification",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "score",
+          "options": [],
+          "tooltip": "Is there justification for requested access to collections, facilities and staff expertise. Consider if the user should apply to a different TAF. Does the user have similar facilities in their home country?"
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "gains_outputs",
+      "label": "Value of the expected gain and outputs",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "score",
+          "options": []
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "merit",
+      "label": "Scientific merit of User/Usergroup (from CV)",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "score",
+          "options": []
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "societal_challenge",
+      "label": "Societal Challenge",
+      "options": {
+        "field": "SelectField",
+        "fieldOptions": {
+          "placeHolder": "score",
+          "options": []
+        }
+      }
+    },
+    {
+      "type": "FieldRow",
+      "id": "comments",
+      "label": "Additional comments",
+      "options": {
+        "field": "TextField",
+        "fieldOptions": {
+          "rows": 8,
+          "maxlength": 500
+        }
+      }
+    }
+  ]
+}

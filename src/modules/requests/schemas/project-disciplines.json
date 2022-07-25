@@ -1,0 +1,70 @@
+[
+  { "name": "Chemistry", "sub": ["Chemistry"] },
+  {
+    "name": "Earth Sciences & Environment",
+    "sub": [
+      "Global change & Climate observation",
+      "Ecosystems & Biodiversity",
+      "Natural disaster & Desertification",
+      "Marine science / Oceanography",
+      "Water sciences / Hydrology",
+      "Other – Earth Sciences",
+      "Other – Environment"
+    ]
+  },
+  { "name": "Energy", "sub": ["Sustainable energy systems", "Fusion", "Other – Energy"] },
+  {
+    "name": "Engineering & Technology",
+    "sub": [
+      "Aeronautics",
+      "Space",
+      "New production processes",
+      "Nanotechnology & Nanosciences",
+      "Transport",
+      "Other – Engineering & Technology"
+    ]
+  },
+  { "name": "Humanities", "sub": ["Arts", "History", "Languages", "Other – Humanities"] },
+  {
+    "name": "Information & Communication Technologies",
+    "sub": [
+      "IST for citizens, businesses & organizations",
+      "Trust & Security",
+      "Communication & Networks",
+      "Computing & software technologies",
+      "Components & Micro-systems",
+      "Knowledge & interface technologies",
+      "Other – ICT"
+    ]
+  },
+  {
+    "name": "Life Sciences & Biotech",
+    "sub": [
+      "Agriculture & Fisheries",
+      "Food quality and safety",
+      "Medicine",
+      "Veterinary sciences",
+      "Molecular and cellular biology",
+      "Other – Life Sciences & Biotech"
+    ]
+  },
+  { "name": "Material Sciences", "sub": ["Knowledge based multifunctional materials", "Other – Material Sciences"] },
+  { "name": "Mathematics", "sub": ["Mathematics"] },
+  {
+    "name": "Physics",
+    "sub": [
+      "Astronomy / Astrophysics / Astroparticles",
+      "Atomic & molecular physics",
+      "Condensed matter physics",
+      "High energy & particle physics",
+      "Nuclear physics",
+      "Plasma physics",
+      "Quantum electronics & optics",
+      "Other – Physics"
+    ]
+  },
+  {
+    "name": "Social Sciences",
+    "sub": ["Economics", "Political Sciences", "Educational sciences", "Law", "Demography", "Other – Social Sciences"]
+  }
+]

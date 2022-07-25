@@ -1,0 +1,43 @@
+// Colors primary
+$blue-light: #10c1ff;
+$blue: #0c86c6;
+$blue-dark: #205692;
+$yellow: #ffd85d;
+$yellow-dark: #f7a112;
+$success: #3dca77;
+$danger: #ff3860;
+
+
+// the GREYS
+$grey-xlight: #f4f4f1;
+$grey-light: #e9e8e3;
+$grey: #d9d9df;
+$grey-medium: #b4b4bf;
+$grey-dark: #868696;
+$grey-xdark: #555555;
+
+$primary: $blue;
+$secondary: $yellow;
+$white: #fff;
+$black: #363636;
+
+//Radius
+$radius-small: 3px;
+
+// font families
+$font-family-primary: 'Open Sans', sans-serif;
+$font-family-secondary: 'Titillium Web', sans-serif;
+
+$header-height: 70px;
+$footer-height: 50px;
+
+$box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+
+$steps-maker-default-color: $primary;
+$steps-default-color: $primary;
+$steps-previous-color: $secondary;
+$steps-active-color: $secondary;
+
+$breadcrumb-item-separator-color: $black;
+
+$switch-active-background-color: $grey-dark;

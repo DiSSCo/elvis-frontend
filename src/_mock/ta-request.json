@@ -1,0 +1,60 @@
+{
+  "id": "123",
+  "callId": "123",
+  "status": "draft",
+  "fieldValues": [
+    { "fieldId": "request_type", "value": { "type": "string", "value": "Visit" } },
+    { "fieldId": "title", "value": { "type": "string", "value": "request#1" } },
+    { "fieldId": "institution", "value": null },
+    { "fieldId": "visit_length", "value": null },
+    { "fieldId": "start_date", "value": null },
+    { "fieldId": "end_date", "value": null },
+    { "fieldId": "team_leader", "value": null },
+    {
+      "fieldId": "other_researchers",
+      "value": {
+        "0": {
+          "name": {
+            "type": "string",
+            "value": "Administrator Picturae"
+          }
+        },
+        "1": {
+          "name": {
+            "type": "string",
+            "value": "Bernadett Döme"
+          }
+        }
+      }
+    },
+    { "fieldId": "project_objectives", "value": null },
+    { "fieldId": "project_discipline", "value": null },
+    { "fieldId": "project_specific_discipline", "value": null },
+    { "fieldId": "project_summary", "value": null },
+    { "fieldId": "other_institutions", "value": null },
+    { "fieldId": "why_other_institutions", "value": null },
+    { "fieldId": "visit_before", "value": null },
+    { "fieldId": "visit_before_institution", "value": null },
+    { "fieldId": "visit_before_request_number", "value": null },
+    { "fieldId": "context_methods", "value": null },
+    { "fieldId": "work_plan", "value": null },
+    { "fieldId": "justification_for_request", "value": null },
+    { "fieldId": "advance_research", "value": null },
+    { "fieldId": "expected_output", "value": null },
+    { "fieldId": "training_requirements", "value": null },
+    { "fieldId": "training_received", "value": null },
+    { "fieldId": "first_application", "value": null },
+    { "fieldId": "previous_project_acronyms", "value": null },
+    { "fieldId": "first_visit_to_selected", "value": null },
+    { "fieldId": "previous_visit_details", "value": null },
+    { "fieldId": "facilities_home", "value": null }
+  ],
+  "creatorData": {
+    "id": "ad9ab2e2-9971-4663-b2da-59501d6ebb20",
+    "email": "admin@picturae.com",
+    "firstName": "Administrator",
+    "lastName": "Picturae",
+    "orcId": null,
+    "status": "Enabled"
+  }
+}
