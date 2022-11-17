@@ -1,7 +1,5 @@
 node_modules
 
-nginx
-
 src/modules/core/utils/README.md
 
 tests/coverage
