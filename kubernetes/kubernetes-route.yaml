@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: elvis-frontend-service
+spec:
+  selector:
+    app: elvis-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: elvis-frontend-route
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`elvis.dissco.tech`)
+      kind: Rule
+      services:
+        - name: elvis-frontend-service
+          namespace: default
+          port: 80
