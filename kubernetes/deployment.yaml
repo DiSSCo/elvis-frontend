@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elvis-frontend-deployment
+  labels:
+    app: elvis-frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elvis-frontend
+  template:
+    metadata:
+      labels:
+        app: elvis-frontend
+    spec:
+      containers:
+        - name: elvis-frontend
+          image: public.ecr.aws/dissco/elvis-frontend:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: VUE_APP_ELVIS_API
+              value: https://elvis.dissco.tech/api/
+      restartPolicy: Always
