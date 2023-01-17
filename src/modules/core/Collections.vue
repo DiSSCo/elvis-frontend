@@ -1,7 +1,7 @@
 <template>
   <div class="collections">
     <h1>Collections</h1>
-    <p>(this functionality will be implemented later in 2022)</p>
+    <p>(this functionality will be implemented later in 2023)</p>
   </div>
 </template>
 

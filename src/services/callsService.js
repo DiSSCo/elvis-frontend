@@ -9,10 +9,10 @@ export async function fetchCalls() {
         {
           field: 'deleted_at',
           type: 'eq',
-          value: null
-        }
-      ]
-    }
+          value: null,
+        },
+      ],
+    },
   ];
 
   return search('calls', queries);
@@ -21,7 +21,7 @@ export async function fetchCalls() {
 export async function checkActiveTaCall() {
   try {
     const response = await fetchCalls();
-    return !!response.data.data.rows.filter(call => call.type === 'ta' && call.status === 'available').length;
+    return !!response.data.data.rows.filter((call) => call.type === 'ta' && call.status === 'available').length;
   } catch (error) {
     console.log('error: ', error);
   }
@@ -35,10 +35,10 @@ export async function fetchCallData(id) {
         {
           field: 'id',
           type: 'eq',
-          value: id
-        }
-      ]
-    }
+          value: id,
+        },
+      ],
+    },
   ];
   return search('calls', queries);
 }

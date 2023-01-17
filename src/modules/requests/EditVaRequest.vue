@@ -22,11 +22,16 @@
           </div>
         </div>
         <div class="column is-4">
-          <request-info :text="$t('request.request_info')" :moreText="$t('request.request_va_more_info')" />
+          <request-info :text="$t('request.request_info')"
+            :moreText="$t('request.request_va_more_info')"
+          />
           <request-status v-if="formData" :formData="formData" />
           <div class="sticky-wrapper">
             <request-navigation :steps="steps" />
-            <request-comments v-if="formData && requestId" :requestStatus="formData.status" :requestId="requestId" />
+            <request-comments v-if="formData && requestId"
+              :requestStatus="formData.status"
+              :requestId="requestId"
+            />
           </div>
         </div>
       </div>
@@ -35,15 +40,17 @@
 </template>
 
 <script>
-import { submitRequest, fetchRequestData, updateField, removeGroup } from '@/services/requestsService';
-import RequestGeneral from './components/va-request/RequestGeneral';
-import RequestInstitutions from './components/va-request/RequestInstitutions';
-import RequestImpact from './components/va-request/RequestImpact';
-import RequestInfo from './components/RequestInfo';
-import RequestStatus from './components/RequestStatus';
-import RequestComments from './components/RequestComments';
-import RequestSubmit from './components/va-request/RequestSubmit';
-import RequestNavigation from './components/RequestNavigation';
+import {
+  submitRequest, fetchRequestData, updateField, removeGroup,
+} from '@/services/requestsService';
+import RequestGeneral from './components/va-request/RequestGeneral.vue';
+import RequestInstitutions from './components/va-request/RequestInstitutions.vue';
+import RequestImpact from './components/va-request/RequestImpact.vue';
+import RequestInfo from './components/RequestInfo.vue';
+import RequestStatus from './components/RequestStatus.vue';
+import RequestComments from './components/RequestComments.vue';
+import RequestSubmit from './components/va-request/RequestSubmit.vue';
+import RequestNavigation from './components/RequestNavigation.vue';
 
 export default {
   components: {
@@ -54,7 +61,7 @@ export default {
     RequestStatus,
     RequestComments,
     RequestSubmit,
-    RequestNavigation
+    RequestNavigation,
   },
 
   computed: {
@@ -68,13 +75,13 @@ export default {
         { id: 'details', name: 'Request details', disabled: false },
         { id: 'institutions', name: 'Institutions involved', disabled: false },
         { id: 'impact', name: 'Impact', disabled: false },
-        { id: 'finish', name: 'Finish', disabled: false }
+        { id: 'finish', name: 'Finish', disabled: false },
       ];
     },
 
     institutions() {
       return !!this.formData.institutions.length;
-    }
+    },
   },
 
   data() {
@@ -83,14 +90,14 @@ export default {
       clickable: true,
       requestId: null,
       activeStep: 0,
-      loading: false
+      loading: false,
     };
   },
 
   async created() {
-    this.$root.$on('updateField', this.handleFormField);
-    this.$root.$on('removeGroup', this.handleRemoveGroup);
-    this.$root.$on('reload', this.getRequestData);
+    this.emitter.on('updateField', this.handleFormField);
+    this.emitter.on('removeGroup', this.handleRemoveGroup);
+    this.emitter.on('reload', this.getRequestData);
 
     this.requestId = this.$route.params.reqid;
     if (this.requestId) {
@@ -98,16 +105,20 @@ export default {
     }
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
-    this.$root.$off('removeGroup');
-    this.$root.$off('reload');
+  beforeUnmount() {
+    this.emitter.off('updateField');
+    this.emitter.off('removeGroup');
+    this.emitter.off('reload');
   },
 
   methods: {
     async getRequestData(id) {
+      console.log(id);
+
       try {
         this.formData = await fetchRequestData(id);
+
+        console.log(this.formData);
       } catch (error) {
         console.log(error);
       }
@@ -137,7 +148,7 @@ export default {
         if (response.status === 200) {
           setTimeout(() => {
             this.$router.push({
-              name: 'requests'
+              name: 'requests',
             });
             this.loading = false;
           }, 1500);
@@ -152,12 +163,12 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.$router.push({
-          name: 'requests'
+          name: 'requests',
         });
         this.loading = false;
       }, 1500);
-    }
-  }
+    },
+  },
 };
 </script>
 

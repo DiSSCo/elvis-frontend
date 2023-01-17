@@ -14,10 +14,10 @@ export async function fetchUserById(id) {
         {
           field: 'id',
           type: 'eq',
-          value: id
-        }
-      ]
-    }
+          value: id,
+        },
+      ],
+    },
   ];
   return search('users', queries);
 }
@@ -35,7 +35,7 @@ export async function updateUserStatus(userId, status) {
     return axios.post(`/users/${userId}/unban`);
   }
   return axios.post(`/users/${userId}/ban`, {
-    reason: ''
+    reason: '',
   });
 }
 
@@ -43,8 +43,8 @@ export async function getUserProfile(token = '') {
   if (token) {
     return axios.get('/profile', {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
   return axios.get('/profile');

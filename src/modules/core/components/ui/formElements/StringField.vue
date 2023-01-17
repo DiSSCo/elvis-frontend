@@ -12,12 +12,14 @@
   />
 
   <div class="read-only-container" v-else>
-    <b-tag v-if="isTag" class="tag" rounded :class="$t(`status.class.${val}`)">{{ $t(`status.${val}`) }}</b-tag>
+    <tag v-if="isTag" :text="$t(`status.${val}`)" :variant="$t(`status.class.${val}`)" :rounded="true" />
     <div v-else>{{ placeHolder || val || '-' }}</div>
   </div>
 </template>
 
 <script>
+import Tag from '@/modules/core/components/ui/Tag.vue';
+
 export default {
   props: {
     path: Array,
@@ -26,22 +28,26 @@ export default {
     loading: Boolean,
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isTag: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    reset: Boolean
+    reset: Boolean,
+  },
+
+  components: {
+    Tag,
   },
 
   data() {
     return {
-      val: this.value && Object.keys(this.value).includes('value') ? this.value.value : this.value
+      val: this.value && Object.keys(this.value).includes('value') ? this.value.value : this.value,
     };
   },
 
@@ -49,21 +55,22 @@ export default {
     reset: {
       handler() {
         this.val = '';
-      }
+      },
     },
 
     value: {
       handler(value) {
         this.val = value && Object.keys(value).includes('value') ? value.value : value;
-      }
-    }
+      },
+    },
   },
 
   methods: {
     handleInput(event) {
       const value = event.target.value.trim();
-      this.$emit('input', { path: this.path, type: 'string', value });
-    }
-  }
+
+      this.$emit('updateInput', { path: this.path, type: 'string', value });
+    },
+  },
 };
 </script>

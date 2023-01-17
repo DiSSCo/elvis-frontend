@@ -35,13 +35,13 @@
 </template>
 
 <script>
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
-import fields from '../schemas/fields.json';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import { isInstitutionMod, isAdmin } from '@/modules/core/utils/auth';
+import fields from '../schemas/fields.json';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
   computed: {
     isInstitutionMod() {
@@ -49,25 +49,25 @@ export default {
     },
     isAdmin() {
       return isAdmin();
-    }
+    },
   },
   props: {
     institution: {
-      type: [Object, Array]
+      type: [Object, Array],
     },
     institutionId: {
-      type: String
+      type: String,
     },
     editable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      fields: fields.name
+      fields: fields.name,
     };
-  }
+  },
 };
 </script>
 

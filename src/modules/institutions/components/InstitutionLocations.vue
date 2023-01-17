@@ -19,34 +19,34 @@
 </template>
 
 <script>
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
-import FieldGroupRepeatable from '@/modules/core/components/ui/formElements/FieldGroupRepeatable';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
+import FieldGroupRepeatable from '@/modules/core/components/ui/formElements/FieldGroupRepeatable.vue';
 import fields from '../schemas/fields.json';
 
 export default {
   components: {
     FieldRow,
-    FieldGroupRepeatable
+    FieldGroupRepeatable,
   },
 
   props: {
     institution: {
-      type: [Object, Array]
+      type: [Object, Array],
     },
     institutionId: {
-      type: String
+      type: String,
     },
     editable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
     return {
-      fields: fields.affiliatedLocations
+      fields: fields.affiliatedLocations,
     };
-  }
+  },
 };
 </script>
 

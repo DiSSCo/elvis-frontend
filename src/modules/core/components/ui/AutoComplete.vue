@@ -14,14 +14,21 @@
       <span class="icon is-small is-left">
         <i :class="icon" class="feather"></i>
       </span>
-      <span v-if="clearable && search" @click.stop="clearValue" class="icon is-small is-right clear-input">
+      <span v-if="clearable && search"
+        @click.stop="clearValue"
+        class="icon is-small is-right clear-input"
+      >
         <i class="feather icon-x"></i>
       </span>
     </div>
 
     <ul v-show="isOpen" class="autocomplete-results">
       <li class="no-results" v-if="isLoading">{{ $t('no_results') }}</li>
-      <li v-else v-for="(result, i) in filteredList" :key="i" @click.stop="select(result)" class="autocomplete-row">
+      <li v-else v-for="(result, i) in filteredList"
+        :key="i"
+        @click.stop="select(result)"
+        class="autocomplete-row"
+      >
         {{ result }}
       </li>
     </ul>
@@ -35,31 +42,31 @@ export default {
     autoCompleteData: Array,
     placeHolder: {
       type: String,
-      default: 'Add link'
+      default: 'Add link',
     },
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     icon: {
       type: String,
-      default: 'icon-link'
+      default: 'icon-link',
     },
     clearable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     freeText: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
     return {
       filteredList: [],
       search: '',
-      isOpen: false
+      isOpen: false,
     };
   },
 
@@ -68,15 +75,15 @@ export default {
       handler(value) {
         this.search = (value && value.length && value[0].value.title) || '';
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   mounted() {
     document.addEventListener('click', this.handleClickOutside);
   },
 
-  destroyed() {
+  unmounted() {
     document.removeEventListener('click', this.handleClickOutside);
   },
 
@@ -93,7 +100,7 @@ export default {
     },
 
     filterByValue(arr, q) {
-      return arr.filter(item => item.toLowerCase().includes(q.toLowerCase()));
+      return arr.filter((item) => item.toLowerCase().includes(q.toLowerCase()));
     },
 
     select(selected) {
@@ -112,8 +119,8 @@ export default {
       if (!this.$refs.root.contains(evt.target)) {
         this.isOpen = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

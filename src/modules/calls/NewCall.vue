@@ -2,43 +2,39 @@
   <div>
     <div class="section">
       <div class="container">
-        <router-link :to="'/calls'"> <i class="feather icon-arrow-left" /> {{ $t('call.back_to_calls') }} </router-link>
+        <router-link :to="'/calls'">
+          <i class="feather icon-arrow-left" />
+          {{ $t('call.back_to_calls') }}
+        </router-link>
 
         <h1 class="title-link">{{ title }}</h1>
         <div class="columns request-wrapper">
           <div class="column is-8">
             <form v-if="call" @submit.prevent>
-              <component
-                v-for="field in fields"
-                :is="field.type"
-                :key="field.id"
-                :value="call[field.id]"
-                :path="[field.id]"
-                :label="field.label"
-                :context="{ resource: 'calls' }"
-                v-bind="{ ...field.options }"
-              />
+              <component v-for="field in fields" :is="field.type" :key="field.id"
+                :value="call[field.id]" :path="[field.id]" :label="field.label"
+                :context="{ resource: 'calls' }" v-bind="{ ...field.options }" />
               <transition name="fade" mode="out-in">
                 <div v-if="showScoring" class="scoring">
                   <div class="scoring-title"><strong>Scoring variables</strong></div>
-                  <component
-                    v-for="field in scoringFields"
-                    :is="field.type"
-                    :key="field.id"
-                    :value="score[field.id]"
-                    :path="[field.id]"
-                    :label="field.label"
-                    :context="{ resource: 'scoring' }"
-                    v-bind="{ ...field.options }"
-                  />
+
+                  <component v-for="field in scoringFields" :is="field.type"
+                  :key="field.id" :value="score[field.id]" :path="[field.id]" :label="field.label"
+                  :context="{ resource: 'scoring' }" v-bind="{ ...field.options }" />
                 </div>
               </transition>
 
               <div class="action-btns">
-                <b-button :loading="loadingCancel" @click="cancel" outlined> {{ $t('cancel') }} </b-button>
-                <b-button type="is-primary" :loading="loading" :disabled="!formIsValid" @click.stop="saveCall">
+                <o-button :loading="loadingCancel" @click="cancel" outlined class="cancelButton">
+                  {{ $t('cancel') }}
+                </o-button>
+                <o-button class="primaryButton"
+                  :loading="loading"
+                  :disabled="!formIsValid"
+                  @click.stop="saveCall"
+                >
                   {{ $t('call.call_save') }}
-                </b-button>
+                </o-button>
               </div>
             </form>
           </div>
@@ -49,28 +45,35 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { createCall, editCall, fetchCallData } from '@/services/callsService';
 import { makeStringFromDateArray } from '@/modules/core/utils/helpers';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import fields from './schemas/fields.json';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   props: {
     editable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
     title() {
       return this.call?.name ? this.call.name : 'New Call';
-    }
+    },
+  },
+
+  setup() {
+    const v$ = useVuelidate();
+
+    return { v$: v$ };
   },
 
   data() {
@@ -81,7 +84,7 @@ export default {
         description: '',
         additionalInfo: '',
         startDate: null,
-        endDate: null
+        endDate: null,
       },
       score: {
         scoringEndDate: null,
@@ -91,7 +94,7 @@ export default {
         justification: '1',
         gainsOutputs: '1',
         merit: '1',
-        societalChallenge: '1'
+        societalChallenge: '1',
       },
       showScoring: false,
       fields: fields.data,
@@ -99,42 +102,42 @@ export default {
       loading: false,
       loadingCancel: false,
       formIsValid: true,
-      callId: null
+      callId: null,
     };
   },
 
   validations: {
     call: {
       name: {
-        required
+        required,
       },
       type: {
-        required
+        required,
       },
       startDate: {
-        required
+        required,
       },
       endDate: {
-        required
-      }
+        required,
+      },
     },
     score: {
       scoringEndDate: {
-        required
-      }
-    }
+        required,
+      },
+    },
   },
 
   async created() {
-    this.$root.$on('updateField', this.handleFormField);
-    this.$root.$on('isValid', this.checkIfValid);
+    this.emitter.on('updateField', this.handleFormField);
+    this.emitter.on('isValid', this.checkIfValid);
     await this.setupForEdit();
     this.setValidation();
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
-    this.$root.$off('isValid');
+  beforeUnmount() {
+    this.emitter.off('updateField');
+    this.emitter.off('isValid');
   },
 
   methods: {
@@ -149,7 +152,7 @@ export default {
     },
 
     async setupForEdit() {
-      const found = this.fields.find(field => field.id === 'type');
+      const found = this.fields.find((field) => field.id === 'type');
       found.options.editable = !this.editable;
       found.options.fieldOptions.errorMessage = this.editable ? null : 'Please choose a type for this call';
       if (this.editable) {
@@ -163,13 +166,13 @@ export default {
       const score = { ...this.score };
       this.call = null;
       this.score = null;
-      Object.keys(call).map(key => {
+      Object.keys(call).forEach((key) => {
         if (Object.keys(data).includes(key)) {
           call[key] = data[key];
         }
       });
 
-      Object.keys(score).map(key => {
+      Object.keys(score).forEach((key) => {
         if (Object.keys(data.scoring.weight).includes(key)) {
           score[key] = data.scoring.weight[key];
         }
@@ -182,15 +185,15 @@ export default {
     },
 
     setValidation() {
-      this.fields = this.fields.map(field => {
+      this.fields = this.fields.map((field) => {
         if (field.options.fieldOptions?.errorMessage) {
-          this.$set(field.options.fieldOptions, 'validation', this.$v.call[field.id]);
+          field.options.fieldOptions.validation = this.v$.call[field.id];
         }
         return field;
       });
-      this.scoringFields = this.scoringFields.map(field => {
+      this.scoringFields = this.scoringFields.map((field) => {
         if (field.options.fieldOptions?.errorMessage) {
-          this.$set(field.options.fieldOptions, 'validation', this.$v.score[field.id]);
+          field.options.fieldOptions.validation = this.v$.score[field.id];
         }
         return field;
       });
@@ -218,43 +221,46 @@ export default {
     },
 
     setStartDate(date) {
-      const found = this.fields.find(field => field.id === 'endDate');
+      const found = this.fields.find((field) => field.id === 'endDate');
       if (found) {
-        this.$set(found.options.fieldOptions, 'minDate', new Date(makeStringFromDateArray(date)));
+        found.options.fieldOptions.minDate = new Date(makeStringFromDateArray(date));
       }
       if (
-        this.call.endDate &&
-        new Date(makeStringFromDateArray(date)) >= new Date(makeStringFromDateArray(this.call.endDate))
+        this.call.endDate
+        && new Date(makeStringFromDateArray(date))
+        >= new Date(makeStringFromDateArray(this.call.endDate))
       ) {
-        this.$set(this.call, 'endDate', date);
+        this.call.endDate = date;
       }
     },
 
     setEndDate(date) {
-      const found = this.scoringFields.find(field => field.id === 'scoringEndDate');
+      const found = this.scoringFields.find((field) => field.id === 'scoringEndDate');
       if (found) {
-        this.$set(found.options.fieldOptions, 'minDate', new Date(makeStringFromDateArray(date)));
+        found.options.fieldOptions.minDate = new Date(makeStringFromDateArray(date));
       }
       if (
-        this.score.scoringEndDate &&
-        new Date(makeStringFromDateArray(date)) >= new Date(makeStringFromDateArray(this.score.scoringEndDate))
+        this.score.scoringEndDate
+        && new Date(makeStringFromDateArray(date))
+        >= new Date(makeStringFromDateArray(this.score.scoringEndDate))
       ) {
-        this.$set(this.score, 'scoringEndDate', date);
+        this.score.scoringEndDate = date;
       }
     },
 
     async saveCall() {
       this.loading = true;
-      this.$v.call.$touch();
-      if (this.showScoring) this.$v.score.$touch();
-      const isValid = this.showScoring ? !this.$v.call.$invalid && !this.$v.score.$invalid : !this.$v.call.$invalid;
+      this.v$.call.$touch();
+      if (this.showScoring) this.v$.score.$touch();
+      const isValid = this.showScoring
+        ? !this.v$.call.$invalid && !this.v$.score.$invalid : !this.v$.call.$invalid;
       if (isValid) {
-        const loadingComponent = this.$buefy.loading.open();
+        const loadingComponent = this.$oruga.loading.open();
         try {
           this.call.type = this.call.type.toLowerCase() === 'virtual access' ? 'VA' : 'TA';
           const scoreFields = {
             scoringEndDate: this.score.scoringEndDate,
-            scoringWeight: { ...this.score }
+            scoringWeight: { ...this.score },
           };
           delete scoreFields.scoringWeight.scoringEndDate;
           const payload = this.showScoring ? { ...this.call, ...scoreFields } : this.call;
@@ -262,7 +268,7 @@ export default {
           setTimeout(() => {
             loadingComponent.close();
             this.$router.push({
-              name: 'calls'
+              name: 'calls',
             });
           }, 1000);
         } catch (error) {
@@ -276,8 +282,10 @@ export default {
     },
 
     async editCall(payload) {
-      delete payload.type;
-      await editCall(this.callId, payload);
+      const copyPayload = { ...payload };
+
+      delete copyPayload.type;
+      await editCall(this.callId, copyPayload);
     },
 
     checkIfValid(event) {
@@ -286,10 +294,10 @@ export default {
 
     cancel() {
       this.$router.push({
-        name: 'calls'
+        name: 'calls',
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -297,27 +305,44 @@ export default {
 .action-bar .container {
   justify-content: flex-end;
 }
+
 .action-btns {
   justify-content: flex-end;
+
   .button {
     margin-left: 1em;
   }
 }
+
 .scoring {
   border-top: 1px solid $grey;
   border-bottom: 1px solid $grey;
   padding-top: 2em;
   margin-bottom: 2em;
+
   .scoring-title {
     margin-bottom: 1em;
   }
 }
+
 .scoring-form {
   margin-top: 1em;
 }
-::v-deep {
-  .scoring .select-field {
-    flex: 0 1 120px !important;
-  }
+
+:deep(.scoring .select-field) {
+  flex: 0 1 120px !important;
+}
+</style>
+
+<style>
+.cancelButton {
+  border-color: #dbdbdb;
+  color: #363636;
+}
+
+.cancelButton:hover {
+  border-color: #dbdbdb;
+  color: #363636;
+  background-color: white;
 }
 </style>

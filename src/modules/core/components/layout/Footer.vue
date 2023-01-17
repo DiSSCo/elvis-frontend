@@ -19,8 +19,8 @@ export default {
   computed: {
     version() {
       return `${this.$t('footer.version')}: ${process.env.VUE_APP_VERSION}`;
-    }
-  }
+    },
+  },
 };
 </script>
 

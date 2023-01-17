@@ -1,8 +1,8 @@
 <template>
   <div v-if="editable" class="textarea-wrapper">
-    <b-tooltip v-if="maxlength" label="characters left" type="is-dark" class="counter">
+    <o-tooltip v-if="maxlength" label="characters left" variant="primary" class="counter">
       <span>{{ counter }}</span>
-    </b-tooltip>
+    </o-tooltip>
     <textarea
       type="textarea"
       v-model.trim="val"
@@ -32,59 +32,60 @@ export default {
     loading: Boolean,
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isHtml: {
       type: Boolean,
-      default: false
+      default: false,
     },
     reset: Boolean,
     maxlength: {
       type: Number,
-      default: 2000
+      default: 2000,
     },
-    rows: Number
+    rows: Number,
   },
 
   data() {
     return {
-      val: this.value && Object.keys(this.value).includes('value') ? this.value.value : this.value
+      val: this.value && Object.keys(this.value).includes('value') ? this.value.value : this.value,
     };
   },
 
   computed: {
     counter() {
       return this.maxlength && this.val ? this.maxlength - this.val.length : this.maxlength;
-    }
+    },
   },
 
   watch: {
     reset: {
       handler() {
         this.val = '';
-      }
+      },
     },
     value: {
       handler(value) {
         this.val = value && Object.keys(value).includes('value') ? value.value : value;
-      }
-    }
+      },
+    },
   },
 
   methods: {
     handleInput(event) {
       const value = event.target.value.trim();
-      this.$emit('input', { path: this.path, type: 'string', value });
+
+      this.$emit('updateInput', { path: this.path, type: 'string', value });
     },
 
     anchorLinks(value) {
       return anchorLinks(value);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -7,7 +7,7 @@
     :loading="loading"
     :disabled="disabled"
     @keypress="checkIfNumber"
-    @blur="$emit('input', { path, type: 'string', value: $event.target.value })"
+    @blur="$emit('updateInput', { path, type: 'string', value: $event.target.value })"
     maxlength
   />
   <div v-else class="read-only-container">{{ placeHolder || val || '-' }}</div>
@@ -22,18 +22,18 @@ export default {
     loading: Boolean,
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    reset: Boolean
+    reset: Boolean,
   },
 
   data() {
     return {
-      val: this.value && Object.keys(this.value).includes('value') ? this.value.value : this.value
+      val: this.value && Object.keys(this.value).includes('value') ? this.value.value : this.value,
     };
   },
 
@@ -41,14 +41,14 @@ export default {
     reset: {
       handler() {
         this.val = '';
-      }
-    }
+      },
+    },
   },
 
   methods: {
     handleInput(event) {
       const value = event.target.value.trim();
-      this.$emit('input', { path: this.path, type: 'string', value });
+      this.$emit('updateInput', { path: this.path, type: 'string', value });
     },
 
     checkIfNumber(event) {
@@ -56,7 +56,7 @@ export default {
       if (!regex.test(event.key)) {
         event.preventDefault();
       }
-    }
-  }
+    },
+  },
 };
 </script>

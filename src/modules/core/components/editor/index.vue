@@ -1,105 +1,121 @@
 <template>
   <div class="editor">
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+    <editor-menu-bar :editor="editor">
       <div class="menubar">
-        <b-tooltip label="bold" type="is-dark" position="is-bottom">
-          <button class="menu-button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
+        <o-tooltip label="bold" variant="primary" position="bottom">
+          <button class="menu-button" :class="{ 'is-active': editor.isActive('bold') }"
+            @click="editor.chain().focus().toggleBold().run()"
+          >
             <img svg-inline class="icon" src="./icons/bold.svg" alt="bold" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="italic" type="is-dark" position="is-bottom">
-          <button class="menu-button" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
+        <o-tooltip label="italic" variant="primary" position="bottom">
+          <button class="menu-button" :class="{ 'is-active': editor.isActive('italic') }"
+            @click="editor.chain().focus().toggleItalic().run()"
+          >
             <img svg-inline class="icon" src="./icons/italic.svg" alt="italic" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="underline" type="is-dark" position="is-bottom">
-          <button class="menu-button" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
+        <o-tooltip label="underline" variant="primary" position="bottom">
+          <button class="menu-button" :class="{ 'is-active': editor.isActive('underline') }"
+            @click="editor.chain().focus().toggleUnderline().run()"
+          >
             <img svg-inline class="icon" src="./icons/underline.svg" alt="underline" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="paragraph" type="is-dark" position="is-bottom">
-          <button class="menu-button" :class="{ 'is-active': isActive.paragraph() }" @click="commands.paragraph">
+        <o-tooltip label="paragraph" variant="primary" position="bottom">
+          <button class="menu-button" :class="{ 'is-active': editor.isActive('paragraph') }"
+            @click="editor.chain().focus().setParagraph().run()"
+          >
             <img svg-inline class="icon" src="./icons/paragraph.svg" alt="paragraph" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="heading H1" type="is-dark" position="is-bottom">
+        <o-tooltip label="heading H1" variant="primary" position="bottom">
           <button
-            class="menu-button"
-            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-            @click="commands.heading({ level: 1 })"
+            @click="editor.chain().focus().setHeading({ level: 1 }).run()"
+            class="menu-button" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
           >
             <span>H1</span>
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="heading H2" type="is-dark" position="is-bottom">
+        <o-tooltip label="heading H2" variant="primary" position="bottom">
           <button
-            class="menu-button"
-            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-            @click="commands.heading({ level: 2 })"
+            @click="editor.chain().focus().setHeading({ level: 2 }).run()"
+            class="menu-button" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
           >
             <span>H2</span>
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="heading H3" type="is-dark" position="is-bottom">
+        <o-tooltip label="heading H3" variant="primary" position="bottom">
           <button
-            class="menu-button"
-            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-            @click="commands.heading({ level: 3 })"
+            @click="editor.chain().focus().setHeading({ level: 3 }).run()"
+            class="menu-button" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
           >
             <span>H3</span>
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="unordered list" type="is-dark" position="is-bottom">
-          <button class="menu-button" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
+        <o-tooltip label="unordered list" variant="primary" position="bottom">
+          <button class="menu-button" :class="{ 'is-active': editor.isActive('bulletList') }"
+            @click="editor.chain().focus().toggleBulletList().run()"
+          >
             <img svg-inline class="icon" src="./icons/ul.svg" alt="ul" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="anchor link" type="is-dark" position="is-bottom">
-          <button class="menu-button" :class="{ 'is-active': isActive.link() }" @click="setUrl(commands.link)">
+        <o-tooltip label="anchor link" variant="primary" position="bottom">
+          <button class="menu-button" :class="{ 'is-active': editor.isActive('link') }"
+            @click="setUrl()"
+          >
             <img svg-inline class="icon" src="./icons/link.svg" alt="link" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="horizontal line" type="is-dark" position="is-bottom">
-          <button class="menu-button" @click="commands.horizontal_rule">
+        <o-tooltip label="horizontal line" variant="primary" position="bottom">
+          <button class="menu-button" :class="{ 'is-active': editor.isActive('horizontalRule') }"
+            @click="editor.chain().focus().setHorizontalRule().run()"
+          >
             <img svg-inline class="icon" src="./icons/hr.svg" alt="hr" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="undo" type="is-dark" position="is-bottom">
-          <button class="menu-button" @click="commands.undo">
+        <o-tooltip label="undo" variant="primary" position="bottom">
+          <button class="menu-button"
+            @click="editor.chain().focus().undo().run()"
+          >
             <img svg-inline class="icon" src="./icons/undo.svg" alt="undo" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
 
-        <b-tooltip label="redo" type="is-dark" position="is-bottom">
-          <button class="menu-button" @click="commands.redo">
+        <o-tooltip label="redo" variant="primary" position="bottom">
+          <button class="menu-button"
+            @click="editor.chain().focus().redo().run()"
+          >
             <img svg-inline class="icon" src="./icons/redo.svg" alt="redo" />
           </button>
-        </b-tooltip>
+        </o-tooltip>
       </div>
     </editor-menu-bar>
 
     <editor-content ref="element" class="editor-content" :editor="editor" />
+
     <div class="action-btns">
       <transition name="slide-down" mode="out-in">
         <span v-show="showMessage" class="has-text-weight-bold has-text-primary"
           ><i class="feather icon-check" /> content updated</span
         >
       </transition>
-      <b-button type="is-primary" :loading="loading" @click="saveContent">
+      <o-button variant="primary" :loading="loading" @click="saveContent">
         {{ $t('save') }}
-      </b-button>
+      </o-button>
     </div>
-    <b-modal v-model="linkModalActive" :width="600">
+    <o-modal v-model:active="linkModalActive">
       <div class="box">
         <h3 class="header">Update link</h3>
         <form @submit.prevent>
@@ -112,51 +128,36 @@
             }"
           />
           <div class="action-btns">
-            <b-button type="is-danger" :loading="removeLoading" @click="removeLink">
+            <o-button variant="danger" :loading="removeLoading" @click="removeLink">
               {{ $t('remove') }}
-            </b-button>
-            <b-button type="is-primary" :loading="loading" @click="saveLink">
+            </o-button>
+            <o-button variant="primary" :loading="loading" @click="saveLink">
               {{ $t('save') }}
-            </b-button>
+            </o-button>
           </div>
         </form>
       </div>
-    </b-modal>
+    </o-modal>
   </div>
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
 import {
-  Blockquote,
-  CodeBlock,
-  HardBreak,
-  Heading,
-  HorizontalRule,
-  OrderedList,
-  BulletList,
-  ListItem,
-  TodoItem,
-  TodoList,
-  Bold,
-  Code,
-  Italic,
-  Link,
-  Strike,
-  Underline,
-  History
-} from 'tiptap-extensions';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+  Editor, EditorContent,
+} from '@tiptap/vue-3';
+import { StarterKit } from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 
 export default {
   components: {
     EditorContent,
-    EditorMenuBar,
-    FieldRow
+    FieldRow,
   },
 
   props: {
-    content: String
+    content: String,
   },
 
   data() {
@@ -170,37 +171,23 @@ export default {
       linkModalActive: false,
       editor: new Editor({
         extensions: [
-          new Blockquote(),
-          new BulletList(),
-          new CodeBlock(),
-          new HardBreak(),
-          new Heading({ levels: [1, 2, 3] }),
-          new HorizontalRule(),
-          new ListItem(),
-          new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
-          new Link(),
-          new Bold(),
-          new Code(),
-          new Italic(),
-          new Strike(),
-          new Underline(),
-          new History()
+          StarterKit,
+          Underline,
+          Link,
         ],
         content: this.content,
-        onUpdate: ({ getHTML }) => {
-          this.newContent = getHTML();
-        }
-      })
+        onUpdate: ({ editor }) => {
+          this.newContent = editor.getHTML();
+        },
+      }),
     };
   },
 
   created() {
-    this.$root.$on('updateField', this.handleFormField);
+    this.emitter.on('updateField', this.handleFormField);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.editor.destroy();
   },
 
@@ -209,18 +196,17 @@ export default {
       this.linkUrl = event.value.value;
     },
 
-    setUrl(command) {
-      this.command = command;
+    setUrl() {
       this.linkUrl = null;
       this.linkModalActive = true;
       const { state } = this.editor;
       const { from, to } = state.selection;
       let marks = [];
-      state.doc.nodesBetween(from, to, node => {
+      state.doc.nodesBetween(from, to, (node) => {
         marks = [...marks, ...node.marks];
       });
 
-      const mark = marks.find(markItem => markItem.type.name === 'link');
+      const mark = marks.find((markItem) => markItem.type.name === 'link');
 
       if (mark && mark.attrs.href) {
         this.linkUrl = mark.attrs.href;
@@ -230,7 +216,8 @@ export default {
     saveLink() {
       this.loading = true;
       this.checkUrl();
-      this.command({ href: this.linkUrl, target: '_blank' });
+      this.editor.chain().focus().extendMarkRange('link').setLink({ href: this.linkUrl, target: '_blank' })
+        .run();
       setTimeout(() => {
         this.loading = false;
         this.linkModalActive = false;
@@ -240,7 +227,8 @@ export default {
     removeLink() {
       this.removeLoading = true;
       this.linkUrl = null;
-      this.command({ href: null });
+      this.editor.chain().focus().extendMarkRange('link').unsetLink()
+        .run();
       setTimeout(() => {
         this.removeLoading = false;
         this.linkModalActive = false;
@@ -257,7 +245,7 @@ export default {
     },
 
     saveContent() {
-      const loadingComponent = this.$buefy.loading.open();
+      const loadingComponent = this.$oruga.loading.open();
       this.$emit('update', this.newContent);
 
       setTimeout(() => {
@@ -271,8 +259,8 @@ export default {
       setTimeout(() => {
         this.showMessage = false;
       }, 2000);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -335,9 +323,9 @@ export default {
   }
 }
 
-::v-deep .editor-content:focus,
-::v-deep .ProseMirror,
-::v-deep .ProseMirror-focused {
+:deep(.editor-content:focus),
+:deep(.ProseMirror),
+:deep(.ProseMirror-focused) {
   outline: none;
 }
 
@@ -390,6 +378,7 @@ export default {
 
     a {
       color: inherit;
+      text-decoration: none !important;
     }
 
     blockquote {
@@ -468,7 +457,7 @@ export default {
     }
   }
 }
-::v-deep li {
+:deep(li) {
   list-style-type: disc;
 
   li {
@@ -483,5 +472,11 @@ export default {
   .button {
     margin-left: 1em;
   }
+}
+</style>
+
+<style lang="css">
+.o-modal__content {
+  width: 600px;
 }
 </style>

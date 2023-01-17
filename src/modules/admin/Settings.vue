@@ -5,14 +5,14 @@
 
       <div class="columns">
         <div class="column">
-          <b-tabs :animated="false" v-model="activeTab">
-            <b-tab-item label="Homepage">
+          <o-tabs :animated="false" v-model="activeTab">
+            <o-tab-item label="Homepage">
               <tab-homepage :data="homepageText" />
-            </b-tab-item>
-            <b-tab-item label="Privacy Statement">
+            </o-tab-item>
+            <o-tab-item label="Privacy Statement">
               <tab-privacy-statement :data="privacyStatement" />
-            </b-tab-item>
-          </b-tabs>
+            </o-tab-item>
+          </o-tabs>
         </div>
       </div>
     </div>
@@ -21,22 +21,22 @@
 
 <script>
 import { fetchSettingsByKey } from '@/services/adminService';
-import { fallbackHomepage } from '@/i18n/fallback/homepage';
-import { fallbackPrivacyStatement } from '@/i18n/fallback/privacystatement';
-import TabHomepage from './components/TabHomepage';
-import TabPrivacyStatement from './components/TabPrivacyStatement';
+import fallbackHomepage from '@/i18n/fallback/homepage';
+import fallbackPrivacyStatement from '@/i18n/fallback/privacystatement';
+import TabHomepage from './components/TabHomepage.vue';
+import TabPrivacyStatement from './components/TabPrivacyStatement.vue';
 
 export default {
   components: {
     TabHomepage,
-    TabPrivacyStatement
+    TabPrivacyStatement,
   },
 
   data() {
     return {
       homepageText: null,
       activeTab: 0,
-      privacyStatement: null
+      privacyStatement: null,
     };
   },
 
@@ -50,8 +50,12 @@ export default {
           this.getPrivacyStatement();
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
+  },
+
+  created() {
+    this.activeTab = 1;
   },
 
   methods: {
@@ -73,7 +77,27 @@ export default {
         console.log('error: ', error);
         this.privacyStatement = fallbackPrivacyStatement;
       }
-    }
-  }
+    },
+  },
 };
 </script>
+
+<style lang="css">
+.o-tabs__nav--default {
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.o-tabs__nav-item {
+  border-bottom: 5px solid white;
+  color: #868696;
+}
+
+.o-tabs__nav-item:hover {
+  border-bottom: 5px solid #ffd85d !important;
+}
+
+.o-tabs__nav-item-default--active {
+  color: #0c86c6;
+  border-bottom: 5px solid #ffd85d;
+}
+</style>

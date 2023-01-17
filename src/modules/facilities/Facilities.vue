@@ -14,45 +14,41 @@
           </h1>
         </header>
         <div>
-          <b-table
-            :data="filteredData"
-            :row-class="(row, index) => 'row'"
-            :mobile-cards="false"
-            :paginated="totalPages > 10"
-            :per-page="perPage"
-            :default-sort-direction="defaultSortDirection"
-            :sort-icon="sortIcon"
-            :sort-icon-size="sortIconSize"
-            :default-sort="defaultSort"
-            @select="showDetails"
-            @sort="(field, order) => setSorting(field, order)"
-            hoverable
-          >
-            <b-table-column field="fieldValues.nameEng.value" label="Facility" width="250" sortable v-slot="props">
+          <o-table :data="isEmpty ? [] : filteredData" hoverable :mobile-cards="hasMobileCards" :paginated="isPaginated"
+            :per-page="perPage" :default-sort-direction="defaultSortDirection" :sort-icon="sortIcon"
+            :sort-icon-size="sortIconSize" :default-sort="defaultSort" @select="row => showDetails(row)">
+            <o-table-column field="fieldValues.nameEng.value" label="Facility" v-slot:default="props" sortable>
               {{ props.row.fieldValues.nameEng.value }}
-            </b-table-column>
-            <b-table-column
-              field="fieldValues.joinedInstruments"
-              label="Instruments & Services"
-              sortable
-              v-slot="props"
-            >
-              {{ props.row.fieldValues.joinedInstruments.join(', ') }}
-            </b-table-column>
-            <b-table-column field="institutionName" label="Provided by" width="250" sortable v-slot="props">
-              {{ props.row.institutionName }}
-            </b-table-column>
-            <b-table-column field="country" label="Country" width="150" sortable v-slot="props">
-              {{ props.row.country[0] }}
-            </b-table-column>
+            </o-table-column>
 
-            <template slot="empty">
+            <o-table-column field="fieldValues.joinedInstruments" label="Instruments & Services" v-slot:default="props"
+              sortable>
+              {{ props.row.fieldValues.joinedInstruments.join(', ') }}
+            </o-table-column>
+
+            <o-table-column field="institutionName" label="Provided by" v-slot:default="props" sortable>
+              {{ props.row.institutionName }}
+            </o-table-column>
+
+            <o-table-column field="country" label="Country" v-slot:default="props" sortable>
+              {{ props.row.country[0] }}
+            </o-table-column>
+
+            <template v-slot:empty>
               {{ $t('facility.no_facilities_found') }}
             </template>
-            <template slot="bottom-left">
-              <pager :total="filteredData.length" :perPage="perPage" @input="setPerPage" />
+            <template v-slot:bottom-left>
+              <o-field grouped group-multiline>
+                <o-select v-model="perPage" :disabled="!isPaginated">
+                  <option value="10">10 per page</option>
+                  <option value="25">25 per page</option>
+                  <option value="50">50 per page</option>
+                  <option value="100">100 per page</option>
+                  <option :value="filteredData.length"> {{ `${filteredData.length} per page` }} </option>
+                </o-select>
+              </o-field>
             </template>
-          </b-table>
+          </o-table>
         </div>
       </div>
     </div>
@@ -60,16 +56,17 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import { search, setQuery } from '@/modules/core/utils/helpers';
-import Search from '@/modules/core/components/ui/Search';
+import Search from '@/modules/core/components/ui/Search.vue';
 import { fetchFacilities } from '@/services/facilitiesService';
 import { fetchInstitutions } from '@/services/institutionsService';
-import Pager from '@/modules/core/components/ui/Pager';
+// import Pager from '@/modules/core/components/ui/Pager.vue';
 
 export default {
   components: {
     Search,
-    Pager
+    // Pager,
   },
 
   data() {
@@ -83,17 +80,18 @@ export default {
       currentPage: 1,
       perPage: Number(this.$route.query.perPage) || 10,
       totalPages: 0,
-      loading: false
+      loading: false,
+      isPaginated: ref(true),
     };
   },
 
   computed: {
     filteredData() {
       if (this.facilities && this.facilities.length && this.searchTerm) {
-        return this.facilities.filter(d => search(d, this.searchTerm));
+        return this.facilities.filter((d) => search(d, this.searchTerm));
       }
       return this.facilities;
-    }
+    },
   },
 
   created() {
@@ -108,11 +106,13 @@ export default {
         const institutions = instResponse.data.data.rows;
         const response = await fetchFacilities();
         if (response.data.data.rows.length) {
-          response.data.data.rows.map(fac => {
+          response.data.data.rows.forEach((fac) => {
             fac.fieldValues.joinedInstruments = fac.fieldValues.instruments
-              ? Object.values(fac.fieldValues.instruments).map(instrument => instrument.name.value)
+              ? Object.values(fac.fieldValues.instruments).map(
+                (instrument) => instrument.name.value,
+              )
               : [];
-            const found = institutions.find(row => row.id === fac.institutionId);
+            const found = institutions.find((row) => row.id === fac.institutionId);
             fac.country = found ? (found.fieldValues.country ? found.fieldValues.country.value : '') : '';
           });
         }
@@ -125,23 +125,36 @@ export default {
 
     showDetails(event) {
       const { query } = this.$route;
+
       this.$router.push({
         name: 'facility-details',
         params: { instId: event.institutionId, id: event.id },
-        query
+        query,
       });
     },
 
     setSearchTerm(event) {
-      this.searchTerm = event;
-      const query = { ...this.$route.query, q: this.searchTerm };
-      setQuery(query);
+      if (typeof event === 'object') {
+        this.searchTerm = event.target.value;
+
+        const query = { ...this.$route.query, q: this.searchTerm };
+        setQuery(query);
+      } else {
+        this.searchTerm = event;
+
+        const query = { ...this.$route.query, q: this.searchTerm };
+        setQuery(query);
+      }
     },
 
     setSorting(field, order) {
       this.defaultSort = field;
       this.defaultSortDirection = order;
-      const query = { ...this.$route.query, orderBy: this.defaultSort, direction: this.defaultSortDirection };
+      const query = {
+        ...this.$route.query,
+        orderBy: this.defaultSort,
+        direction: this.defaultSortDirection,
+      };
       setQuery(query);
     },
 
@@ -157,12 +170,26 @@ export default {
         orderBy: this.defaultSort,
         direction: this.defaultSortDirection,
         perPage: this.perPage,
-        q: this.searchTerm
+        q: this.searchTerm,
       };
       setQuery(query);
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="css">
+td {
+  font-size: 14px !important;
+  padding-top: 1em !important;
+  padding-bottom: 1em !important;
+}
+
+td:hover {
+  cursor: pointer !important;
+}
+
+.td-center {
+  vertical-align: middle !important;
+}
+</style>

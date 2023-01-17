@@ -4,7 +4,9 @@
       <strong>{{ $t('request.costs') }}</strong>
     </div>
 
-    <field-row v-if="isAllowed('request_attachment_download') && myInstitution" :label="$t('request.download_costs')">
+    <field-row v-if="isAllowed('request_attachment_download') && myInstitution"
+      :label="$t('request.download_costs')"
+    >
       <a
         href="https://www.synthesys.info/content/dam/nhm-synthesys/Virtual%20Access%20Proposal%20-%20Cost%20Template.xlsx"
         >{{ $t('request.download_costs_template') }}</a
@@ -36,36 +38,36 @@
 
 <script>
 import { isAllowed } from '@/modules/core/utils/auth';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
   props: {
     institutionId: {
-      type: String
+      type: String,
     },
     requestId: {
-      type: String
+      type: String,
     },
     myInstitution: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
 
   data() {
     return {
-      componentKey: 0
+      componentKey: 0,
     };
   },
 
   created() {
-    this.$root.$on('fileUploaded', this.reloadAttachments);
+    this.emitter.on('fileUploaded', this.reloadAttachments);
   },
 
-  beforeDestroy() {
-    this.$root.$off('fileUploaded');
+  beforeUnmount() {
+    this.emitter.off('fileUploaded');
   },
 
   methods: {
@@ -74,9 +76,9 @@ export default {
     },
 
     reloadAttachments() {
-      this.componentKey++;
-    }
-  }
+      this.componentKey += 1;
+    },
+  },
 };
 </script>
 

@@ -2,7 +2,9 @@
   <div class="taginput-container" :loading="isLoading">
     <span v-for="(tag, index) in tagList" :key="index" class="tag">
       <span class="tag-title" @click="tagSelect(tag)">{{ tag }}</span>
-      <span v-if="removeable" class="delete-tag" @click="removeTag(index)"><i class="feather icon-x" /></span>
+      <span v-if="removeable" class="delete-tag" @click="removeTag(index)">
+        <i class="feather icon-x" />
+      </span>
     </span>
     <auto-complete
       v-if="showAutoComplete"
@@ -15,11 +17,11 @@
 </template>
 
 <script>
-import AutoComplete from './AutoComplete';
+import AutoComplete from './AutoComplete.vue';
 
 export default {
   components: {
-    AutoComplete
+    AutoComplete,
   },
 
   props: {
@@ -27,19 +29,19 @@ export default {
     value: [String, Object, Array],
     autoCompleteData: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     removeable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
     return {
       tagList: [],
       results: [],
-      isLoading: false
+      isLoading: false,
     };
   },
 
@@ -53,8 +55,8 @@ export default {
     },
 
     autoCompl() {
-      return this.autoCompleteData.filter(item => !this.tagList.includes(item));
-    }
+      return this.autoCompleteData.filter((item) => !this.tagList.includes(item));
+    },
   },
 
   watch: {
@@ -62,13 +64,16 @@ export default {
       handler(value) {
         this.tagList = typeof value === 'string' ? [value] : value;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
     async onInput(value) {
       if (!value) return;
+
+      console.log(value);
+
       this.$emit('auto-complete', { path: this.fieldPath, value });
     },
 
@@ -84,8 +89,8 @@ export default {
     removeTag(index) {
       this.tagList.splice(index, 1);
       this.$emit('update-tags', this.tagList);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -157,7 +162,7 @@ export default {
       background: $grey-xlight;
       padding: 0.4em 0.5em;
       margin-bottom: 3px;
-      .b-tooltip {
+      .o-tooltip {
         display: block;
       }
       &:last-child {

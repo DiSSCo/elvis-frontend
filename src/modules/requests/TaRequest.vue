@@ -3,12 +3,12 @@
     <div class="action-bar">
       <div class="container">
         <div class="action-btns">
-          <b-button v-if="canScore" type="is-primary" @click="goToScoring">
+          <o-button v-if="canScore" variant="primary" @click="goToScoring">
             <span> <i class="feather icon-award" /> {{ $t('request.score') }} </span>
-          </b-button>
-          <b-button v-if="canViewScores" type="is-primary" @click="viewScores">
+          </o-button>
+          <o-button v-if="canViewScores" variant="primary" @click="viewScores">
             <span> <i class="feather icon-bar-chart-2" /> {{ $t('request.view_scores') }} </span>
-          </b-button>
+          </o-button>
         </div>
       </div>
     </div>
@@ -21,10 +21,17 @@
         <div class="columns request-wrapper">
           <div class="column is-8">
             <div v-if="formData && institutions">
-              <project-subject :formData="formData" :institutions="institutions" :editable="false" />
+              <project-subject :formData="formData"
+                :institutions="institutions"
+                :editable="false"
+              />
               <div v-if="formData.institutions.length">
                 <project-details :formData="formData" :editable="false" />
-                <other-institutions id="other" :formData="formData" :institutions="institutions" :editable="false" />
+                <other-institutions id="other"
+                  :formData="formData"
+                  :institutions="institutions"
+                  :editable="false"
+                />
                 <project-methodology id="methodology" :formData="formData" :editable="false" />
                 <previous-visits id="visits" :formData="formData" :editable="false" />
                 <resource-needs
@@ -42,7 +49,10 @@
             <request-status v-if="formData" :formData="formData" />
             <div class="sticky-wrapper">
               <request-navigation :steps="steps" />
-              <request-comments v-if="formData && requestId" :requestStatus="formData.status" :requestId="requestId" />
+              <request-comments v-if="formData && requestId"
+                :requestStatus="formData.status"
+                :requestId="requestId"
+              />
             </div>
           </div>
         </div>
@@ -56,19 +66,19 @@
 import { fetchRequestData } from '@/services/requestsService';
 import { fetchFacilitiesByInstitutionId } from '@/services/facilitiesService';
 import { fetchInstitutions } from '@/services/institutionsService';
-import ProjectSubject from './components/ta-request/ProjectSubject';
-import ProjectDetails from './components/ta-request/ProjectDetails';
-import OtherInstitutions from './components/ta-request/OtherInstitutions';
-import ProjectMethodology from './components/ta-request/ProjectMethodology';
-import PreviousVisits from './components/ta-request/PreviousVisits';
-import ResourceNeeds from './components/ta-request/ResourceNeeds';
-import SupportingStatement from './components/ta-request/SupportingStatement';
-import RequestStatus from './components/RequestStatus';
-import RequestComments from './components/RequestComments';
-import RequestNavigation from './components/RequestNavigation';
 import { fetchCallData } from '@/services/callsService';
 import { isAllowed, isAdmin, isTafAdmin } from '@/modules/core/utils/auth';
 import { isAfterDate } from '@/modules/core/utils/helpers';
+import ProjectSubject from './components/ta-request/ProjectSubject.vue';
+import ProjectDetails from './components/ta-request/ProjectDetails.vue';
+import OtherInstitutions from './components/ta-request/OtherInstitutions.vue';
+import ProjectMethodology from './components/ta-request/ProjectMethodology.vue';
+import PreviousVisits from './components/ta-request/PreviousVisits.vue';
+import ResourceNeeds from './components/ta-request/ResourceNeeds.vue';
+import SupportingStatement from './components/ta-request/SupportingStatement.vue';
+import RequestStatus from './components/RequestStatus.vue';
+import RequestComments from './components/RequestComments.vue';
+import RequestNavigation from './components/RequestNavigation.vue';
 
 export default {
   components: {
@@ -81,7 +91,7 @@ export default {
     SupportingStatement,
     RequestStatus,
     RequestComments,
-    RequestNavigation
+    RequestNavigation,
   },
 
   computed: {
@@ -101,7 +111,7 @@ export default {
         { id: 'methodology', name: 'Project methodology', disabled: this.noInstitutionYet },
         { id: 'visits', name: 'Previous visits', disabled: this.noInstitutionYet },
         { id: 'needs', name: 'Resource needs', disabled: this.noInstitutionYet },
-        { id: 'statement', name: 'Supporting statement', disabled: this.noInstitutionYet }
+        { id: 'statement', name: 'Supporting statement', disabled: this.noInstitutionYet },
       ];
     },
 
@@ -119,19 +129,19 @@ export default {
 
     canScore() {
       return (
-        !this.isAfterDate &&
-        this.isAllowed('request_score') &&
-        (this.formData?.status === 'approved' || this.formData?.status === 'scoring')
+        !this.isAfterDate
+        && this.isAllowed('request_score')
+        && (this.formData?.status === 'approved' || this.formData?.status === 'scoring')
       );
     },
 
     canViewScores() {
       return (
-        (this.isTafAdmin || this.isAdmin) &&
-        this.formData?.scoreFormId?.length &&
-        (this.formData?.status === 'approved' || this.formData?.status === 'scoring')
+        (this.isTafAdmin || this.isAdmin)
+        && this.formData?.scoreFormId?.length
+        && (this.formData?.status === 'approved' || this.formData?.status === 'scoring')
       );
-    }
+    },
   },
 
   data() {
@@ -143,12 +153,12 @@ export default {
       activeStep: 0,
       clickable: true,
       requestId: null,
-      loading: false
+      loading: false,
     };
   },
 
   async created() {
-    this.$root.$on('reload', this.getRequestData);
+    this.emitter.on('reload', this.getRequestData);
     this.requestId = this.$route.params.id;
     await this.getInstitutions();
 
@@ -202,7 +212,7 @@ export default {
       const params = { id };
       this.$router.push({
         name: 'request-scoring-ta',
-        params
+        params,
       });
     },
 
@@ -211,10 +221,10 @@ export default {
       const params = { id };
       this.$router.push({
         name: 'request-view-scores-ta',
-        params
+        params,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -223,13 +233,13 @@ export default {
   border-top: 1px solid $grey-light;
   padding-top: 2em;
 }
-::v-deep .header {
+:deep(.header) {
   background: $yellow;
   padding: 0.4em 0.8em;
   margin-bottom: 1em;
 }
-::v-deep .field-row-body .form-field,
-::v-deep .error-message .error {
+:deep(.field-row-body .form-field),
+:deep(.error-message .error) {
   flex: 2;
 }
 

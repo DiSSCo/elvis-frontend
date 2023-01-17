@@ -1,4 +1,4 @@
-import { i18n } from '@/i18n';
+import i18n from '@/i18n';
 import router from '@/router';
 
 export function localeDate() {
@@ -16,7 +16,7 @@ export function clone(item) {
 
 export function removeDuplicatesInArray(arrayWithDuplicates, prop) {
   const arrayWithoutDuplicates = arrayWithDuplicates.filter(
-    (obj, pos, arr) => arr.map(mapObj => mapObj[prop.toString()]).indexOf(obj[prop]) === pos
+    (obj, pos, arr) => arr.map((mapObj) => mapObj[prop.toString()]).indexOf(obj[prop]) === pos,
   );
   return arrayWithoutDuplicates || [];
 }
@@ -43,7 +43,7 @@ export function setDate(date) {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
-    timeZone: 'UTC'
+    timeZone: 'UTC',
   };
   if (Array.isArray(date)) {
     const utcDate = new Date(Date.UTC(date[0], date[1] - 1, date[2]));
@@ -56,7 +56,7 @@ export function setDateTime(date) {
   const options = {
     dateStyle: 'long',
     timeStyle: 'short',
-    timeZone: 'UTC'
+    timeZone: 'UTC',
   };
   if (Array.isArray(date)) {
     const utcDate = new Date(Date.UTC(date[0], date[1] - 1, date[2], date[3], date[4], date[5]));
@@ -136,13 +136,13 @@ function parsePath(path) {
 }
 
 export function toObject(obj) {
-  Object.keys(obj).forEach(k => {
+  Object.keys(obj).forEach((k) => {
     const parsedPath = parsePath(k).join('.');
     if (parsedPath.indexOf('.') !== -1) {
       fill(parsedPath.split('.'), obj, obj[k]);
       delete obj[k];
     } else {
-      obj[k] = obj[k];
+      // obj[k] = obj[k];
     }
   });
 
@@ -159,7 +159,7 @@ export function sanitizeString(str) {
 }
 
 export function sanitizeObject(object) {
-  Object.keys(object).map(k => {
+  Object.keys(object).forEach((k) => {
     if (object[k] && typeof object[k] === 'string') {
       object[k] = sanitizeString(object[k]);
     }
@@ -176,13 +176,15 @@ export function search(object, searchTerm) {
   const cleanObj = sanitizeObject(clonedObj);
   const regex = new RegExp(searchTerm, 'i');
 
-  return Object.values(cleanObj).find(val => {
+  return Object.values(cleanObj).find((val) => {
     if (typeof val === 'string' && val.match(regex)) {
       return cleanObj;
     }
     if (typeof val === 'object') {
       return search(val, searchTerm);
     }
+
+    return null;
   });
 }
 
@@ -191,6 +193,6 @@ export function objectsAreEqual(object1, object2) {
 }
 
 export function setQuery(query) {
-  if (objectsAreEqual(query, router.currentRoute.query)) return;
+  if (objectsAreEqual(query, router.currentRoute.value.query)) return;
   router.replace({ query });
 }

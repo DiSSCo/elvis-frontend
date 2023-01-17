@@ -10,7 +10,9 @@
 
         <div class="columns">
           <div class="column is-3 gravatar-wrapper">
-            <gravatar :initials="getInitials(requester.firstName, requester.lastName)" :size="175" />
+            <gravatar :initials="getInitials(requester.firstName, requester.lastName)"
+              :size="175"
+            />
           </div>
           <div class="column is-9">
             <dl class="profile">
@@ -37,22 +39,23 @@
               <dd>{{ relatedInstitutionName || '-' }}</dd>
               <dt>{{ $t('profile.status') }}</dt>
               <dd v-if="isAdmin">
-                <b-tooltip label="user status" type="is-dark">
-                  <b-switch
+                <o-tooltip label="user status" variant="primary">
+                  <o-switch
                     :value="!requester.bannedAt"
-                    type="is-primary"
+                    variant="primary"
                     @input="toggleStatus(requester.id, $event)"
-                    @click.native.stop
-                    >{{ requester.bannedAt ? 'Disabled' : 'Enabled' }}</b-switch
+                    @click.stop
+                    >{{ requester.bannedAt ? 'Disabled' : 'Enabled' }}
+                  </o-switch
                   >
-                </b-tooltip>
+                </o-tooltip>
               </dd>
               <dd v-else>
-                <b-tooltip :label="requester.bannedAt ? 'Disabled' : 'Enabled'" type="is-dark">
+                <o-tooltip :label="requester.bannedAt ? 'Disabled' : 'Enabled'" variant="primary">
                   <div :class="{ 'has-text-danger': requester.bannedAt }">
                     {{ requester.bannedAt ? 'Disabled' : 'Enabled' }}
                   </div>
-                </b-tooltip>
+                </o-tooltip>
               </dd>
             </dl>
 
@@ -76,10 +79,12 @@
               </dd>
               <dt>
                 <span style="margin-right: 5px">User roles</span>
-                <b-tooltip v-if="isAdmin" type="is-dark" multilined animated>
-                  <b-icon custom-class="is-blue" size="is-small" icon="information" />
-                  <template v-slot:content><span>Assign an institution first to edit the user roles</span></template>
-                </b-tooltip>
+                <o-tooltip v-if="isAdmin" variant="primary" multilined animated>
+                  <o-icon class="is-blue" size="is-small" icon="information" />
+                  <template v-slot:content>
+                    <span>Assign an institution first to edit the user roles</span>
+                  </template>
+                </o-tooltip>
               </dt>
               <dd v-if="isAdmin">
                 <checkbox-field
@@ -93,7 +98,9 @@
                 />
               </dd>
               <dd v-else>
-                <div v-for="(role, index) in institutionRoles" :key="index">{{ role.value ? role.name : '' }}</div>
+                <div v-for="(role, index) in institutionRoles" :key="index">
+                  {{ role.value ? role.name : '' }}
+                </div>
               </dd>
               <dt>Roles for Country</dt>
               <dd v-if="isAdmin || isTafAdmin">
@@ -111,10 +118,12 @@
               </dd>
               <dt>
                 <span style="margin-right: 5px">User roles</span>
-                <b-tooltip v-if="isAdmin || isTafAdmin" type="is-dark" multilined animated>
-                  <b-icon custom-class="is-blue" size="is-small" icon="information" />
-                  <template v-slot:content><span>Assign a country first to edit the user roles</span></template>
-                </b-tooltip>
+                <o-tooltip v-if="isAdmin || isTafAdmin" type="is-dark" multilined animated>
+                  <o-icon class="is-blue" size="small" icon="information" />
+                  <template v-slot:content>
+                    <span>Assign a country first to edit the user roles</span>
+                  </template>
+                </o-tooltip>
               </dt>
               <dd v-if="isAdmin || isTafAdmin">
                 <checkbox-field
@@ -128,7 +137,9 @@
                 />
               </dd>
               <dd v-else>
-                <div v-for="(role, index) in countryRoles" :key="index">{{ role.value ? role.name : '' }}</div>
+                <div v-for="(role, index) in countryRoles" :key="index">
+                  {{ role.value ? role.name : '' }}
+                </div>
               </dd>
             </dl>
           </div>
@@ -147,21 +158,21 @@ import {
   assignVaCoordinator,
   assignTaScorer,
   assignTafAdmin,
-  assignModerator
+  assignModerator,
 } from '@/services/usersService';
 import { capitalize, sanitizeOrcId } from '@/modules/core/utils/helpers';
 import { isAdmin, isTafAdmin } from '@/modules/core/utils/auth';
 import { fetchInstitutions } from '@/services/institutionsService';
-import Gravatar from '@/modules/core/components/ui/Gravatar';
-import CheckboxField from '@/modules/core/components/ui/formElements/CheckboxField';
-import LinkField from '@/modules/core/components/ui/formElements/LinkField';
+import Gravatar from '@/modules/core/components/ui/Gravatar.vue';
+import CheckboxField from '@/modules/core/components/ui/formElements/CheckboxField.vue';
+import LinkField from '@/modules/core/components/ui/formElements/LinkField.vue';
 import countries from '@/modules/core/schemas/country-list.json';
 
 export default {
   components: {
     Gravatar,
     CheckboxField,
-    LinkField
+    LinkField,
   },
 
   computed: {
@@ -171,7 +182,7 @@ export default {
 
     relatedInstitutionName() {
       const { relatedInstitutionId } = this.requester.attributes;
-      const [found] = this.institutions.filter(i => i.id === relatedInstitutionId);
+      const [found] = this.institutions.filter((i) => i.id === relatedInstitutionId);
       return found ? found.name : null;
     },
 
@@ -181,12 +192,12 @@ export default {
     },
 
     institutionName() {
-      const [found] = this.institutions.filter(i => i.id === this.institutionId);
+      const [found] = this.institutions.filter((i) => i.id === this.institutionId);
       return found ? found.name : null;
     },
 
     institutionsList() {
-      return this.institutions.map(institution => institution.name).sort();
+      return this.institutions.map((institution) => institution.name).sort();
     },
 
     countryCode() {
@@ -195,12 +206,12 @@ export default {
     },
 
     countryName() {
-      const [found] = countries.filter(c => c.code === this.countryCode);
+      const [found] = countries.filter((c) => c.code === this.countryCode);
       return found ? found.name : null;
     },
 
     countryList() {
-      return countries.map(country => country.name).sort();
+      return countries.map((country) => country.name).sort();
     },
 
     isAdmin() {
@@ -209,7 +220,7 @@ export default {
 
     isTafAdmin() {
       return isTafAdmin();
-    }
+    },
   },
 
   data() {
@@ -223,7 +234,7 @@ export default {
       countryRoles: null,
       assignedUserGroups: null,
       selectedInstitutionId: null,
-      selectedCountryCode: null
+      selectedCountryCode: null,
     };
   },
 
@@ -241,12 +252,14 @@ export default {
   methods: {
     async selectInstitution(event) {
       [this.selectedInstitutionId] = this.institutions
-        .filter(institution => event.value.includes(institution.name))
-        .map(i => i.id);
+        .filter((institution) => event.value.includes(institution.name))
+        .map((i) => i.id);
     },
 
     async selectCountry(event) {
-      [this.selectedCountryCode] = countries.filter(country => event.value.includes(country.name)).map(c => c.code);
+      [this.selectedCountryCode] = countries.filter(
+        (country) => event.value.includes(country.name),
+      ).map((c) => c.code);
     },
 
     getInitials(firstName, lastName) {
@@ -273,8 +286,8 @@ export default {
           this.userGroups = response.data.available_groups;
         }
         return this.userGroups
-          .filter(group => roles.includes(group))
-          .map(name => {
+          .filter((group) => roles.includes(group))
+          .map((name) => {
             const value = !!this.requester.groups.includes(name);
             return { name, value };
           });
@@ -315,14 +328,14 @@ export default {
     },
 
     async toggleStatus(id, event) {
-      this.$set(this.requester, 'enabled', event);
+      this.requester.enabled = event;
       updateUserStatus(id, event);
     },
 
     orcId(id) {
       return sanitizeOrcId(id);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -343,7 +356,7 @@ export default {
   border-top: 1px solid $grey;
   padding-top: 1em;
 }
-::v-deep .is-blue {
+:deep(.is-blue) {
   color: $blue;
 }
 </style>

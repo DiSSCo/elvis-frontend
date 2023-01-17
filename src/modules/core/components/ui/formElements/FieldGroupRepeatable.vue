@@ -1,7 +1,11 @@
 <template>
   <div class="field-group-wrapper">
     <header v-if="label">{{ label }}</header>
-    <div v-for="(item, key, index) in value" :key="key" class="field-group" :class="{ 'no-label': !label }">
+    <div v-for="(item, key, index) in value"
+      :key="key"
+      class="field-group"
+      :class="{ 'no-label': !label }"
+    >
       <component
         v-for="field in fields"
         :is="field.type"
@@ -14,82 +18,90 @@
         :editable="editable"
         v-bind="{ ...field.options }"
       />
+
       <div class="btn-actions">
-        <b-tooltip label="add new group" type="is-dark">
-          <b-button
+        <o-tooltip label="add new group" variant="primary">
+          <o-button
             v-if="Object.keys(value).length - 1 === index && editable"
-            type="is-secondary"
+            class="secondaryButton"
             @click="addGroup"
             rounded
           >
             <span class="btn-icon">
               <i class="feather icon-plus" />
             </span>
-          </b-button>
-        </b-tooltip>
+          </o-button>
+        </o-tooltip>
 
-        <b-tooltip label="remove group" type="is-dark">
-          <b-button v-if="Object.keys(value).length > 1 && editable" class="remove" @click="deleteGroup(key)" rounded>
+        <o-tooltip label="remove group" variant="primary">
+          <o-button v-if="Object.keys(value).length > 1 && editable"
+            class="remove" @click="deleteGroup(key)"
+            rounded
+          >
             <span class="btn-icon">
               <i class="feather icon-minus" />
             </span>
-          </b-button>
-        </b-tooltip>
+          </o-button>
+        </o-tooltip>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import FieldRow from './FieldRow.vue';
+import FieldGroup from './FieldGroup.vue';
+
 export default {
   components: {
-    FieldRow: () => import('@/modules/core/components/ui/formElements/FieldRow'),
-    FieldGroup: () => import('@/modules/core/components/ui/formElements/FieldGroup')
+    FieldRow,
+    FieldGroup,
   },
 
   props: {
     path: {
-      type: Array
+      type: Array,
     },
     context: {
       type: Object,
-      default: null
+      default: null,
     },
     value: {
-      type: Object
+      type: Object,
     },
     label: {
-      type: String
+      type: String,
     },
     fields: {
-      type: Array
+      type: Array,
     },
     editable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   computed: {
     getFields() {
       return this.fields && this.fields.fields ? this.fields.fields : this.fields;
-    }
+    },
   },
 
   methods: {
     addGroup() {
-      this.$set(this.value, Number(Object.keys(this.value).pop()) + 1, {});
+      this.value[Number(Object.keys(this.value).pop()) + 1] = {};
     },
 
     deleteGroup(key) {
-      this.$root.$emit('removeGroup', {
+      this.emitter.emit('removeGroup', {
         context: this.context,
         path: this.path,
-        key
+        key,
       });
-      this.$delete(this.value, key);
-    }
-  }
+
+      delete this.value[key];
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -146,4 +158,15 @@ header {
     }
   }
 }
+</style>
+
+<style lang="css">
+  .secondaryButton {
+    background-color: #0c86c6;
+    border-color: transparent;
+  }
+
+  .secondaryButton:hover {
+    background-color: #173d68;
+  }
 </style>

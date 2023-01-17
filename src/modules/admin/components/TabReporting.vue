@@ -8,18 +8,18 @@ import { updateSettings } from '@/services/adminService';
 
 export default {
   components: {
-    editor
+    editor,
   },
 
   props: {
-    data: String
+    data: String,
   },
 
   methods: {
     async updateReporting(value) {
       const payload = { key: 'reporting', type: 'string', value };
       await updateSettings(payload);
-    }
-  }
+    },
+  },
 };
 </script>

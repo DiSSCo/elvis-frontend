@@ -2,14 +2,15 @@ import axios from 'axios';
 // import { DialogProgrammatic as Dialog, ToastProgrammatic as Toast } from 'buefy';
 // import { i18n } from '@/i18n';
 import { getToken } from './auth';
+
 class HttpInterceptor {
   tokenInterceptor() {
     axios.interceptors.request.use(
-      config => {
+      (config) => {
         config.headers.Authorization = config.headers.Authorization || `Bearer ${getToken()}`;
         return config;
       },
-      error => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     // axios.interceptors.response.use(

@@ -9,14 +9,14 @@
         <div class="column is-8">
           <div v-if="formData && institutions">
             <project-subject :formData="formData" :institutions="institutions" />
-            <b-notification
+            <o-notification
               v-if="errorMessage"
-              type="is-danger is-light"
+              variant="danger"
               aria-close-label="Close notification"
               role="alert"
             >
               {{ errorMessage }}
-            </b-notification>
+            </o-notification>
             <div v-show="institutionsSelected">
               <project-details
                 :formData="formData"
@@ -39,11 +39,16 @@
           </div>
         </div>
         <div class="column is-4">
-          <request-info :text="$t('request.request_info')" :moreText="$t('request.request_ta_more_info')" />
+          <request-info :text="$t('request.request_info')"
+            :moreText="$t('request.request_ta_more_info')"
+          />
           <request-status v-if="formData" :formData="formData" />
           <div class="sticky-wrapper">
             <request-navigation :steps="steps" />
-            <request-comments v-if="formData && requestId" :requestStatus="formData.status" :requestId="requestId" />
+            <request-comments v-if="formData && requestId"
+              :requestStatus="formData.status"
+              :requestId="requestId"
+            />
           </div>
         </div>
       </div>
@@ -58,23 +63,23 @@ import {
   fetchRequestData,
   updateField,
   addInstitution,
-  removeInstitution
+  removeInstitution,
 } from '@/services/requestsService';
 
 import { fetchInstitutions } from '@/services/institutionsService';
 import { makeStringFromDateArray } from '@/modules/core/utils/helpers';
-import ProjectSubject from './components/ta-request/ProjectSubject';
-import ProjectDetails from './components/ta-request/ProjectDetails';
-import OtherInstitutions from './components/ta-request/OtherInstitutions';
-import ProjectMethodology from './components/ta-request/ProjectMethodology';
-import PreviousVisits from './components/ta-request/PreviousVisits';
-import ResourceNeeds from './components/ta-request/ResourceNeeds';
-import SupportingStatement from './components/ta-request/SupportingStatement';
-import RequestSubmit from './components/ta-request/RequestSubmit';
-import RequestInfo from './components/RequestInfo';
-import RequestStatus from './components/RequestStatus';
-import RequestComments from './components/RequestComments';
-import RequestNavigation from './components/RequestNavigation';
+import ProjectSubject from './components/ta-request/ProjectSubject.vue';
+import ProjectDetails from './components/ta-request/ProjectDetails.vue';
+import OtherInstitutions from './components/ta-request/OtherInstitutions.vue';
+import ProjectMethodology from './components/ta-request/ProjectMethodology.vue';
+import PreviousVisits from './components/ta-request/PreviousVisits.vue';
+import ResourceNeeds from './components/ta-request/ResourceNeeds.vue';
+import SupportingStatement from './components/ta-request/SupportingStatement.vue';
+import RequestSubmit from './components/ta-request/RequestSubmit.vue';
+import RequestInfo from './components/RequestInfo.vue';
+import RequestStatus from './components/RequestStatus.vue';
+import RequestComments from './components/RequestComments.vue';
+import RequestNavigation from './components/RequestNavigation.vue';
 
 export default {
   components: {
@@ -89,7 +94,7 @@ export default {
     RequestInfo,
     RequestStatus,
     RequestComments,
-    RequestNavigation
+    RequestNavigation,
   },
 
   computed: {
@@ -110,9 +115,9 @@ export default {
         { id: 'visits', name: 'Previous visits', disabled: !this.institutionsSelected },
         { id: 'needs', name: 'Resource needs', disabled: !this.institutionsSelected },
         { id: 'statement', name: 'Supporting statement', disabled: !this.institutionsSelected },
-        { id: 'finish', name: 'Finish', disabled: !this.institutionsSelected }
+        { id: 'finish', name: 'Finish', disabled: !this.institutionsSelected },
       ];
-    }
+    },
   },
 
   data() {
@@ -127,23 +132,23 @@ export default {
       errorMessage: null,
       startDate: null,
       endDate: null,
-      maxWorkingDays: null
+      maxWorkingDays: null,
     };
   },
 
   async created() {
-    this.$root.$on('updateField', this.handleFormField);
-    this.$root.$on('reload', this.getRequestData);
-    this.$root.$on('set-working-days', this.setWorkingDays);
+    this.emitter.on('updateField', this.handleFormField);
+    this.emitter.on('reload', this.getRequestData);
+    this.emitter.on('set-working-days', this.setWorkingDays);
     this.requestId = this.$route.params.reqid;
     await this.getInstitutions();
     await this.getRequestData();
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
-    this.$root.$off('reload');
-    this.$root.$off('set-working-days');
+  beforeUnmount() {
+    this.emitter.off('updateField');
+    this.emitter.off('reload');
+    this.emitter.off('set-working-days');
   },
 
   methods: {
@@ -152,7 +157,7 @@ export default {
         try {
           const response = await fetchRequestData(this.requestId);
           this.formData = response;
-          this.selectedInstitutions = this.formData.institutions.map(i => i.name);
+          this.selectedInstitutions = this.formData.institutions.map((i) => i.name);
         } catch (error) {
           console.log(error);
         }
@@ -173,12 +178,14 @@ export default {
     },
 
     async selectInstitutions(institutionsList) {
-      const loadingComponent = this.$buefy.loading.open();
-      this.institutions.map(async institution => {
-        if (institutionsList.includes(institution.name) && !this.selectedInstitutions.includes(institution.name)) {
+      const loadingComponent = this.$oruga.loading.open();
+      this.institutions.map(async (institution) => {
+        if (institutionsList.includes(institution.name)
+          && !this.selectedInstitutions.includes(institution.name)) {
           await this.addNewInstitution(institution);
         }
-        if (this.selectedInstitutions.includes(institution.name) && !institutionsList.includes(institution.name)) {
+        if (this.selectedInstitutions.includes(institution.name)
+          && !institutionsList.includes(institution.name)) {
           await removeInstitution(institution.id, this.formData.id);
         }
       });
@@ -253,7 +260,7 @@ export default {
         if (response.status === 200) {
           setTimeout(() => {
             this.$router.push({
-              name: 'requests'
+              name: 'requests',
             });
             this.loading = false;
           }, 1500);
@@ -268,12 +275,12 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.$router.push({
-          name: 'requests'
+          name: 'requests',
         });
         this.loading = false;
       }, 1500);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -282,13 +289,13 @@ export default {
   border-top: 1px solid $grey-light;
   padding-top: 2em;
 }
-::v-deep .header {
+:deep(.header) {
   background: $yellow;
   padding: 0.4em 0.8em;
   margin-bottom: 1em;
 }
-::v-deep .field-row-body .form-field,
-::v-deep .error-message .error {
+:deep(.field-row-body .form-field),
+:deep(.error-message .error) {
   flex: 2;
 }
 </style>

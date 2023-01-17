@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
-import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
+import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup.vue';
 import data from '../../schemas/fields-ta.json';
 
 export default {
   components: {
     FieldRow,
-    FieldGroup
+    FieldGroup,
   },
 
   props: {
@@ -34,13 +34,13 @@ export default {
     institutions: Array,
     editable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
     return {
-      fields: data.otherInstitutions
+      fields: data.otherInstitutions,
     };
   },
 
@@ -51,9 +51,9 @@ export default {
   methods: {
     getInstitutions() {
       try {
-        const institutionsList = this.institutions.map(inst => inst.name).sort();
+        const institutionsList = this.institutions.map((inst) => inst.name).sort();
 
-        this.fields = this.fields.map(field => {
+        this.fields = this.fields.map((field) => {
           if (field.id === 'other_institutions' || field.id === 'visit_before_institution') {
             field.options.fieldOptions.autoCompleteData = institutionsList;
           }
@@ -62,8 +62,8 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

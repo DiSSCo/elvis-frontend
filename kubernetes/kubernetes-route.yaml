@@ -18,7 +18,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`elvis.dissco.tech`)
+    - match: Host(`elvis.dissco.tech/elvis-test`)
       kind: Rule
       services:
         - name: elvis-frontend-service

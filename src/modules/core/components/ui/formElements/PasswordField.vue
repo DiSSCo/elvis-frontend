@@ -13,12 +13,14 @@
   />
 
   <div class="read-only-container" v-else>
-    <b-tag v-if="isTag" class="tag" rounded :class="$t(`status.class.${val}`)">{{ $t(`status.${val}`) }}</b-tag>
+    <tag v-if="isTag" :text="$t(`status.${val}`)" :variant="$t(`status.class.${val}`)" :rounded="true" />
     <div v-else>{{ placeHolder || val || '-' }}</div>
   </div>
 </template>
 
 <script>
+import Tag from '@/modules/core/components/ui/Tag.vue';
+
 export default {
   props: {
     path: Array,
@@ -27,16 +29,20 @@ export default {
     loading: Boolean,
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isTag: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+  },
+
+  components: {
+    Tag,
   },
 
   data() {
@@ -45,14 +51,14 @@ export default {
         ? Object.keys(this.value).includes('value')
           ? this.$t(this.value.value)
           : this.$t(this.value)
-        : ''
+        : '',
     };
   },
 
   methods: {
     handleInput(event) {
-      this.$emit('input', { path: this.path, type: 'string', value: event.target.value });
-    }
-  }
+      this.$emit('updateInput', { path: this.path, type: 'string', value: event.target.value });
+    },
+  },
 };
 </script>

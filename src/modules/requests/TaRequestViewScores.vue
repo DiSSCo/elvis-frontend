@@ -7,7 +7,10 @@
       <h1 class="title-link">View Scores</h1>
       <table v-if="totalScoring" class="scoring-results">
         <tr class="table-head">
-          <td>{{ $t(`scores.${totalScoring.scorer.label}`) }} <span class="weight-label">weight:</span></td>
+          <td>
+            {{ $t(`scores.${totalScoring.scorer.label}`) }}
+            <span class="weight-label">weight:</span>
+          </td>
           <td v-for="(col, index) in totalScoring.scoring" :key="index" class="score">
             <div class="score-label">
               <div>{{ $t(`scores.${col.label}`) }}</div>
@@ -79,7 +82,7 @@ export default {
 
     totalScoring() {
       return this.calcTotal(this.allScores);
-    }
+    },
   },
 
   data() {
@@ -97,8 +100,8 @@ export default {
         'justification',
         'gains_outputs',
         'merit',
-        'societal_challenge'
-      ]
+        'societal_challenge',
+      ],
     };
   },
 
@@ -114,24 +117,24 @@ export default {
       [this.call] = response.data.data.rows;
       const scoreFormIds = this.request.scoreFormId || [];
 
-      scoreFormIds.map(async form => {
+      scoreFormIds.map(async (form) => {
         const score = await viewScore(this.requestId, form.id);
         const total = { label: 'total', value: 0 };
         const row = Object.keys(score.data.form.values)
-          .filter(f => f !== 'comments')
-          .map(fieldId => {
+          .filter((f) => f !== 'comments')
+          .map((fieldId) => {
             total.value += Number(score.data.form.values[fieldId].value.value);
             return {
               index: this.scoringOrder.indexOf(fieldId),
               label: fieldId,
-              value: Number(score.data.form.values[fieldId].value.value)
+              value: Number(score.data.form.values[fieldId].value.value),
             };
           });
 
         const scorerName = await this.getScorerName(score.data.scorerId);
         const scorer = {
           label: 'reviewer',
-          value: { name: scorerName, comments: score.data.form.values.comments.value.value }
+          value: { name: scorerName, comments: score.data.form.values.comments.value.value },
         };
         const scoring = sortArray(row, 'index', 'asc');
         this.scores.push({ scorer, scoring, total });
@@ -155,7 +158,7 @@ export default {
         scorer.label = 'request_title';
         scorer.title = this.request.fieldValues.subject?.value || '';
         scorer.requester = `${this.request.creatorData.firstName} ${this.request.creatorData.lastName}`;
-        const totalScores = clone.map(score => score.scoring.map(s => s.value));
+        const totalScores = clone.map((score) => score.scoring.map((s) => s.value));
         const average = this.calcAverage(...totalScores);
         const averageScoring = scoring.map((s, i) => {
           const weight = this.call.scoring.weight[this.toCamelCase(s.label)];
@@ -163,7 +166,7 @@ export default {
           return {
             label: s.label,
             value: average[i],
-            weight
+            weight,
           };
         });
         total.label = 'average_weighted_total';
@@ -177,7 +180,7 @@ export default {
       const n = arrays.reduce((max, xs) => Math.max(max, xs.length), 0);
       const result = Array.from({ length: n });
       return result.map((_, i) => {
-        const av = arrays.map(xs => xs[i] || 0).reduce((sum, x) => sum + x, 0) / arrays.length;
+        const av = arrays.map((xs) => xs[i] || 0).reduce((sum, x) => sum + x, 0) / arrays.length;
         return Number(av.toFixed(2));
       });
     },
@@ -185,8 +188,8 @@ export default {
     toCamelCase(str) {
       const parts = str.split('_');
       return parts.map((part, index) => (index ? part.charAt(0).toUpperCase() + part.slice(1) : part)).join('');
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -269,12 +272,12 @@ export default {
     bottom: -40px;
   }
 }
-::v-deep .vue-slider-dot-tooltip-inner {
+:deep(.vue-slider-dot-tooltip-inner) {
   background: $white;
   color: $black;
   font-size: 10px;
 }
-::v-deep .vue-slider-dot-handle-disabled {
+:deep(.vue-slider-dot-handle-disabled) {
   background: $white;
 }
 </style>

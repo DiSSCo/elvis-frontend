@@ -11,8 +11,8 @@ export default {
   props: {
     status: {
       type: [Number, String],
-      default: 404
-    }
+      default: 404,
+    },
   },
 
   computed: {
@@ -20,8 +20,8 @@ export default {
       return this.$te(`error_handling.${this.status}`)
         ? this.$t(`error_handling.${this.status}`)
         : this.$t('error_handling.default');
-    }
-  }
+    },
+  },
 };
 </script>
 

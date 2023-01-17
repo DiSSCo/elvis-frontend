@@ -7,8 +7,10 @@
             <h1>{{ $t('help.title') }}</h1>
           </header>
           <p>
-            Hello, you have come to the right place for ELViS user support! ELViS users can submit queries about using
-            the platform, technical issues with the functionalities and feedback for improvements via the DiSSCo
+            Hello, you have come to the right place for ELViS user support!
+            ELViS users can submit queries about using
+            the platform, technical issues with the functionalities and feedback
+            for improvements via the DiSSCo
             helpdesk: <a href="mailto:support@dissco.jitbit.com">support@dissco.jitbit.com</a>.
           </p>
           <header>
@@ -24,8 +26,8 @@
             <h1>{{ $t('help.extra_note') }}</h1>
           </header>
           <p>
-            To reduce traffic in the helpdesk please check if your query can be solved in the Transnational Access and
-            Virtual Access FAQs on the SYNTHESYS+ Website:
+            To reduce traffic in the helpdesk please check if your query can be
+            solved in the Transnational Access and Virtual Access FAQs on the SYNTHESYS+ Website:
             <a href="https://www.synthesys.info/access/virtual-access/Virtual-Access-FAQs.html">VA FAQs</a>
             and
             <a href="https://www.synthesys.info/access/faqs.html">TA FAQs</a>.
@@ -40,46 +42,53 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { sendFeedback } from '@/services/apiService';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+// import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 
 export default {
-  components: {
-    FieldRow
+  // components: {
+  //   FieldRow,
+  // },
+
+  setup() {
+    const v$ = useVuelidate();
+
+    return { v$: v$ };
   },
 
   data() {
     return {
       form: {
         subject: '',
-        message: ''
+        message: '',
       },
       uploadErrorMessage: '',
       succesMessage: '',
       loading: false,
       file: null,
-      reset: false
+      reset: false,
     };
   },
 
   validations: {
     form: {
       subject: {
-        required
+        required,
       },
       message: {
-        required
-      }
-    }
+        required,
+      },
+    },
   },
 
   created() {
-    this.$root.$on('fileUploaded', this.fetchFile);
+    this.emitter.on('fileUploaded', this.fetchFile);
   },
 
-  beforeDestroy() {
-    this.$root.$off('fileUploaded');
+  beforeUnmount() {
+    this.emitter.off('fileUploaded');
   },
 
   methods: {
@@ -89,8 +98,8 @@ export default {
 
     async submit() {
       this.loading = true;
-      this.$v.form.$touch();
-      if (!this.$v.form.$invalid) {
+      this.v$.form.$touch();
+      if (!this.v$.form.$invalid) {
         const formData = new FormData();
         formData.append('subject', this.form.subject);
         formData.append('message', this.form.message);
@@ -106,8 +115,7 @@ export default {
         } catch (error) {
           console.log('error: ', error);
           this.loading = false;
-          this.uploadErrorMessage =
-            'Something went wrong uploading the form, perhaps your file is too large. Please try again.';
+          this.uploadErrorMessage = 'Something went wrong uploading the form, perhaps your file is too large. Please try again.';
         }
       } else {
         this.loading = false;
@@ -119,13 +127,13 @@ export default {
       this.form.message = '';
       this.file = null;
       this.reset = !this.reset;
-      this.$v.form.$reset();
+      this.v$.form.$reset();
 
       setTimeout(() => {
         this.succesMessage = '';
       }, 5000);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -147,7 +155,7 @@ export default {
   justify-content: flex-end;
 }
 
-::v-deep i {
+:deep(i) {
   font-size: 18px;
 }
 

@@ -6,7 +6,7 @@ const localVue = createLocalVue();
 
 beforeEach(() => {
   wrapper = mount(StringField, {
-    localVue
+    localVue,
   });
 });
 

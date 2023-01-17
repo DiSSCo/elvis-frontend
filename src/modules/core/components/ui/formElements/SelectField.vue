@@ -1,11 +1,11 @@
 <template>
   <div v-if="editable" class="select-field">
-    <b-select :value="val" :placeholder="placeHolder" @input="select" expanded :disabled="disabled">
+    <o-select :value="val" :placeholder="placeHolder" @input="select" expanded :disabled="disabled">
       <option v-if="withEmptyOption" value="">- {{ placeHolder }} -</option>
       <option v-for="(option, index) in options" :key="index" :value="option">
         {{ prefix }} {{ option }} {{ suffix }}
       </option>
-    </b-select>
+    </o-select>
   </div>
   <div v-else>
     <span v-if="val">{{ prefix }} {{ val }} {{ suffix }}</span
@@ -21,19 +21,19 @@ export default {
     placeHolder: String,
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     options: Array,
     withEmptyOption: {
       type: Boolean,
-      default: false
+      default: false,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     prefix: String,
-    suffix: String
+    suffix: String,
   },
 
   computed: {
@@ -45,15 +45,17 @@ export default {
         return this.value;
       }
       return null;
-    }
+    },
   },
 
   methods: {
     select(event) {
-      this.$emit('input', { path: this.path, type: 'string', value: String(event) });
-      this.$root.$emit('selection', event);
-    }
-  }
+      const value = event.target.value.trim();
+
+      this.$emit('updateInput', { path: this.path, type: 'string', value: String(value) });
+      this.emitter.emit('selection', event);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -61,10 +63,10 @@ export default {
   display: flex;
   flex: 1;
 
-  ::v-deep .control {
+  :deep(.control) {
     flex: 1;
   }
-  ::v-deep .select.is-empty select {
+  :deep(.select.is-empty select) {
     color: $grey-dark;
   }
 }

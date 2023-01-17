@@ -2,9 +2,9 @@
   <div v-if="formData">
     <div class="action-bar">
       <div class="container">
-        <b-button v-if="!editable" type="is-primary" @click="editable = true">
+        <o-button v-if="!editable" class="primaryButton" @click="editable = true">
           <span> <i class="feather icon-edit" /> {{ $t('profile.edit') }} </span>
-        </b-button>
+        </o-button>
       </div>
     </div>
 
@@ -35,23 +35,26 @@
                   <field-row
                     :label="$t('profile.birthday')"
                     :fieldOptions="{
-                      validation: $v.formData.birthDate,
+                      validation: v$.formData.birthDate,
                       errorMessage: `Please enter a valid date of birth`
                     }"
                     :style="{ order: 7 }"
                   >
                     <div class="multiple-inputs is-6">
-                      <div v-for="(part, index) of formData.birthDate" :key="index" class="single-input is-4">
+                      <div v-for="(part, index) of formData.birthDate"
+                        :key="index" class="single-input is-4"
+                      >
                         <input
                           type="text"
                           v-model.trim="part.value"
-                          @blur="$v.formData.birthDate[index].$touch()"
+                          @blur="v$.formData.birthDate[index].$touch()"
                           ref="birthday"
                           tabindex="7"
                           :maxlength="part.maxLength"
                           :placeholder="part.placeHolder"
                           :class="{
-                            'is-danger': $v.formData.birthDate[index].$dirty && $v.formData.birthDate[index].$error
+                            'is-danger': v$.formData.birthDate[index].$dirty
+                            && v$.formData.birthDate[index].$error
                           }"
                         />
                       </div>
@@ -61,17 +64,21 @@
                   <field-row
                     :label="$t('profile.orcid')"
                     :fieldOptions="{
-                      validation: $v.formData.orcId,
+                      validation: v$.formData.orcId,
                       errorMessage: `Please enter a valid ${$t('profile.orcid')}`
                     }"
                     :style="{ order: 9 }"
                   >
                     <div class="multiple-inputs">
-                      <div v-for="(id, index) of formData.orcId" :key="index" class="single-input is-3">
+                      <div v-for="(id, index) of formData.orcId"
+                        :key="index"
+                        class="single-input is-3"
+                      >
                         <input
                           type="text"
                           v-model.trim="id.part"
-                          @blur="index === formData.orcId.length - 1 ? $v.formData.orcId.$touch() : null"
+                          @blur="index === formData.orcId.length - 1
+                          ? v$.formData.orcId.$touch() : null"
                           @keyup="keyup($event, 4)"
                           maxlength="4"
                           ref="orcId"
@@ -81,10 +88,10 @@
                     </div>
                   </field-row>
                   <div class="action-btns" :style="{ order: 20 }">
-                    <b-button @click="cancel" outlined> {{ $t('cancel') }} </b-button>
-                    <b-button type="is-primary" :loading="loading" @click="saveProfile">
+                    <o-button @click="cancel" outlined class="cancelButton"> {{ $t('cancel') }} </o-button>
+                    <o-button variant="primary" :loading="loading" @click="saveProfile">
                       {{ $t('profile.save') }}
-                    </b-button>
+                    </o-button>
                   </div>
                 </form>
               </transition>
@@ -169,39 +176,47 @@
 </template>
 
 <script>
-import { required, maxLength, minLength, minValue, maxValue, numeric } from 'vuelidate/lib/validators';
+import { useVuelidate } from '@vuelidate/core';
+import {
+  required, maxLength, minLength, minValue, maxValue, numeric,
+} from '@vuelidate/validators';
 import { fetchInstitutions } from '@/services/institutionsService';
 import { getUserProfile, updateUserProfile } from '@/services/usersService';
 import { getProfile, setProfile } from '@/modules/core/utils/auth';
 import { capitalize, sanitizeOrcId } from '@/modules/core/utils/helpers';
-import fields from './schemas/profile.json';
-import Gravatar from '@/modules/core/components/ui/Gravatar';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import Gravatar from '@/modules/core/components/ui/Gravatar.vue';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import countries from '@/modules/core/schemas/country-list.json';
+import fields from './schemas/profile.json';
 
 export default {
   components: {
     FieldRow,
-    Gravatar
+    Gravatar,
+  },
+
+  setup() {
+    return { v$: useVuelidate() };
   },
 
   computed: {
     institutionName() {
       const { institutionId } = this.profile.attributes;
-      const [name] = this.institutions.filter(inst => inst.id === institutionId).map(i => i.name);
+      const [name] = this.institutions.filter((inst) => inst.id
+      === institutionId).map((i) => i.name);
       return name;
     },
 
     countryName() {
       const { countryCode } = this.profile.attributes;
-      const [name] = countries.filter(country => country.code === countryCode).map(i => i.name);
+      const [name] = countries.filter((country) => country.code === countryCode).map((i) => i.name);
       return name;
     },
 
     institutionRoles() {
       const roles = ['institution moderator', 'ta coordinator', 'va coordinator'];
       return this.formData.groups
-        .filter(role => roles.includes(role))
+        .filter((role) => roles.includes(role))
 
         .join(', ');
     },
@@ -209,7 +224,7 @@ export default {
     countryRoles() {
       const roles = ['taf admin', 'ta scorer'];
       return this.formData.groups
-        .filter(role => roles.includes(role))
+        .filter((role) => roles.includes(role))
 
         .join(', ');
     },
@@ -218,7 +233,7 @@ export default {
       return Number(this.formData.birthDate.year.value)
         ? `${this.formData.birthDate.day.value}-${this.formData.birthDate.month.value}-${this.formData.birthDate.year.value}`
         : '-';
-    }
+    },
   },
 
   data() {
@@ -235,34 +250,34 @@ export default {
         day: {
           value: '',
           placeHolder: 'dd',
-          maxLength: 2
+          maxLength: 2,
         },
         month: {
           value: '',
           placeHolder: 'mm',
-          maxLength: 2
+          maxLength: 2,
         },
         year: {
           value: '',
           placeHolder: 'yyyy',
-          maxLength: 4
-        }
+          maxLength: 4,
+        },
       },
       orcId: [{ part: '' }, { part: '' }, { part: '' }, { part: '' }],
       relatedInstitutionId: '',
       nationality: '',
       homeInstitutionId: '',
-      countryOtherInstitution: ''
+      countryOtherInstitution: '',
     };
   },
 
   validations: {
     formData: {
       firstName: {
-        required
+        required,
       },
       lastName: {
-        required
+        required,
       },
       birthDate: {
         required,
@@ -273,8 +288,8 @@ export default {
             minLength: minLength(2),
             maxLength: maxLength(2),
             minValue: minValue(1),
-            maxValue: maxValue(31)
-          }
+            maxValue: maxValue(31),
+          },
         },
         month: {
           value: {
@@ -283,8 +298,8 @@ export default {
             minLength: minLength(2),
             maxLength: maxLength(2),
             minValue: minValue(1),
-            maxValue: maxValue(12)
-          }
+            maxValue: maxValue(12),
+          },
         },
         year: {
           value: {
@@ -293,9 +308,9 @@ export default {
             minLength: minLength(4),
             maxLength: maxLength(4),
             minValue: minValue(1900),
-            maxValue: maxValue(new Date().getFullYear())
-          }
-        }
+            maxValue: maxValue(new Date().getFullYear()),
+          },
+        },
       },
       orcId: {
         required,
@@ -303,45 +318,45 @@ export default {
           part: {
             required,
             maxLength: maxLength(4),
-            minLength: minLength(4)
-          }
-        }
-      }
-    }
+            minLength: minLength(4),
+          },
+        },
+      },
+    },
   },
 
   async created() {
-    this.$root.$on('updateField', this.handleFormField);
+    this.emitter.on('updateField', this.handleFormField);
     this.profile = getProfile();
     await this.setFields();
     await this.setData();
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
+  beforeUnmount() {
+    this.emitter.off('updateField');
   },
 
   methods: {
     handleFormField(event) {
       if (event.fieldId.includes('relatedInstitutionName')) {
-        this.$set(this.formData, 'relatedInstitutionName', event.value.value);
+        this.formData.relatedInstitutionName = event.value.value;
       }
       if (event.fieldId.includes('homeInstitutionName')) {
-        this.$set(this.formData, 'homeInstitutionName', event.value.value);
+        this.formData.homeInstitutionName = event.value.value;
       }
       if (event.fieldId.includes('nationality')) {
-        this.$set(this.formData, 'nationality', event.value.value);
+        this.formData.nationality = event.value.value;
       }
       if (event.fieldId.includes('countryOtherInstitution')) {
-        this.$set(this.formData, 'countryOtherInstitution', event.value.value);
+        this.formData.countryOtherInstitution = event.value.value;
       }
       if (event.fieldId.includes('gender')) {
-        this.$set(this.formData, 'gender', event.value.value);
+        this.formData.gender = event.value.value;
       }
     },
 
     parseOrcId(orcId) {
-      const parsed = orcId.map(id => id.part);
+      const parsed = orcId.map((id) => id.part);
       return parsed.join('').length ? parsed.join('-') : '';
     },
 
@@ -359,78 +374,86 @@ export default {
       const institutionsFromResponse = await fetchInstitutions();
       this.institutions = institutionsFromResponse.data.data.rows;
 
-      this.fields = this.fields.map(field => {
+      this.fields = this.fields.map((field) => {
+        const copyField = { ...field };
         if (field.options.fieldOptions?.errorMessage) {
-          this.$set(field.options.fieldOptions, 'validation', this.$v.formData[field.id]);
+          field.options.fieldOptions.validation = this.v$.formData[field.id];
         }
         if (field.id === 'relatedInstitutionName') {
-          field.options.fieldOptions.options = this.institutions.map(inst => inst.name).sort();
+          copyField.options.fieldOptions.options = this.institutions.map(
+            (inst) => inst.name,
+          ).sort();
         }
         if (field.id === 'nationality') {
-          field.options.fieldOptions.options = countries.map(country => country.name).sort();
+          copyField.options.fieldOptions.options = countries.map((country) => country.name).sort();
         }
         if (field.id === 'countryOtherInstitution') {
-          field.options.fieldOptions.options = countries.map(country => country.name).sort();
+          copyField.options.fieldOptions.options = countries.map((country) => country.name).sort();
         }
-        return field;
+        return copyField;
       });
     },
 
     setData() {
       if (!this.profile) return;
       this.profile.birthDateTime = this.profile.birthDateTime
-        ? this.profile.birthDateTime.map(part => {
-            part = Number(part);
-            return part && part < 10 ? `0${part}` : part;
-          })
+        ? this.profile.birthDateTime.map((part) => {
+          const copyPart = Number(part);
+          return copyPart && copyPart < 10 ? `0${copyPart}` : copyPart;
+        })
         : [null, null, null];
-      [this.birthDate.year.value, this.birthDate.month.value, this.birthDate.day.value] = this.profile.birthDateTime;
-      this.$set(this.profile, 'birthDate', this.birthDate);
+      [this.birthDate.year.value, this.birthDate.month.value,
+        this.birthDate.day.value] = this.profile.birthDateTime;
+      this.profile.birthDate = this.birthDate;
 
       const [relatedInstitutionName] = this.institutions
-        .filter(institution => institution.id === this.profile.attributes?.relatedInstitutionId)
-        .map(i => i.name);
-      this.$set(this.profile, 'relatedInstitutionName', relatedInstitutionName);
+        .filter((institution) => institution.id === this.profile.attributes?.relatedInstitutionId)
+        .map((i) => i.name);
+      this.profile.relatedInstitutionName = relatedInstitutionName;
 
       const homeInstitutionName = this.profile.attributes?.homeInstitutionId;
-      this.$set(this.profile, 'homeInstitutionName', homeInstitutionName);
+      this.profile.homeInstitutionName = homeInstitutionName;
 
       const [countryName] = countries
-        .filter(country => country.name === this.profile.attributes?.nationality)
-        .map(country => country.name);
-      this.$set(this.profile, 'nationality', countryName);
+        .filter((country) => country.name === this.profile.attributes?.nationality)
+        .map((country) => country.name);
+      this.profile.nationality = countryName;
 
       const [otherCountryName] = countries
-        .filter(country => country.name === this.profile.attributes?.countryOtherInstitution)
-        .map(country => country.name);
-      this.$set(this.profile, 'countryOtherInstitution', otherCountryName);
+        .filter((country) => country.name === this.profile.attributes?.countryOtherInstitution)
+        .map((country) => country.name);
+      this.profile.countryOtherInstitution = otherCountryName;
 
       if (this.profile.attributes.orcId) {
         const sanitizedOrcId = sanitizeOrcId(this.profile.attributes.orcId);
         const orcIdAsArray = sanitizedOrcId.split('-').slice(-1 * 4);
         this.orcId.map((id, index) => (id.part = orcIdAsArray[index]));
       }
-      this.$set(this.profile, 'orcId', this.orcId);
+      this.profile.orcId = this.orcId;
       this.formData = this.profile;
     },
 
     async saveProfile() {
-      this.$v.formData.$touch();
-      if (!this.$v.$invalid) {
+      this.v$.formData.$touch();
+      if (!this.v$.$invalid) {
         this.submit();
       }
     },
 
     async submit() {
       this.loading = true;
-      const loadingComponent = this.$buefy.loading.open();
+      const loadingComponent = this.$oruga.loading.open();
       const [foundRelated] = this.institutions.filter(
-        institution => institution.name === this.formData.relatedInstitutionName
+        (institution) => institution.name === this.formData.relatedInstitutionName,
       );
 
-      const [foundCountry] = countries.filter(country => country.name === this.formData.nationality);
+      const [foundCountry] = countries.filter(
+        (country) => country.name === this.formData.nationality,
+      );
 
-      const [foundOtherCountry] = countries.filter(country => country.name === this.formData.countryOtherInstitution);
+      const [foundOtherCountry] = countries.filter(
+        (country) => country.name === this.formData.countryOtherInstitution,
+      );
 
       const relatedInstitutionId = foundRelated ? foundRelated.id : null;
 
@@ -447,7 +470,7 @@ export default {
         relatedInstitutionId,
         nationality,
         homeInstitutionId: this.formData.homeInstitutionName,
-        countryOtherInstitution
+        countryOtherInstitution,
       };
 
       await updateUserProfile(payload);
@@ -474,8 +497,8 @@ export default {
     },
     sanitizeOrcId(id) {
       return sanitizeOrcId(id);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -554,5 +577,18 @@ export default {
 .user-roles {
   border-top: 1px solid $grey;
   padding-top: 1em;
+}
+</style>
+
+<style>
+.cancelButton {
+  border-color: #dbdbdb;
+  color: #363636;
+}
+
+.cancelButton:hover {
+  border-color: #dbdbdb;
+  color: #363636;
+  background-color: white;
 }
 </style>

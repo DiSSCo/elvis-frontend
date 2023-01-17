@@ -9,42 +9,42 @@
       <div class="container">
         <header>
           <h1>
-            {{ $t('institution.institutions') }} <span v-if="filteredData">({{ filteredData.length }})</span>
+            {{ $t('institution.institutions') }}
+            <span v-if="filteredData">({{ filteredData.length }})</span>
           </h1>
         </header>
         <div>
-          <b-table
-            :data="filteredData"
-            :row-class="(row, index) => 'row'"
-            :mobile-cards="false"
-            :paginated="filteredData.length > 10"
-            :per-page="perPage"
-            :current-page.sync="page"
-            :default-sort-direction="defaultSortDirection"
-            :sort-icon="sortIcon"
-            :sort-icon-size="sortIconSize"
-            :default-sort="defaultSort"
-            @select="showDetails"
-            @sort="(field, order) => setSorting(field, order)"
-            hoverable
-            data-cy="table"
-          >
-            <b-table-column field="id" label="Id" sortable v-slot="props">{{ props.row.id }}</b-table-column>
-            <b-table-column field="name" label="Summary" sortable v-slot="props">
-              <div class="emphasized">{{ props.row.name }}</div>
-              <div>{{ props.row.fieldValues.country.value[0] }} {{ props.row.fieldValues.city.value }}</div>
-            </b-table-column>
-            <b-table-column field="fieldValues.country.value" label="Country" sortable v-slot="props">{{
-              props.row.fieldValues.country.value ? props.row.fieldValues.country.value[0] : ''
-            }}</b-table-column>
+          <o-table :data="isEmpty ? [] : filteredData" hoverable :mobile-cards="hasMobileCards" :paginated="isPaginated"
+            :per-page="perPage" :default-sort-direction="defaultSortDirection" :sort-icon="sortIcon"
+            :sort-icon-size="sortIconSize" :default-sort="defaultSort" @select="row => showDetails(row)">
+            <o-table-column field="id" label="Id" v-slot:default="props" sortable class="td-center">
+              {{ props.row.id }}
+            </o-table-column>
 
-            <template slot="empty">
-              {{ $t('institution.no_institutions_found') }}
+            <o-table-column field="name" label="Summary" v-slot:default="props" sortable>
+              <div class="emphasized">{{ props.row.name }}</div>
+              <div>
+                {{ props.row.fieldValues.country.value[0] }}
+                {{ props.row.fieldValues.city.value }}
+              </div>
+            </o-table-column>
+
+            <o-table-column field="fieldValues.country.value" label="Country" v-slot:default="props" sortable>
+              {{ props.row.fieldValues.country.value ? props.row.fieldValues.country.value[0] : '' }}
+            </o-table-column>
+
+            <template v-slot:empty>
+              {{ $t('facility.no_facilities_found') }}
             </template>
-            <template slot="bottom-left">
-              <pager :total="filteredData.length" :perPage="perPage" @input="setPerPage" />
+            <template v-slot:bottom-left>
+              <o-field grouped group-multiline>
+                <o-select v-model="perPage" :disabled="!isPaginated">
+                  <option value="10">10 per page</option>
+                  <option :value="filteredData.length"> {{ `${filteredData.length} per page` }} </option>
+                </o-select>
+              </o-field>
             </template>
-          </b-table>
+          </o-table>
         </div>
       </div>
     </div>
@@ -52,48 +52,47 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import { search, setQuery } from '@/modules/core/utils/helpers';
 import { fetchInstitutions } from '@/services/institutionsService';
-import Search from '@/modules/core/components/ui/Search';
-import Pager from '@/modules/core/components/ui/Pager';
+import Search from '@/modules/core/components/ui/Search.vue';
 
 export default {
   components: {
     Search,
-    Pager
   },
 
   computed: {
     filteredData() {
       if (this.institutions && this.institutions.length && this.searchTerm) {
-        return this.institutions.filter(d => search(d, this.searchTerm));
+        return this.institutions.filter((d) => search(d, this.searchTerm));
       }
       return this.institutions;
-    }
+    },
   },
 
-  // watch: {
-  //   page: {
-  //     handler(value) {
-  //       this.page = value;
-  //       const query = { page: value, perPage: this.perPage };
-  //       this.$router.replace({
-  //         name: 'institutions',
-  //         query
-  //       });
-  //     }
-  //   },
-  //   perPage: {
-  //     handler(value) {
-  //       this.perPage = value;
-  //       const query = { page: this.page, perPage: value };
-  //       this.$router.replace({
-  //         name: 'institutions',
-  //         query
-  //       });
-  //     }
-  //   }
-  // },
+  watch: {
+    page: {
+      handler(value) {
+        this.page = value;
+        const query = { page: value, perPage: this.perPage };
+        this.$router.replace({
+          name: 'institutions',
+          query,
+        });
+      },
+    },
+    perPage: {
+      handler(value) {
+        this.perPage = value;
+        const query = { page: this.page, perPage: value };
+        this.$router.replace({
+          name: 'institutions',
+          query,
+        });
+      },
+    },
+  },
 
   data() {
     return {
@@ -104,7 +103,8 @@ export default {
       sortIconSize: 'is-small',
       searchTerm: this.$route.query.q || '',
       page: Number(this.$route.query.page) || 1,
-      perPage: Number(this.$route.query.perPage) || 10
+      perPage: Number(this.$route.query.perPage) || 10,
+      isPaginated: ref(true),
     };
   },
 
@@ -125,20 +125,32 @@ export default {
       this.$router.push({
         name: 'institution-details',
         params,
-        query
+        query,
       });
     },
 
     setSearchTerm(event) {
-      this.searchTerm = event;
-      const query = { ...this.$route.query, q: this.searchTerm };
-      setQuery(query);
+      if (typeof event === 'object') {
+        this.searchTerm = event.target.value;
+
+        const query = { ...this.$route.query, q: this.searchTerm };
+        setQuery(query);
+      } else {
+        this.searchTerm = event;
+
+        const query = { ...this.$route.query, q: this.searchTerm };
+        setQuery(query);
+      }
     },
 
     setSorting(field, order) {
       this.defaultSort = field;
       this.defaultSortDirection = order;
-      const query = { ...this.$route.query, orderBy: this.defaultSort, direction: this.defaultSortDirection };
+      const query = {
+        ...this.$route.query,
+        orderBy: this.defaultSort,
+        direction: this.defaultSortDirection,
+      };
       setQuery(query);
     },
 
@@ -154,11 +166,11 @@ export default {
         orderBy: this.defaultSort,
         direction: this.defaultSortDirection,
         perPage: this.perPage,
-        q: this.searchTerm
+        q: this.searchTerm,
       };
       setQuery(query);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -166,7 +178,24 @@ export default {
 .details {
   cursor: pointer;
 }
+
 .is-large {
   font-size: 24px;
+}
+</style>
+
+<style lang="css">
+td {
+  font-size: 14px !important;
+  padding-top: 1em !important;
+  padding-bottom: 1em !important;
+}
+
+td:hover {
+  cursor: pointer !important;
+}
+
+.td-center {
+  vertical-align: middle !important;
 }
 </style>

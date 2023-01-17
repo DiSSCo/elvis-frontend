@@ -1,6 +1,6 @@
 <template>
   <div class="form-steps-wrapper">
-    <scrollactive
+    <div
       :scrollOnStart="false"
       :highlightFirstItem="true"
       :offset="0"
@@ -12,22 +12,36 @@
         v-for="(step, index) in steps"
         :key="index"
         :href="`#${step.id}`"
-        :class="{ disabled: step.disabled }"
+        :class="{ disabled: step.disabled, 'is-active': active === index }"
         class="scrollactive-item"
+        @click="setActive(index)"
       >
-        <span class="step" :class="{ last: index === steps.length - 1 }" /><span class="step-text">{{
+        <span class="step" :class="{ last: index === steps.length - 1 }" />
+        <span class="step-text">{{
           step.name
         }}</span>
       </a>
-    </scrollactive>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    steps: Array
-  }
+    steps: Array,
+  },
+
+  data() {
+    return {
+      active: 0,
+    };
+  },
+
+  methods: {
+    setActive(index) {
+      this.active = index;
+    },
+  },
 };
 </script>
 
@@ -48,7 +62,7 @@ export default {
     overflow: hidden;
     color: $black;
     &:hover {
-      text-decoration: none;
+      text-decoration: none !important;
       font-weight: bold;
     }
     &.is-active {

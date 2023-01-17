@@ -5,7 +5,7 @@ export async function search(index, queries, page = 1, perPage = 1000) {
     index,
     queries,
     perPage,
-    page
+    page,
   });
 }
 
@@ -17,21 +17,21 @@ export function buildQuery(id = '', field = 'collection') {
         {
           field: 'deleted_at',
           type: 'eq',
-          value: null
-        }
-      ]
-    }
+          value: null,
+        },
+      ],
+    },
   ];
   if (id) {
     queries.push({
       type: 'FieldQuery',
       operator: 'equals',
       value: id,
-      field: `${field}.id`
+      field: `${field}.id`,
     });
   }
   return {
     queries,
-    type: 'AndQuery'
+    type: 'AndQuery',
   };
 }

@@ -21,29 +21,29 @@
 
 <script>
 import { fetchUsers } from '@/services/usersService';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
-import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
+import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup.vue';
 import data from '../../schemas/fields-ta.json';
 import disciplines from '../../schemas/project-disciplines.json';
 
 export default {
   components: {
     FieldRow,
-    FieldGroup
+    FieldGroup,
   },
 
   props: {
     formData: Object,
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     startDate: String,
     endDate: String,
     institutions: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
 
   data() {
@@ -51,7 +51,7 @@ export default {
       fields: data.projectDetails,
       disciplines,
       sDate: new Date(),
-      eDate: new Date()
+      eDate: new Date(),
     };
   },
 
@@ -61,7 +61,7 @@ export default {
         this.setStartDate(value);
       },
       immediate: true,
-      deep: true
+      deep: true,
     },
 
     endDate: {
@@ -69,8 +69,8 @@ export default {
         this.setEndDate(value);
       },
       immediate: true,
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   created() {
@@ -93,10 +93,10 @@ export default {
           this.setSubDisciplines(null);
         }
         setTimeout(() => {
-          this.$root.$emit('updateField', {
+          this.emitter.emit('updateField', {
             context: { resource: 'requests' },
             fieldId: ['project_specific_discipline'],
-            value: { type: 'string', value: '' }
+            value: { type: 'string', value: '' },
           });
         }, 1000);
       }
@@ -105,16 +105,18 @@ export default {
     async getResearchers() {
       try {
         const response = await fetchUsers();
-        const autoCompleteData = response.data.data.rows.map(person => {
-          const [institution] = this.institutions.filter(i => i.id === person.attributes.relatedInstitutionId);
+        const autoCompleteData = response.data.data.rows.map((person) => {
+          const [institution] = this.institutions.filter(
+            (i) => i.id === person.attributes.relatedInstitutionId,
+          );
           return institution
             ? `${person.firstName} ${person.lastName} (${institution.name})`
             : `${person.firstName} ${person.lastName}`;
         });
 
-        this.fields = this.fields.map(field => {
+        this.fields = this.fields.map((field) => {
           if (field.group === 'team_details') {
-            const found = field.fields.find(f => f.id === 'other_researchers');
+            const found = field.fields.find((f) => f.id === 'other_researchers');
             found.options.fieldOptions.autoCompleteData = autoCompleteData;
           }
           return field;
@@ -129,9 +131,9 @@ export default {
       if (date) {
         this.sDate = date;
         this.calculateWorkingDays();
-        const found = this.fields.find(field => field.id === 'end_date');
+        const found = this.fields.find((field) => field.id === 'end_date');
         if (found) {
-          this.$set(found.options.fieldOptions, 'minDate', new Date(date));
+          found.options.fieldOptions.minDate = new Date(date);
         }
       }
     },
@@ -151,7 +153,7 @@ export default {
       const currentDate = startDate;
       while (currentDate <= endDate) {
         const dayOfWeek = currentDate.getDay();
-        if (!(dayOfWeek === 6 || dayOfWeek === 0)) count++;
+        if (!(dayOfWeek === 6 || dayOfWeek === 0)) count += 1;
         currentDate.setDate(currentDate.getDate() + 1);
       }
 
@@ -159,38 +161,36 @@ export default {
     },
 
     setWorkingDays(count) {
-      const found = this.fields.find(field => field.id === 'visit_length');
+      const found = this.fields.find((field) => field.id === 'visit_length');
       if (found) {
-        this.$set(
-          found.options.fieldOptions,
-          'options',
-          Array.from(Array(count + 1), (x, i) => String(i))
-        );
-        this.$root.$emit('set-working-days', count);
+        found.options.fieldOptions.options = Array.from(Array(count + 1), (x, i) => String(i));
+        this.emitter.emit('set-working-days', count);
       }
     },
 
     setDisciplines() {
-      const group = this.fields.find(field => field.group === 'project_information');
-      const found = group.fields.find(field => field.id === 'project_discipline');
-      const mainDisciplines = this.disciplines.map(discipline => discipline.name);
+      const group = this.fields.find((field) => field.group === 'project_information');
+      const found = group.fields.find((field) => field.id === 'project_discipline');
+      const mainDisciplines = this.disciplines.map((discipline) => discipline.name);
 
       if (found) {
-        this.$set(found.options.fieldOptions, 'options', mainDisciplines);
+        found.options.fieldOptions.options = mainDisciplines;
         this.setSubDisciplines(this.formData.fieldValues.project_discipline?.value);
       }
     },
 
     setSubDisciplines(main) {
-      const group = this.fields.find(field => field.group === 'project_information');
-      const found = group.fields.find(field => field.id === 'project_specific_discipline');
-      const foundDiscipline = main ? this.disciplines.find(discipline => discipline.name === main)?.sub : [];
+      const group = this.fields.find((field) => field.group === 'project_information');
+      const found = group.fields.find((field) => field.id === 'project_specific_discipline');
+      const foundDiscipline = main ? this.disciplines.find(
+        (discipline) => discipline.name === main,
+      )?.sub : [];
 
       if (found) {
-        this.$set(found.options.fieldOptions, 'options', foundDiscipline);
+        found.options.fieldOptions.options = foundDiscipline;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

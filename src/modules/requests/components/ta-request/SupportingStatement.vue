@@ -2,19 +2,21 @@
   <div>
     <h3 class="header">Supporting statement</h3>
     <p>
-      The Supporting Statement will be used as a professional reference. Therefore, it should be provided by a senior
-      peer who knows both you and your work first-hand. It must not be provided by a staff member from your chosen TAF.
-      Ideally this should be from an international expert in your field who is not from your own institution nor is your
-      User Group leader. It is acknowledged that for PhD students this will be difficult to attain and please email the
-      SYNTHESYS team on synthesys@nhm.ac.uk, if you are encountering difficulties procuring a supporting statement that
-      fits these rules.
+      The Supporting Statement will be used as a professional reference. Therefore,
+      it should be provided by a senior peer who knows both you and your work first-hand.
+      It must not be provided by a staff member from your chosen TAF. Ideally this should
+      be from an international expert in your field who is not from your own institution
+      nor is your User Group leader. It is acknowledged that for PhD students this will be
+      difficult to attain and please email the SYNTHESYS team on synthesys@nhm.ac.uk, if
+      you are encountering difficulties procuring a supporting statement that fits these rules.
     </p>
     <p>
-      Supporting Statements are mandatory, but we recognise that due to various disruptions in 2020 and 2021, now is a
-      difficult time to procure letters of reference. For now, all Transnational Access requests can be submitted
-      without a Supporting Statement, but one must be added later before any funding is applied. Once the Call closes,
-      the statement will be validated by the SYNTHESYS administrator to ensure that your Supporter reference is genuine.
-      You must contact your Supporter prior to submission.
+      Supporting Statements are mandatory, but we recognise that due to various disruptions
+      in 2020 and 2021, now is a difficult time to procure letters of reference. For now, all
+      Transnational Access requests can be submitted without a Supporting Statement, but one
+      must be added later before any funding is applied. Once the Call closes, the statement
+      will be validated by the SYNTHESYS administrator to ensure that your Supporter reference
+      is genuine. You must contact your Supporter prior to submission.
     </p>
     <form @submit.prevent>
       <component
@@ -34,31 +36,31 @@
 </template>
 
 <script>
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
-import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
+import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup.vue';
 import data from '../../schemas/fields-ta.json';
 
 export default {
   components: {
     FieldRow,
-    FieldGroup
+    FieldGroup,
   },
 
   props: {
     formData: {
-      type: Object
+      type: Object,
     },
     editable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
     return {
-      fields: data.supportingStatement
+      fields: data.supportingStatement,
     };
-  }
+  },
 };
 </script>
 

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: elvis-frontend-deployment
+  name: test-elvis-frontend-deployment
   labels:
-    app: elvis-frontend-deployment
+    app: test-elvis-frontend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: elvis-frontend
+      app: test-elvis-frontend
   template:
     metadata:
       labels:
-        app: elvis-frontend
+        app: test-elvis-frontend
     spec:
       containers:
-        - name: elvis-frontend
-          image: public.ecr.aws/dissco/elvis-frontend:latest
+        - name: test-elvis-frontend
+          image: public.ecr.aws/dissco/test-elvis-frontend:latest
           ports:
             - containerPort: 80
           env:

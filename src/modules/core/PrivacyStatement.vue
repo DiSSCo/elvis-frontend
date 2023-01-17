@@ -6,19 +6,19 @@
 
 <script>
 import { fetchSettingsByKey } from '@/services/adminService';
-import { fallbackPrivacyStatement } from '@/i18n/fallback/privacystatement';
+import fallbackPrivacyStatement from '@/i18n/fallback/privacystatement';
 
 export default {
   data() {
     return {
-      content: null
+      content: null,
     };
   },
 
   computed: {
     privacyStatement() {
       return this.content;
-    }
+    },
   },
 
   created() {
@@ -34,8 +34,8 @@ export default {
         console.log('error: ', error);
         this.content = fallbackPrivacyStatement;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -43,7 +43,7 @@ export default {
 .privacy-statement {
   background: $white;
 }
-::v-deep li {
+:deep(li) {
   list-style-type: disc;
 
   li {

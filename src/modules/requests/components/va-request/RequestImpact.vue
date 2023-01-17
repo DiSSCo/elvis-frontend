@@ -21,29 +21,29 @@
 </template>
 
 <script>
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import data from '../../schemas/fields-va.json';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   props: {
     formData: {
-      type: Object
+      type: Object,
     },
     editable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
     return {
-      fields: data.impact
+      fields: data.impact,
     };
-  }
+  },
 };
 </script>
 

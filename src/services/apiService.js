@@ -3,8 +3,8 @@ import axios from 'axios';
 export async function sendFeedback(formData) {
   return axios.post('/contact', formData, {
     headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+      'Content-Type': 'multipart/form-data',
+    },
   });
 }
 
@@ -14,7 +14,7 @@ export async function fetchAttachments(url) {
 
 export async function downloadAttachment(url, attachmentId) {
   return axios.get(`${url}/${attachmentId}/download`, {
-    responseType: 'blob'
+    responseType: 'blob',
   });
 }
 
@@ -25,13 +25,13 @@ export async function deleteAttachment(url, attachmentId) {
 export async function uploadAttachment(url, formData) {
   return axios.post(url, formData, {
     headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+      'Content-Type': 'multipart/form-data',
+    },
   });
 }
 
 export async function fetchAddress(address) {
   return axios.get(
-    `https://nominatim.openstreetmap.org/search?q=${address}&limit=1&format=json&pretty=1&accept-language=nl`
+    `https://nominatim.openstreetmap.org/search?q=${address}&limit=1&format=json&pretty=1&accept-language=nl`,
   );
 }
