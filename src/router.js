@@ -87,21 +87,29 @@ router.beforeEach(async (to, from, next) => {
     let route;
     if (to.meta?.permissions) {
       const permission = Array.isArray(to.meta.permissions)
-        ? to.meta.permissions.some((p) => allPermissions.includes(p))
+        ? to.meta.permissions.some(p => allPermissions.includes(p))
         : allPermissions.includes(to.meta.permissions);
 
-      route = permission ? {} : { name: 'message', params: { status: 403, 0: to.path } };
+      if (!permission) {
+        route = { name: 'message', params: { status: 403, 0: to.path } };
+      }
 
       if (to.meta?.checkInstitution) {
         const { instId } = to.params;
-        route = isOwnInstitution(instId) ? {} : { name: 'message', params: { status: 403, 0: to.path } };
+
+        if (!isOwnInstitution(instId)) {
+          route = { name: 'message', params: { status: 403, 0: to.path } };
+        }
       }
       if (to.meta?.checkActiveTaCall) {
         const isActiveCall = await checkActiveTaCall();
-        route = !isActiveCall ? {} : { name: 'message', params: { status: 403, 0: to.path } };
+
+        if (isActiveCall) {
+          route = { name: 'message', params: { status: 403, 0: to.path } }
+        }
       }
     }
-
+    
     return next(route);
   }
 

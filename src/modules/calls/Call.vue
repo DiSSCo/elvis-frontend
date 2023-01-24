@@ -2,7 +2,7 @@
   <div>
     <div class="action-bar">
       <div class="container">
-        <o-button v-if="creatable" variant="primary" @click="createNewRequest">
+        <o-button v-if="creatable" class="primaryButton" @click="createNewRequest">
           <span> <i class="feather icon-plus" /> {{ $t('call.new_request') }} </span>
         </o-button>
       </div>

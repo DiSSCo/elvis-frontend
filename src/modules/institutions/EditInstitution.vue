@@ -12,7 +12,7 @@
           <institution-address :institution="institution" :editable="true" />
           <institution-locations :institution="institution" :editable="true" />
           <div class="action-btns">
-            <o-button variant="primary" :loading="loading" @click="saveInstitution">
+            <o-button class="primaryButton" :loading="loading" @click="saveInstitution">
               {{ $t('institution.institution_save') }}
             </o-button>
           </div>

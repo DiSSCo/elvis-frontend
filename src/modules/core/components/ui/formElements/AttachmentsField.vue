@@ -2,17 +2,17 @@
   <div v-if="attachments.length">
     <div v-for="(file, index) in attachments" :key="index" class="tags">
       <div class="attached">
-        <tag type="is-light" ellipsis>
+        <div type="is-light" ellipsis>
           <i class="feather icon-paperclip" />
           <span class="attachment" @click="openAttachment(file)">{{ file.fileName }}</span>
-        </tag>
-        <tag type="is-light">
+        </div>
+        <div type="is-light">
           <small>{{ $t('file_handling.by') }}:</small>
           {{ file.owner.fullName }}
-        </tag>
-        <tag type="is-light" :closable="closable" @close="deleteAttachment(file)">{{
+        </div>
+        <div type="is-light" :closable="closable" @close="deleteAttachment(file)">{{
           setDateTime(file.addedAt)
-        }}</tag>
+        }}</div>
       </div>
     </div>
   </div>

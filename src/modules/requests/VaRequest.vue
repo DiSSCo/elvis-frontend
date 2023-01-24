@@ -83,8 +83,6 @@ export default {
     async getRequestData(id) {
       try {
         this.formData = await fetchRequestData(id);
-
-        console.log(this.formData);
       } catch (error) {
         console.log(error);
       }
