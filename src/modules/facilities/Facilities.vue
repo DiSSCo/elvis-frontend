@@ -14,7 +14,7 @@
           </h1>
         </header>
         <div>
-          <o-table :data="isEmpty ? [] : filteredData" hoverable :mobile-cards="hasMobileCards" :paginated="isPaginated"
+          <o-table :data="filteredData" hoverable :paginated="isPaginated"
             :per-page="perPage" :default-sort-direction="defaultSortDirection" :sort-icon="sortIcon"
             :sort-icon-size="sortIconSize" :default-sort="defaultSort" @select="row => showDetails(row)">
             <o-table-column field="fieldValues.nameEng.value" label="Facility" v-slot:default="props" sortable>
@@ -61,12 +61,10 @@ import { search, setQuery } from '@/modules/core/utils/helpers';
 import Search from '@/modules/core/components/ui/Search.vue';
 import { fetchFacilities } from '@/services/facilitiesService';
 import { fetchInstitutions } from '@/services/institutionsService';
-// import Pager from '@/modules/core/components/ui/Pager.vue';
 
 export default {
   components: {
     Search,
-    // Pager,
   },
 
   data() {

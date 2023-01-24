@@ -20,26 +20,22 @@ export async function fetchRequestData(payload) {
   const isCoordinator = payload.isCoordinator ? '/coordinator' : '';
   const id = payload.id ? payload.id : payload;
 
-  console.log(payload);
-
   try {
     const result = await axios.get(`/call-requests/${id}${isCoordinator}`);
-
-    console.log(result);
 
     if (result.data?.institutions?.length) {
       result.data.institutions.forEach((institution) => {
         const fields = toObject(
-          institution.fieldValues.reduce((obj, item) => (
-            (obj[item.fieldId] = item.value), obj
-          ), {}),
+          institution.fieldValues.reduce((obj, item) => {
+            obj[item.fieldId] = item.value; return obj;
+          }, {}),
         );
         institution.fieldValues = fields;
       });
     }
 
     const fieldVals = toObject(
-      result.data.fieldValues.reduce((obj, item) => ((obj[item.fieldId] = item.value), obj), {}),
+      result.data.fieldValues.reduce((obj, item) => {obj[item.fieldId] = item.value; return obj;}, {}),
     );
     result.data.fieldValues = fieldVals;
 

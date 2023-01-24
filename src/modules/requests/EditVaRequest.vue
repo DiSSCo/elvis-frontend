@@ -117,28 +117,20 @@ export default {
 
       try {
         this.formData = await fetchRequestData(id);
-
-        console.log(this.formData);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
 
     async handleFormField(payload) {
       try {
         await updateField(this.requestId, payload);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
 
     async handleRemoveGroup(payload) {
       try {
         await removeGroup(this.requestId, payload);
         this.formData = await fetchRequestData(this.requestId);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
 
     async submitRequest() {

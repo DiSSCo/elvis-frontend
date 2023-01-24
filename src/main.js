@@ -8,6 +8,7 @@ import VueKeyCloak from '@dsb-norge/vue-keycloak-js';
 import mitt from 'mitt';
 import Oruga from '@oruga-ui/oruga-next';
 import '@oruga-ui/oruga-next/dist/oruga-full.css';
+import Vue3Sanitize from "vue-3-sanitize";
 
 import App from './App.vue';
 import router from './router';
@@ -81,6 +82,7 @@ axios
             setProfile(profile.data);
           }
 
+          app.use(Vue3Sanitize);
           app.use(Oruga);
           app.use(VueScrollTo);
           app.use(router);
@@ -116,13 +118,13 @@ app.config.errorHandler = (err, vm, info) => {
   console.error('info end');
 };
 
-app.config.warnHandler = () => {
+app.config.warnHandler = (msg, vm, trace) => {
   // eslint-disable-next-line
-  // console.warn(msg);
+  console.warn(msg);
   // eslint-disable-next-line
-  // console.warn(vm);
+  console.warn(vm);
   // eslint-disable-next-line
-  // console.warn(trace);
+  console.warn(trace);
   // eslint-disable-next-line
-  // console.warn('trace end');
+  console.warn('trace end');
 };

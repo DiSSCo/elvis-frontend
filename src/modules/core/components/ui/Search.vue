@@ -2,7 +2,7 @@
   <div class="hero search-bar">
     <form @submit.prevent>
       <o-field class="search">
-        <o-input icon="magnify" :value="test" type="search" icon-clickable :placeholder="placeholder"
+        <o-input icon="magnify" type="search" icon-clickable :placeholder="placeholder"
           @input="$emit('input', $event)" />
       </o-field>
     </form>

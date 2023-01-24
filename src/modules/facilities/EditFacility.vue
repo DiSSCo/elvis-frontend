@@ -115,8 +115,6 @@ export default {
     },
 
     async handleRemoveGroup(payload) {
-      console.log('test');
-
       try {
         await removeGroup(this.institutionId, this.facilityId, payload);
       } catch (error) {

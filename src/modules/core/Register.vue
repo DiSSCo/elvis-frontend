@@ -85,12 +85,12 @@
                     :showLabel="false"
                   />
 
-                  <o-button :loading="loading" variant="primary" @click.prevent="register" :disabled="disabled">{{
+                  <o-button :loading="loading" class="primaryButton" @click.prevent="register" :disabled="disabled">{{
                     $t('registration.register')
                   }}</o-button>
                 </div>
                 <div v-if="message.text" class="response-message" :style="{ order: 21 }">
-                  <o-message :type="message.type" has-icon>{{ message.text }}</o-message>
+                  <o-notification :variant="message.type" has-icon>{{ message.text }}</o-notification>
                 </div>
                 <div class="is-size-7" :style="{ order: 22 }">
                   (Here you can read the <a href="#" @click="showPrivacyStatement = true">Privacy Statement</a>)
@@ -147,7 +147,7 @@ export default {
     'v$.form.email': {
       handler(value) {
         const emailField = this.fields.find((field) => field.id === 'email');
-        emailField.options.fieldOptions.errorMessage = !value /* .required */
+        emailField.options.fieldOptions.errorMessage = !value
           ? 'Please enter an email address'
           : !value.email
             ? 'Please enter a valid email address'
@@ -161,7 +161,7 @@ export default {
     'v$.form.password': {
       handler(value) {
         const passwordField = this.fields.find((field) => field.id === 'password');
-        passwordField.options.fieldOptions.errorMessage = !value /* .required */
+        passwordField.options.fieldOptions.errorMessage = !value
           ? 'Please enter a password'
           : value.required && !value.strength
             ? 'Password is too weak. Please check the rules under the (i)'
@@ -288,7 +288,7 @@ export default {
           && password.length < 20
           && /[a-z]/.test(password)
           && /[A-Z]/.test(password)
-          && /[0-9]/.test(password),
+          && /\d/.test(password),
       },
       passWordVerified: {
         required,

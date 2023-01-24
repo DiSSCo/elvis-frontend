@@ -399,7 +399,7 @@ export default {
       this.profile.birthDateTime = this.profile.birthDateTime
         ? this.profile.birthDateTime.map((part) => {
           const copyPart = Number(part);
-          return copyPart && copyPart < 10 ? `0${copyPart}` : copyPart;
+          return copyPart && copyPart < 10 ? `0${copyPart}` : `${copyPart}`;
         })
         : [null, null, null];
       [this.birthDate.year.value, this.birthDate.month.value,

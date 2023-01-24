@@ -72,8 +72,6 @@ export default {
     async onInput(value) {
       if (!value) return;
 
-      console.log(value);
-
       this.$emit('auto-complete', { path: this.fieldPath, value });
     },
 

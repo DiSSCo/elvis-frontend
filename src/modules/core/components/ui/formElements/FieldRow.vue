@@ -115,34 +115,32 @@ export default {
     },
 
     isRequired() {
-      let isR = false;
+      let isRequired = false;
 
       if (this.validation) {
-        isR = this.validation?.required.$params;
+        isRequired = this.validation?.required.$params;
       } else if (this.fieldOptions.validation) {
-        isR = this.fieldOptions.validation?.required.$params;
+        isRequired = this.fieldOptions.validation?.required.$params;
       }
 
-      return isR;
+      return isRequired;
     },
 
     isValid() {
-      let isV;
+      let isValid;
 
       if (this.validation) {
-        isV = !this.validation?.$error;
+        isValid = !this.validation?.$error;
       } else {
-        isV = !this.fieldOptions.validation?.$error;
+        isValid = !this.fieldOptions.validation?.$error;
       }
 
-      return isV;
+      return isValid;
     },
   },
 
   methods: {
     updateField(field) {
-      console.log(field);
-
       this.loading = true;
 
       if (this.validation) {

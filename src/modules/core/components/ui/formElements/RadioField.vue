@@ -6,7 +6,7 @@
           checkIfBoolean(item)
         }}</o-radio>
 
-      <a v-if="editable && external && external.length" :href="external[index]" target="blank" class="link">
+      <a v-if="editable && external && external.length" :href="$sanitize(external[index])" target="blank" class="link">
         more info
       </a>
     </div>
@@ -16,6 +16,7 @@
 
 <script>
 import { capitalize } from '@/modules/core/utils/helpers';
+
 
 export default {
   props: {

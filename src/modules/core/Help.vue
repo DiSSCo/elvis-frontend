@@ -45,13 +45,8 @@
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { sendFeedback } from '@/services/apiService';
-// import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 
 export default {
-  // components: {
-  //   FieldRow,
-  // },
-
   setup() {
     const v$ = useVuelidate();
 

@@ -16,7 +16,6 @@ export default {
     data: {
       handler() {
         this.$data._chart.update();
-        // this.renderChart(this.data, this.options);
       },
     },
   },

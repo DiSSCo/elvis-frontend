@@ -21,7 +21,7 @@
         <o-table-column field="attributes.orcId" :label="$t('profile.orcid')" width="180" sortable v-slot="props">
           <div class="details">
             <a v-if="props.row.attributes && props.row.attributes.orcId"
-              :href="`//orcid.org/${orcId(props.row.attributes.orcId)}`" target="blank">{{
+              :href="$sanitize(`//orcid.org/${orcId(props.row.attributes.orcId)}`)" target="blank">{{
                 orcId(props.row.attributes.orcId)
               }}</a>
             <span v-else>-</span>

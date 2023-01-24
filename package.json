@@ -30,6 +30,7 @@
     "leaflet": "^1.9.3",
     "mitt": "^3.0.0",
     "vue": "^3.2.13",
+    "vue-3-sanitize": "^0.1.4",
     "vue-axios": "^3.5.2",
     "vue-chartjs": "^5.0.1",
     "vue-i18n": "^9.2.2",

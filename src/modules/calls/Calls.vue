@@ -16,7 +16,7 @@
           </h1>
         </header>
 
-        <o-table :data="isEmpty ? [] : data" hoverable :mobile-cards="hasMobileCards" @select="row => showDetails(row)">
+        <o-table :data="data" hoverable @select="row => showDetails(row)">
           <o-table-column field="name" label="Title" v-slot:default="props" sortable>
             {{ props.row.name }}
           </o-table-column>
@@ -34,9 +34,7 @@
           </o-table-column>
 
           <o-table-column field="status" label="Status" v-slot:default="props" sortable>
-            <tag class="tag rounded" :class="$t(`${ props.row.status } `)">
-              {{ $t(`status.${ props.row.status }`) }}
-            </tag>
+            <tag :text="$t(`status.${ props.row.status }`)" :variant="$t(`is-${props.row.status}`)" :rounded="true" />
           </o-table-column>
 
           <o-table-column label="Actions" v-slot:default="props">
@@ -66,8 +64,13 @@ import { setDate } from '@/modules/core/utils/helpers';
 import { fetchCalls, deleteCall } from '@/services/callsService';
 import { isAllowed } from '@/modules/core/utils/auth';
 import Dialog from '@/modules/core/components/ui/Dialog.vue';
+import Tag from '@/modules/core/components/ui/Tag.vue';
 
 export default {
+  components: {
+    Tag,
+  },
+
   data() {
     return {
       data: [],

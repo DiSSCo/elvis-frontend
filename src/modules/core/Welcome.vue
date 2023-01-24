@@ -35,9 +35,6 @@
         <a href="https://www.dissco.eu/" target="_blank"
           ><img :src="require('@/assets/images/logo/logo-dissco.png')" alt="DISSCO"
         /></a>
-        <!--<div class="banner-text">Building the future of
-           European Natural Science Collections</div>
-        -->
         <a href="https://www.synthesys.info/" target="_blank" class="logo-synthesys"
           ><img :src="require('@/assets/images/logo/logo-synthesys.png')" alt="Synthesys"
         /></a>

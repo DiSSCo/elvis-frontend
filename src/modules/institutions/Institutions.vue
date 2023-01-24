@@ -14,7 +14,7 @@
           </h1>
         </header>
         <div>
-          <o-table :data="isEmpty ? [] : filteredData" hoverable :mobile-cards="hasMobileCards" :paginated="isPaginated"
+          <o-table :data="filteredData" hoverable :paginated="isPaginated"
             :per-page="perPage" :default-sort-direction="defaultSortDirection" :sort-icon="sortIcon"
             :sort-icon-size="sortIconSize" :default-sort="defaultSort" @select="row => showDetails(row)">
             <o-table-column field="id" label="Id" v-slot:default="props" sortable class="td-center">

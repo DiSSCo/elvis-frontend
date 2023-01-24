@@ -141,8 +141,6 @@ export function toObject(obj) {
     if (parsedPath.indexOf('.') !== -1) {
       fill(parsedPath.split('.'), obj, obj[k]);
       delete obj[k];
-    } else {
-      // obj[k] = obj[k];
     }
   });
 
