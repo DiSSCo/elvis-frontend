@@ -89,7 +89,7 @@
                   </field-row>
                   <div class="action-btns" :style="{ order: 20 }">
                     <o-button @click="cancel" outlined class="cancelButton"> {{ $t('cancel') }} </o-button>
-                    <o-button variant="primary" :loading="loading" @click="saveProfile">
+                    <o-button class="primaryButton" :loading="loading" @click="saveProfile">
                       {{ $t('profile.save') }}
                     </o-button>
                   </div>

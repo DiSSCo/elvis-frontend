@@ -1,7 +1,7 @@
 <template>
   <div>
     <o-button v-if="isAllowed('facility_create') && isOwnInstitution"
-      variant="primary"
+      class="primaryButton"
       @click.stop="createNewFacility"
     >
       <span> <i class="feather icon-plus" /> {{ $t('facility.new_facility') }} </span>

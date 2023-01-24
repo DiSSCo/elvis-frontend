@@ -1,6 +1,6 @@
 <template>
   <div>
-    <o-button v-if="isAllowed('manage_coordinators') && isOwnInstitution" variant="primary"
+    <o-button v-if="isAllowed('manage_coordinators') && isOwnInstitution" class="primaryButton"
       @click.stop="addUserModalActive = true">
       <span> <i class="feather icon-plus" /> Add user </span>
     </o-button>
@@ -34,14 +34,14 @@
           label="Actions" v-slot="props">
           <div class="action-btns">
             <o-tooltip label="edit user roles" variant="primary">
-              <o-button class="disable-action" @click.stop="editUser(props.row)" size="small">
+              <o-button class="disable-action tableButton" @click.stop="editUser(props.row)" size="small">
                 <i class="feather icon-edit-1" />
               </o-button>
             </o-tooltip>
             <o-tooltip :label="props.row.attributes.institutionId ?
             'remove the assigned roles first'
             : 'remove user'" variant="primary">
-              <o-button class="delete-action" size="small" @click.stop="deleteUser(props.row)"
+              <o-button class="delete-action tableButton" size="small" @click.stop="deleteUser(props.row)"
                 :disabled="props.row.attributes.institutionId">
                 <i class="feather icon-trash-2" />
               </o-button>
@@ -61,7 +61,7 @@
       </o-table>
     </div>
 
-    <o-modal v-model="addUserModalActive" :width="600">
+    <o-modal :active="addUserModalActive" :width="600">
       <div class="box user-modal">
         <h3 class="header">Add user</h3>
         <form @submit.prevent>
@@ -71,10 +71,10 @@
             autoCompleteData: autoCompleteList
           }" />
           <div class="action-btns">
-            <o-button variant="primary" :loading="loading" @click="saveUsers">
+            <o-button class="primaryButton" :loading="loading" @click="saveUsers">
               {{ $t('save') }}
             </o-button>
-            <o-button @click="addUserModalActive = false" outlined>
+            <o-button class="cancelButton" @click="addUserModalActive = false" outlined>
               {{ $t('cancel') }}
             </o-button>
           </div>
@@ -82,7 +82,7 @@
       </div>
     </o-modal>
 
-    <o-modal v-model="editUserModalActive" :width="600">
+    <o-modal :active="editUserModalActive" :width="600">
       <div class="box user-modal">
         <h3 class="header">Edit user</h3>
         <dl v-if="selectedUser" class="profile">
@@ -98,7 +98,7 @@
         </dl>
 
         <div class="action-btns">
-          <o-button variant="primary" :loading="loading" @click="saveEditUsers">
+          <o-button class="primaryButton" :loading="loading" @click="saveEditUsers">
             {{ $t('close') }}
           </o-button>
         </div>
