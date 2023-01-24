@@ -18,18 +18,18 @@
 </template>
 
 <script>
-import FieldRow from './FieldRow';
+import FieldRow from './FieldRow.vue';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   props: {
     path: Array,
     context: {
       type: Object,
-      default: null
+      default: null,
     },
     value: Object,
     label: String,
@@ -37,16 +37,16 @@ export default {
     fieldOptions: Object,
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
-    subheader: Boolean
+    subheader: Boolean,
   },
 
   computed: {
     getFields() {
       return this.fields;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -62,7 +62,7 @@ export default {
     .field-rows .field-row {
       margin-bottom: 0.8em;
       width: 100%;
-      ::v-deep .field-row-body {
+      :deep(.field-row-body) {
         margin-bottom: 1em;
         width: 100%;
       }
@@ -88,7 +88,7 @@ export default {
     flex: 3;
 
     .field-row,
-    ::v-deep .field-row-body {
+    :deep(.field-row-body) {
       margin-bottom: 0;
       width: auto;
     }

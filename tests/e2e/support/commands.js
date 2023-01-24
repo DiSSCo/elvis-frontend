@@ -27,7 +27,7 @@
 Cypress.Commands.add('login', (email, password) => {
   Cypress.log({
     name: 'login',
-    message: `${email} | ${password}`
+    message: `${email} | ${password}`,
   });
 
   cy.visit('/');

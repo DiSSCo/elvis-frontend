@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { search } from './searchService';
 import { parseField } from '@/modules/core/utils/helpers';
+import { search } from './searchService';
 
 export async function fetchInstitutions(q = '') {
   const queries = [];
@@ -10,9 +10,9 @@ export async function fetchInstitutions(q = '') {
       {
         field: 'title',
         type: 'like',
-        value: q
-      }
-    ]
+        value: q,
+      },
+    ],
   });
 
   return search('institutions', queries);
@@ -46,19 +46,19 @@ export async function updateCetaf(payload) {
 export async function removeGroup(payload) {
   const { context, path, key } = payload;
   return axios.post(`/institutions/${context.institutionId}/delete-group`, {
-    groupId: `${path}[${key}]`
+    groupId: `${path}[${key}]`,
   });
 }
 
 export async function addUserToInstitution(institutionId, userId) {
   return axios.post(`/institutions/${institutionId}/people/invite`, {
-    id: userId
+    id: userId,
   });
 }
 
 export async function removeUserFromInstitution(institutionId, userId) {
   return axios.post(`/institutions/${institutionId}/people/remove`, {
-    id: userId
+    id: userId,
   });
 }
 

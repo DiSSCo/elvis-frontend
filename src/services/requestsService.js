@@ -1,8 +1,8 @@
 /* eslint-disable no-sequences */
 /* eslint-disable no-return-assign */
 import axios from 'axios';
-import { search } from './searchService';
 import { parseField, toObject } from '@/modules/core/utils/helpers';
+import { search } from './searchService';
 
 export async function fetchFilteredRequests(queries) {
   return search('requests', queries);
@@ -19,20 +19,23 @@ export async function fetchRequestId(callId) {
 export async function fetchRequestData(payload) {
   const isCoordinator = payload.isCoordinator ? '/coordinator' : '';
   const id = payload.id ? payload.id : payload;
+
   try {
     const result = await axios.get(`/call-requests/${id}${isCoordinator}`);
 
     if (result.data?.institutions?.length) {
-      result.data.institutions.map(institution => {
+      result.data.institutions.forEach((institution) => {
         const fields = toObject(
-          institution.fieldValues.reduce((obj, item) => ((obj[item.fieldId] = item.value), obj), {})
+          institution.fieldValues.reduce((obj, item) => {
+            obj[item.fieldId] = item.value; return obj;
+          }, {}),
         );
         institution.fieldValues = fields;
       });
     }
 
     const fieldVals = toObject(
-      result.data.fieldValues.reduce((obj, item) => ((obj[item.fieldId] = item.value), obj), {})
+      result.data.fieldValues.reduce((obj, item) => {obj[item.fieldId] = item.value; return obj;}, {}),
     );
     result.data.fieldValues = fieldVals;
 
@@ -59,7 +62,7 @@ export async function removeGroup(id, payload) {
 
   return axios.post(`/call-requests/${id}/delete-group`, {
     institutionId,
-    groupId: `${path}[${key}]`
+    groupId: `${path}[${key}]`,
   });
 }
 
@@ -85,19 +88,19 @@ export async function fetchComments(requestId) {
 
 export async function downLoadAllComments(requestId) {
   return axios.get(`/call-requests/${requestId}/comments/download`, {
-    responseType: 'blob'
+    responseType: 'blob',
   });
 }
 
 export async function addInstitution(institutionId, requestId) {
   return axios.post(`/call-requests/${requestId}/add-institution`, {
-    institutionId
+    institutionId,
   });
 }
 
 export async function removeInstitution(institutionId, requestId) {
   return axios.post(`/call-requests/${requestId}/delete-institution`, {
-    institutionId
+    institutionId,
   });
 }
 
@@ -111,7 +114,7 @@ export async function deleteRequest(requestId) {
 
 export async function downLoadRequest(requestId) {
   return axios.get(`/call-requests/${requestId}/download`, {
-    responseType: 'blob'
+    responseType: 'blob',
   });
 }
 

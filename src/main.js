@@ -1,85 +1,113 @@
-/* eslint-disable no-new */
-import Vue from 'vue';
-import Buefy from 'buefy';
-import VueKeyCloak from '@dsb-norge/vue-keycloak-js';
+import { createApp, h } from 'vue';
+import httpInterceptor from '@/modules/core/utils/http-interceptor';
+import { setKeycloak, setProfile } from '@/modules/core/utils/auth';
+import { getUserProfile } from '@/services/usersService';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import Vuelidate from 'vuelidate';
-import VueScrollactive from 'vue-scrollactive';
-import { getUserProfile } from '@/services/usersService';
-import { setKeycloak, setProfile } from '@/modules/core/utils/auth';
-import httpInterceptor from '@/modules/core/utils/http-interceptor';
-import App from './App';
-import router from './router';
-import { i18n } from './i18n';
+import VueKeyCloak from '@dsb-norge/vue-keycloak-js';
+import mitt from 'mitt';
+import Oruga from '@oruga-ui/oruga-next';
+import '@oruga-ui/oruga-next/dist/oruga-full.css';
+import Vue3Sanitize from "vue-3-sanitize";
 
-Vue.use(VueScrollactive);
+import App from './App.vue';
+import router from './router';
+import i18n from './i18n';
+
+const app = createApp(App);
 
 const VueScrollTo = require('vue-scrollto');
-Vue.use(VueScrollTo);
 
-Vue.use(Vuelidate);
-
-Vue.use(Buefy, {
-  defaultUseHtml5Validation: false
-});
-
-Vue.use(VueAxios, axios);
-Vue.axios.defaults.baseURL = process.env.VUE_APP_ELVIS_API;
+app.use(VueAxios, axios);
+app.axios.defaults.baseURL = 'https://elvis.dissco.tech/api';
 
 function showError(error) {
-  new Vue({
-    el: '#elvis',
-    render: h =>
-      h(
-        'h1',
-        {
-          class: 'center'
-        },
-        `Something went wrong here: ${error}`
-      )
-  });
+  const errorMessage = h(
+    'h1',
+    {
+      class: 'center',
+    },
+    `Something went wrong here: ${error}`,
+  );
+
+  const errorApp = createApp(errorMessage);
+
+  errorApp.config.productionTip = false;
+  errorApp.config.performance = true;
+  errorApp.config.errorHandler = (err, vm, info) => {
+    // eslint-disable-next-line
+    console.error(err);
+    // eslint-disable-next-line
+    console.error(vm);
+    // eslint-disable-next-line
+    console.error(info);
+    // eslint-disable-next-line
+    console.error('info end');
+  };
+
+  errorApp.config.warnHandler = (msg, vm, trace) => {
+    // eslint-disable-next-line
+    console.warn(msg);
+    // eslint-disable-next-line
+    console.warn(vm);
+    // eslint-disable-next-line
+    console.warn(trace);
+    // eslint-disable-next-line
+    console.warn('trace end');
+  };
+
+  errorApp.mount('#elvis');
 }
 
 axios
   .get('/config')
-  .then(response => {
+  .then((response) => {
     if (response) {
       const kcConfig = response.data.authConfig;
+
       const { clientId, realm, url } = kcConfig;
 
-      Vue.use(VueKeyCloak, {
-        init: { onLoad: 'check-sso', checkLoginIframe: false },
-        config: { clientId, realm, url },
-        onReady: async keycloak => {
+      app.use(VueKeyCloak, {
+        init: {
+          flow: 'standard', // default
+          checkLoginIframe: false, // default
+          onLoad: 'check-sso',
+        },
+        config: { clientId: clientId, realm: realm, url: url },
+        onReady: async (keycloak) => {
           setKeycloak(keycloak);
           httpInterceptor.tokenInterceptor();
           if (keycloak.token) {
             const profile = await getUserProfile(keycloak.token);
             setProfile(profile.data);
           }
-          new Vue({
-            el: '#elvis',
-            router,
-            i18n,
-            render: h => h(App)
-          });
+
+          app.use(Vue3Sanitize);
+          app.use(Oruga);
+          app.use(VueScrollTo);
+          app.use(router);
+          app.use(i18n);
+
+          const emitter = mitt();
+          app.config.globalProperties.emitter = emitter;
+
+          app.mount('#elvis');
         },
-        onInitError: error => {
+        onInitError: (error) => {
           showError(error);
-        }
+        },
       });
     } else {
       showError('');
     }
   })
-  .catch(error => {
+  .catch((error) => {
     showError(error);
   });
 
-Vue.config.productionTip = false;
-Vue.config.performance = true;
-Vue.config.errorHandler = (err, vm, info) => {
+app.config.productionTip = false;
+app.config.performance = true;
+app.config.errorHandler = (err, vm, info) => {
   // eslint-disable-next-line
   console.error(err);
   // eslint-disable-next-line
@@ -90,7 +118,7 @@ Vue.config.errorHandler = (err, vm, info) => {
   console.error('info end');
 };
 
-Vue.config.warnHandler = (msg, vm, trace) => {
+app.config.warnHandler = (msg, vm, trace) => {
   // eslint-disable-next-line
   console.warn(msg);
   // eslint-disable-next-line

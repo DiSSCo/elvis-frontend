@@ -1,5 +1,6 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { nextTick } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+
 import { getPermissions, isAuthenticated, isOwnInstitution } from '@/modules/core/utils/auth';
 import { checkActiveTaCall } from '@/services/callsService';
 import callsRoutes from '@/modules/calls/routes';
@@ -9,33 +10,33 @@ import requestersRoutes from '@/modules/requesters/routes';
 import requestsRoutes from '@/modules/requests/routes';
 import adminRoutes from '@/modules/admin/routes';
 
-Vue.use(Router);
-
-function load(component) {
-  return () => import(`@/modules/core/${component}.vue`);
-}
+import Welcome from '@/modules/core/Welcome.vue';
+import Register from '@/modules/core/Register.vue';
+import Collections from '@/modules/core/Collections.vue';
+import Help from '@/modules/core/Help.vue';
+import Profile from '@/modules/core/Profile.vue';
+import PrivacyStatement from '@/modules/core/PrivacyStatement.vue';
+import Message from '@/modules/core/Message.vue';
 
 const routes = [
   {
     path: '/',
-    redirect: '/calls'
-    // name: 'dashboard',
-    // component: load('DashBoard')
+    redirect: '/calls',
   },
   {
     path: '/welcome',
     name: 'welcome',
-    component: load('Welcome')
+    component: Welcome,
   },
   {
     path: '/register',
     name: 'register',
-    component: load('Register')
+    component: Register,
   },
   {
     path: '/collections',
     name: 'collections',
-    component: load('Collections')
+    component: Collections,
   },
   ...facilitiesRoutes,
   ...callsRoutes,
@@ -46,47 +47,47 @@ const routes = [
   {
     path: '/help',
     name: 'help',
-    component: load('Help')
+    component: Help,
   },
   {
     path: '/profile',
     name: 'profile',
-    component: load('Profile')
+    component: Profile,
   },
   {
     path: '/privacy-statement',
     name: 'privacy-statement',
-    component: load('PrivacyStatement')
+    component: PrivacyStatement,
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     name: 'message',
-    component: load('Message'),
-    props: true
-  }
+    component: Message,
+    props: true,
+  },
 ];
 
-const router = new Router({
-  mode: 'history',
-  routes
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
 });
 
 router.beforeEach(async (to, from, next) => {
-  await Vue.nextTick();
+  await nextTick();
   const allPermissions = getPermissions();
 
   if (
-    isAuthenticated() ||
-    to.path === '/login' ||
-    to.path === '/welcome' ||
-    to.path === '/register' ||
-    to.path === '/privacy-statement' ||
-    to.path === '/reset'
+    isAuthenticated()
+    || to.path === '/login'
+    || to.path === '/welcome'
+    || to.path === '/register'
+    || to.path === '/privacy-statement'
+    || to.path === '/reset'
   ) {
     let route;
     if (to.meta?.permissions) {
       const permission = Array.isArray(to.meta.permissions)
-        ? to.meta.permissions.some(p => allPermissions.includes(p))
+        ? to.meta.permissions.some((p) => allPermissions.includes(p))
         : allPermissions.includes(to.meta.permissions);
 
       route = permission ? {} : { name: 'message', params: { status: 403, 0: to.path } };

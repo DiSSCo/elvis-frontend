@@ -1,7 +1,7 @@
 <template>
-  <b-select :value="perPage" @input="$emit('input', $event)">
+  <o-select :value="perPage" @input="$emit('input', $event)">
     <option v-for="step in steps" :key="step" :value="step">{{ step }} {{ $t('per_page') }}</option>
-  </b-select>
+  </o-select>
 </template>
 
 <script>
@@ -10,8 +10,8 @@ export default {
     total: Number,
     perPage: {
       type: Number,
-      default: 10
-    }
+      default: 10,
+    },
   },
 
   computed: {
@@ -24,7 +24,7 @@ export default {
         steps.push(25);
       }
       return [10, ...steps, max];
-    }
-  }
+    },
+  },
 };
 </script>

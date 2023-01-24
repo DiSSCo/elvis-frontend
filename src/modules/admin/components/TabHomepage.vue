@@ -3,23 +3,23 @@
 </template>
 
 <script>
-import editor from '@/modules/core/components/editor';
+import editor from '@/modules/core/components/editor/index.vue';
 import { updateSettings } from '@/services/adminService';
 
 export default {
   components: {
-    editor
+    editor,
   },
 
   props: {
-    data: String
+    data: String,
   },
 
   methods: {
     async updateHomePage(value) {
       const payload = { key: 'homepage', type: 'string', value };
       await updateSettings(payload);
-    }
-  }
+    },
+  },
 };
 </script>

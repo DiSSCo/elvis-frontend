@@ -1,50 +1,62 @@
 <template>
   <div>
-    <b-button v-if="isAllowed('facility_create') && isOwnInstitution" type="is-primary" @click.stop="createNewFacility">
+    <o-button v-if="isAllowed('facility_create') && isOwnInstitution"
+      variant="primary"
+      @click.stop="createNewFacility"
+    >
       <span> <i class="feather icon-plus" /> {{ $t('facility.new_facility') }} </span>
-    </b-button>
+    </o-button>
 
     <div v-if="facilities" class="facility-view">
-      <b-table
+      <o-table
         :data="facilities"
-        :row-class="(row, index) => 'row'"
         :mobile-cards="false"
         @select="showFacility"
         hoverable
       >
-        <b-table-column field="fieldValues.nameEng.value" label="Facility" sortable v-slot="props">
+        <o-table-column field="fieldValues.nameEng.value" label="Facility" sortable v-slot="props">
           {{ props.row.fieldValues.nameEng.value }}
-        </b-table-column>
-        <b-table-column field="fieldValues.joinedInstruments" label="Instruments & Services" sortable v-slot="props">
+        </o-table-column>
+        <o-table-column field="fieldValues.joinedInstruments"
+          label="Instruments & Services"
+          sortable
+          v-slot="props"
+        >
           {{ props.row.fieldValues.joinedInstruments.join(', ') }}
-        </b-table-column>
-        <b-table-column field="actions" width="125" label="Actions" v-slot="props">
+        </o-table-column>
+        <o-table-column field="actions" width="125" label="Actions" v-slot="props">
           <div class="action-btns">
-            <b-tooltip
+            <o-tooltip
               v-if="isAllowed('facility_edit')"
               :label="canEdit ? 'edit facility' : 'action disabled due to active TA call'"
-              type="is-dark"
+              variant="primary"
             >
-              <b-button class="disable-action is-small" @click.stop="editFacility(props.row)" :disabled="!canEdit">
+              <o-button class="tableButton disable-action" size="small" outlined
+                :disabled="!canEdit"
+                @click.stop="editFacility(props.row)"
+              >
                 <i class="feather icon-edit-1" />
-              </b-button>
-            </b-tooltip>
-            <b-tooltip
+              </o-button>
+            </o-tooltip>
+            <o-tooltip
               v-if="isAllowed('facility_delete')"
               :label="canEdit ? 'delete facility' : 'action disabled due to active TA call'"
-              type="is-dark"
+              variant="primary"
             >
-              <b-button class="delete-action is-small" @click.stop="deleteFacility(props.row)" :disabled="!canEdit">
+              <o-button class="tableButton delete-action" size="small" outlined
+                @click.stop="deleteFacility(props.row)"
+                :disabled="!canEdit"
+              >
                 <i class="feather icon-trash-2" />
-              </b-button>
-            </b-tooltip>
+              </o-button>
+            </o-tooltip>
           </div>
-        </b-table-column>
+        </o-table-column>
 
-        <template slot="empty">
+        <template v-slot:empty>
           {{ $t('facility.no_facilities_found') }}
         </template>
-      </b-table>
+      </o-table>
     </div>
   </div>
 </template>
@@ -53,13 +65,14 @@
 import { isAllowed, isOwnInstitution } from '@/modules/core/utils/auth';
 import { deleteFacility } from '@/services/facilitiesService';
 import { checkActiveTaCall } from '@/services/callsService';
+import Dialog from '@/modules/core/components/ui/Dialog.vue';
 
 export default {
   props: {
     institution: {
-      type: [Object, Array]
+      type: [Object, Array],
     },
-    facilities: [Array]
+    facilities: [Array],
   },
 
   computed: {
@@ -74,12 +87,12 @@ export default {
 
     canEdit() {
       return this.isAllowed('facility_edit') && this.isOwnInstitution && !this.isActiveTaCall;
-    }
+    },
   },
 
   data() {
     return {
-      activeCall: false
+      activeCall: false,
     };
   },
 
@@ -95,14 +108,14 @@ export default {
     showFacility(event) {
       this.$router.push({
         name: 'facility-details',
-        params: { instId: event.institutionId, id: event.id }
+        params: { instId: event.institutionId, id: event.id },
       });
     },
 
     createNewFacility() {
       this.$router.push({
         name: 'new-facility',
-        params: { instId: this.institution.id }
+        params: { instId: this.institution.id },
       });
     },
 
@@ -111,34 +124,60 @@ export default {
         name: 'facility-edit',
         params: {
           instId: facility.institutionId,
-          id: facility.id
-        }
+          id: facility.id,
+        },
       });
     },
 
     deleteFacility(facility) {
       this.loading = true;
-      this.$buefy.dialog.confirm({
-        confirmText: String(this.$t('delete')),
-        cancelText: String(this.$t('cancel')),
-        message: 'Are you sure you want to delete this facility?',
-        type: 'is-danger',
-        onConfirm: async () => {
-          await deleteFacility(facility);
-          this.$emit('reload');
-          this.loading = false;
+
+      this.$oruga.modal.open({
+        component: Dialog,
+        props: {
+          confirmText: String(this.$t('delete')),
+          cancelText: String(this.$t('cancel')),
+          message: 'Are you sure you want to delete this facility?',
         },
-        onCancel: () => {
-          this.loading = false;
-        }
+        trapFocus: true,
+        events: {
+          onConfirm: async () => {
+            this.$oruga.modal.closeAll();
+
+            await deleteFacility(facility);
+            this.$emit('reload');
+            this.loading = false;
+          },
+          onCancel: () => {
+            this.$oruga.modal.closeAll();
+
+            this.loading = false;
+          },
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .facility-view {
   margin-top: 1em;
+}
+</style>
+
+<style lang="css">
+td {
+  font-size: 14px !important;
+  padding-top: 1em !important;
+  padding-bottom: 1em !important;
+}
+
+td:hover {
+  cursor: pointer !important;
+}
+
+.td-center {
+  vertical-align: middle !important;
 }
 </style>

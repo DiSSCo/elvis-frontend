@@ -26,12 +26,12 @@
 <script>
 import { isAllowed } from '@/modules/core/utils/auth';
 import { fetchRequestData } from '@/services/requestsService';
-import RequestGeneral from './components/va-request/RequestGeneral';
-import RequestInstitutions from './components/va-request/RequestInstitutions';
-import RequestImpact from './components/va-request/RequestImpact';
-import RequestStatus from './components/RequestStatus';
-import RequestComments from './components/RequestComments';
-import RequestNavigation from './components/RequestNavigation';
+import RequestGeneral from './components/va-request/RequestGeneral.vue';
+import RequestInstitutions from './components/va-request/RequestInstitutions.vue';
+import RequestImpact from './components/va-request/RequestImpact.vue';
+import RequestStatus from './components/RequestStatus.vue';
+import RequestComments from './components/RequestComments.vue';
+import RequestNavigation from './components/RequestNavigation.vue';
 
 export default {
   components: {
@@ -40,7 +40,7 @@ export default {
     RequestImpact,
     RequestStatus,
     RequestComments,
-    RequestNavigation
+    RequestNavigation,
   },
 
   computed: {
@@ -53,20 +53,20 @@ export default {
       return [
         { id: 'details', name: 'Request details', disabled: false },
         { id: 'institutions', name: 'Institutions involved', disabled: false },
-        { id: 'impact', name: 'Impact', disabled: false }
+        { id: 'impact', name: 'Impact', disabled: false },
       ];
-    }
+    },
   },
 
   data() {
     return {
       formData: null,
-      loading: false
+      loading: false,
     };
   },
 
   created() {
-    this.$root.$on('reload', this.getRequestData);
+    this.emitter.on('reload', this.getRequestData);
     const { id } = this.$route.params;
     if (isAllowed('request_approve')) {
       this.getRequestData({ id, isCoordinator: true });
@@ -75,19 +75,21 @@ export default {
     this.getRequestData(id);
   },
 
-  beforeDestroy() {
-    this.$root.$off('reload');
+  beforeUnmount() {
+    this.emitter.off('reload');
   },
 
   methods: {
     async getRequestData(id) {
       try {
         this.formData = await fetchRequestData(id);
+
+        console.log(this.formData);
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

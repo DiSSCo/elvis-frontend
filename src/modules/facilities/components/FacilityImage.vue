@@ -12,34 +12,38 @@
       }"
     />
     <div v-else class="image" :class="{ thumb: editable, 'no-image': !image }">
-      <img v-if="image" :src="`data:${image.contentType.base}/${image.contentType.subType};base64, ${image.payload}`" />
+      <img v-if="image"
+        alt="Facility image"
+        :src="`data:${image.contentType.base}
+        /${image.contentType.subType};base64, ${image.payload}`"
+      />
 
-      <img v-else src="~@/assets/images/no-image.svg" />
+      <img v-else src="~@/assets/images/no-image.svg" alt="" />
     </div>
   </div>
 </template>
 
 <script>
 import { fetchImage } from '@/services/facilitiesService';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
   props: {
     editable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     facility: {
-      type: [Object, Array]
-    }
+      type: [Object, Array],
+    },
   },
 
   data() {
     return {
-      image: null
+      image: null,
     };
   },
 
@@ -49,17 +53,17 @@ export default {
         this.image = null;
         this.fetchImage();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   created() {
-    this.$root.$on('fileUploaded', this.reload);
+    this.emitter.on('fileUploaded', this.reload);
     this.fetchImage();
   },
 
-  beforeDestroy() {
-    this.$root.$off('fileUploaded');
+  beforeUnmount() {
+    this.emitter.off('fileUploaded');
   },
 
   methods: {
@@ -77,8 +81,8 @@ export default {
           console.log(error);
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

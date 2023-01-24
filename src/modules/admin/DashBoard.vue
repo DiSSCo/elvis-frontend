@@ -4,28 +4,18 @@
       <h1>Stats Requests</h1>
       <div v-if="chartData">
         <div class="action-btns">
-          <b-radio :value="requestYear" name="year" :native-value="currentYear" @input="setYear(currentYear)">{{
+          <o-radio v-model="requestYear" name="year" :native-value="currentYear" @input="setYear(currentYear)">{{
             currentYear
-          }}</b-radio>
-          <b-radio :value="requestYear" name="year" :native-value="currentYear - 1" @input="setYear(currentYear - 1)">{{
+          }}</o-radio>
+          <o-radio v-model="requestYear" name="year" :native-value="currentYear - 1" @input="setYear(currentYear - 1)">{{
             currentYear - 1
-          }}</b-radio>
+          }}</o-radio>
         </div>
         <div class="action-btns">
-          <b-radio
-            :value="requestType"
-            name="requestType"
-            native-value="Virtual Access"
-            @input="setType('Virtual Access')"
-            >Virtual Access</b-radio
-          >
-          <b-radio
-            :value="requestType"
-            name="requestType"
-            native-value="Transnational Access"
-            @input="setType('Transnational Access')"
-            >Transnational Access</b-radio
-          >
+          <o-radio v-model="requestType" name="requestType" native-value="Virtual Access"
+            @input="setType('Virtual Access')">Virtual Access</o-radio>
+          <o-radio v-model="requestType" name="requestType" native-value="Transnational Access"
+            @input="setType('Transnational Access')">Transnational Access</o-radio>
         </div>
         <bar-chart :data="chartData" :options="options" :height="600" />
       </div>
@@ -34,12 +24,18 @@
 </template>
 
 <script>
-import BarChart from '@/modules/core/components/ui/BarChart';
+import BarChart from '@/modules/core/components/ui/BarChart.vue';
+import {
+  Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,
+} from 'chart.js';
 import { fetchFilteredRequests } from '@/services/requestsService';
 import { sortArray, makeStringFromDateArray } from '@/modules/core/utils/helpers';
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+
 export default {
   components: {
-    BarChart
+    BarChart,
   },
 
   data() {
@@ -53,11 +49,11 @@ export default {
             {
               ticks: {
                 beginAtZero: true,
-                stepSize: 1
-              }
-            }
-          ]
-        }
+                stepSize: 1,
+              },
+            },
+          ],
+        },
         // animation: {
         //   duration: 0
         // },
@@ -78,7 +74,7 @@ export default {
         'September',
         'October',
         'November',
-        'December'
+        'December',
       ],
       statusses: {
         draft: '#b4b4bf',
@@ -86,12 +82,12 @@ export default {
         approved: '#3dca77',
         submitted: '#10c1ff',
         withdrawn: '#f4f4f1',
-        scoring: '#205692'
+        scoring: '#205692',
       },
       currentYear: new Date().getFullYear(),
       requestYear: new Date().getFullYear(),
       requestType: 'Virtual Access',
-      sortedData: null
+      sortedData: null,
     };
   },
 
@@ -106,10 +102,13 @@ export default {
 
       try {
         const response = await fetchFilteredRequests(queries);
-        const withDate = response.data.data.rows.map(row => {
-          row.dateString = makeStringFromDateArray(row.requestDate);
-          row.month = this.monthNames[new Date(row.dateString).getMonth()];
-          return row;
+        const withDate = response.data.data.rows.map((row) => {
+          const copyRow = { ...row };
+
+          copyRow.dateString = makeStringFromDateArray(row.requestDate);
+          copyRow.month = this.monthNames[new Date(row.dateString).getMonth()];
+
+          return copyRow;
         });
         this.sortedData = sortArray(withDate, 'dateString');
         this.setGraphData();
@@ -129,47 +128,47 @@ export default {
     },
 
     setGraphData() {
-      const data = this.monthNames.map(name => {
-        return {
-          month: name,
-          statusses: []
-        };
-      });
+      const data = this.monthNames.map((name) => ({
+        month: name,
+        statusses: [],
+      }));
 
       this.chartData = {
         labels: [],
-        datasets: []
+        datasets: [],
       };
       this.chartData.labels = this.monthNames;
 
       this.sortedData
-        .filter(request => request.requestDate[0] === this.requestYear && request.requestType === this.requestType)
-        .map(request => {
-          return data.map(item => {
-            if (item.month === request.month) {
-              return item.statusses.push(request.status);
-            }
-          });
-        });
+        .filter((request) => request.requestDate[0] === this.requestYear
+          && request.requestType === this.requestType)
+        .map((request) => data.forEach((item) => {
+          if (item.month === request.month) {
+            return item.statusses.push(request.status);
+          }
 
-      const reduced = data.map(d => {
-        return d.statusses.reduce((obj, item) => {
-          obj[item] = (obj[item] || 0) + 1;
-          return obj;
-        }, {});
-      });
+          return null;
+        }));
 
-      Object.keys(this.statusses).map(status => {
-        const filteredData = reduced.map(month => month[status] || 0);
+      const reduced = data.map((d) => d.statusses.reduce((obj, item) => {
+        const copyObj = { ...obj };
+
+        copyObj[item] = (obj[item] || 0) + 1;
+
+        return copyObj;
+      }, {}));
+
+      Object.keys(this.statusses).forEach((status) => {
+        const filteredData = reduced.map((month) => month[status] || 0);
         this.chartData.datasets.push({
           label: status === 'scoring' ? 'Scored' : this.$t(`status.${status}`),
           backgroundColor: this.statusses[status],
           borderWidth: 1,
-          data: filteredData
+          data: filteredData,
         });
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

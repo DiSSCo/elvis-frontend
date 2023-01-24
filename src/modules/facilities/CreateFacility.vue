@@ -14,7 +14,7 @@
               label="Facility name"
               :value="form.name"
               :fieldOptions="{
-                validation: $v.form.name,
+                validation: v$.form.name,
                 errorMessage: 'Please fill in a name first',
                 placeHolder: 'Fill in a name first and press enter...',
                 maxlength: 500
@@ -28,14 +28,21 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { fetchNewFacilityId, updateField } from '@/services/facilitiesService';
 import { fetchInstitution } from '@/services/institutionsService';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
+  },
+
+  setup() {
+    const v$ = useVuelidate();
+
+    return { v$: v$ };
   },
 
   data() {
@@ -43,27 +50,27 @@ export default {
       institutionId: '',
       institutionName: '',
       form: {
-        name: ''
-      }
+        name: '',
+      },
     };
   },
 
   validations: {
     form: {
       name: {
-        required
-      }
-    }
+        required,
+      },
+    },
   },
 
   async created() {
-    this.$root.$on('updateField', this.createNewFacility);
+    this.emitter.on('updateField', this.createNewFacility);
     this.institutionId = this.$route.params.instId;
     this.getInstitutionName(this.institutionId);
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
+  beforeUnmount() {
+    this.emitter.off('updateField');
   },
 
   methods: {
@@ -83,20 +90,20 @@ export default {
           const payload = {
             context: { resource: 'facilities' },
             fieldId: ['nameEng'],
-            value: { type: 'string', value }
+            value: { type: 'string', value },
           };
           await updateField(this.institutionId, id, payload);
 
           this.$router.push({
             name: 'facility-new',
-            params: { instId: this.institutionId, id }
+            params: { instId: this.institutionId, id },
           });
         }
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

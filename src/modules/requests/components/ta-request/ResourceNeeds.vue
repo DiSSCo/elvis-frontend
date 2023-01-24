@@ -2,14 +2,15 @@
   <div>
     <h3 class="header">Resource needs</h3>
     <p>
-      In order to manage facilities efficiently, it is important that applicants give a clear indication of the
-      equipment that you will wish during your visit. Therefore it is necessary to enumerate the days of access required
-      for each facility/piece of equipment. You do not have to request compound microsccopes, these will be provided for
-      you.
+      In order to manage facilities efficiently, it is important that applicants give
+      a clear indication of the equipment that you will wish during your visit. Therefore
+      it is necessary to enumerate the days of access required for each facility/piece of
+      equipment. You do not have to request compound microsccopes, these will be provided
+      for you.
     </p>
     <p>
-      Applicants are strongly advised to contact the appropriate Facility Manager via the Host before submitting an
-      application.
+      Applicants are strongly advised to contact the appropriate Facility Manager via the
+      Host before submitting an application.
     </p>
 
     <form @submit.prevent>
@@ -36,13 +37,11 @@
       >
         <div class="institution-name">
           {{ institution.name }}
-          <b-tag
-            v-if="formData.status !== 'draft' && checkStatus(institution)"
-            class="tag"
-            rounded
-            :class="$t(`status.class.${checkStatus(institution)}`)"
-            >{{ $t(`status.${checkStatus(institution)}`) }}</b-tag
-          >
+          <tag v-if="formData.status !== 'draft' && checkStatus(institution)"
+            :text="$t(`status.${checkStatus(institution)}`)"
+            :variant="$t(`status.class.${checkStatus(institution)}`)"
+            :rounded="true"
+          />
         </div>
         <div v-for="(field, j) in institution.facilities" :key="j" class="services">
           <form @submit.prevent>
@@ -71,36 +70,38 @@
 </template>
 
 <script>
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
-import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup';
-import data from '../../schemas/fields-ta.json';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
+import FieldGroup from '@/modules/core/components/ui/formElements/FieldGroup.vue';
+import Tag from '@/modules/core/components/ui/Tag.vue';
 import { updateField } from '@/services/requestsService';
 import { fetchFacilitiesByInstitutionId } from '@/services/facilitiesService';
 import { sortArray } from '@/modules/core/utils/helpers';
-import RequestApproval from '../RequestApproval';
 import { isAllowed, isOwnInstitution } from '@/modules/core/utils/auth';
+import RequestApproval from '../RequestApproval.vue';
+import data from '../../schemas/fields-ta.json';
 
 export default {
   components: {
     FieldRow,
     FieldGroup,
-    RequestApproval
+    RequestApproval,
+    Tag,
   },
 
   props: {
     formData: Object,
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
-    maxWorkingDays: Number
+    maxWorkingDays: Number,
   },
 
   data() {
     return {
       fields: data.resourceNeeds,
       institutionFacilities: [],
-      requestId: null
+      requestId: null,
     };
   },
 
@@ -112,7 +113,7 @@ export default {
         }
       },
       immediate: true,
-      deep: true
+      deep: true,
     },
 
     maxWorkingDays: {
@@ -120,17 +121,17 @@ export default {
         if (value && oldValue && value !== oldValue) {
           this.fetchFacilities();
         }
-      }
-    }
+      },
+    },
   },
 
   created() {
-    this.$root.$on('updateField', this.handleFormField);
+    this.emitter.on('updateField', this.handleFormField);
     this.requestId = this.$route.params.reqid;
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
+  beforeUnmount() {
+    this.emitter.off('updateField');
   },
 
   methods: {
@@ -148,11 +149,11 @@ export default {
           label: facility.fieldValues.nameEng.value,
           fields: [],
           options: {
-            subheader: true
-          }
+            subheader: true,
+          },
         };
 
-        Object.values(facility.fieldValues.instruments).map((instrument, instrIndex) => {
+        Object.values(facility.fieldValues.instruments).forEach((instrument, instrIndex) => {
           const maxWorkingDays = this.maxWorkingDays || 15;
           const row = {
             type: 'FieldRow',
@@ -163,13 +164,13 @@ export default {
               fieldOptions: {
                 placeHolder: 'Amount of days',
                 suffix: 'days',
-                options: Array.from(Array(maxWorkingDays + 1), (x, i) => String(i))
-              }
-            }
+                options: Array.from(Array(maxWorkingDays + 1), (x, i) => String(i)),
+              },
+            },
           };
           group.fields.push(row);
           const value = institution.fieldValues.facility[facIndex]?.service[instrIndex] || null;
-          this.$set(institution.fieldValues.facility, row.id, value);
+          institution.fieldValues.facility[row.id] = value;
           group.institution = institution;
         });
         return group;
@@ -183,14 +184,14 @@ export default {
       const facilityPayload = {
         institutionId: payload.context.institutionId,
         fieldId: payload.fieldId.split('.'),
-        value: payload.value
+        value: payload.value,
       };
       await updateField(this.requestId, facilityPayload);
     },
 
     fetchFacilities() {
       this.institutionFacilities = [];
-      this.formData.institutions.map(async institution => {
+      this.formData.institutions.map(async (institution) => {
         const response = await fetchFacilitiesByInstitutionId(institution.id);
         const { name, id, status } = institution;
         const facilities = this.buildFacilityFields(institution, response.data.data.rows);
@@ -199,7 +200,7 @@ export default {
             name,
             id,
             status,
-            facilities
+            facilities,
           });
           this.institutionFacilities = sortArray(this.institutionFacilities, 'id');
         }
@@ -214,8 +215,8 @@ export default {
 
     isOwnInstitution(institutionId) {
       return isOwnInstitution(institutionId);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -237,7 +238,7 @@ export default {
   font-weight: 600;
 }
 
-::v-deep .field-rows {
+:deep(.field-rows) {
   margin-right: 1em;
 }
 </style>

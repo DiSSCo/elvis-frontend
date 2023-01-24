@@ -6,17 +6,17 @@
 
 <script>
 import { isAllowed } from '@/modules/core/utils/auth';
-import NewCall from './NewCall';
+import NewCall from './NewCall.vue';
 
 export default {
   components: {
-    NewCall
+    NewCall,
   },
 
   created() {
     if (!isAllowed('call_edit')) {
       return this.$router.push({ name: 'message', params: { status: 403 } });
     }
-  }
+  },
 };
 </script>

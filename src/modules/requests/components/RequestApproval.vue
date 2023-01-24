@@ -1,15 +1,15 @@
 <template>
   <div>
     <div v-if="editable && status === 'submitted'" class="approval-btn" @click="approve">
-      <b-button type="is-success" :loading="loading">
+      <o-button variant="success" :loading="loading">
         <span> <i class="feather icon-check" /> {{ $t('approve') }} </span>
-      </b-button>
+      </o-button>
     </div>
 
     <div v-if="editable && status === 'approved'" class="approval-btn" @click="undoApproval">
-      <b-button type="is-warning" :loading="loading">
+      <o-button variant="warning" :loading="loading">
         <span> <i class="feather icon-x" /> {{ $t('undo_approval') }} </span>
-      </b-button>
+      </o-button>
     </div>
     <div v-if="errorMessage" class="has-text-danger">{{ errorMessage }}</div>
   </div>
@@ -17,23 +17,25 @@
 
 <script>
 import { approveRequest, unapproveRequest } from '@/services/requestsService';
+import Dialog from '@/modules/core/components/ui/Dialog.vue';
+
 export default {
   props: {
     editable: {
-      type: Boolean
+      type: Boolean,
     },
     status: {
-      type: String
+      type: String,
     },
     requestId: {
-      type: String
-    }
+      type: String,
+    },
   },
 
   data() {
     return {
       loading: false,
-      errorMessage: ''
+      errorMessage: '',
     };
   },
 
@@ -41,63 +43,85 @@ export default {
     approve() {
       this.loading = true;
       this.errorMessage = '';
-      this.$buefy.dialog.confirm({
-        confirmText: String(this.$t('approve')),
-        cancelText: String(this.$t('cancel')),
-        message: String(this.$t('request.request_approve_question')),
-        type: 'is-success',
-        onConfirm: async () => {
-          try {
-            const response = await approveRequest(this.requestId);
-            if (response.status === 200) {
-              setTimeout(() => {
-                this.$root.$emit('reload', { id: this.requestId, isCoordinator: true });
-                this.loading = false;
-                this.isOpen = -1;
-              }, 2000);
-            }
-          } catch (error) {
-            console.log(error);
-            this.loading = false;
-            this.errorMessage = `Something went wrong: ${error}`;
-          }
+
+      this.$oruga.modal.open({
+        component: Dialog,
+        props: {
+          confirmText: String(this.$t('approve')),
+          cancelText: String(this.$t('cancel')),
+          message: String(this.$t('request.request_approve_question')),
+          type: 'success',
         },
-        onCancel: () => {
-          this.loading = false;
-        }
+        trapFocus: true,
+        events: {
+          onConfirm: async () => {
+            this.$oruga.modal.closeAll();
+
+            try {
+              const response = await approveRequest(this.requestId);
+              if (response.status === 200) {
+                setTimeout(() => {
+                  this.emitter.emit('reload', { id: this.requestId, isCoordinator: true });
+                  this.loading = false;
+                  this.isOpen = -1;
+                }, 2000);
+              }
+            } catch (error) {
+              console.log(error);
+              this.loading = false;
+              this.errorMessage = `Something went wrong: ${error}`;
+            }
+          },
+          onCancel: () => {
+            this.$oruga.modal.closeAll();
+
+            this.loading = false;
+          },
+        },
       });
     },
 
     undoApproval() {
       this.loading = true;
       this.errorMessage = '';
-      this.$buefy.dialog.confirm({
-        confirmText: String(this.$t('undo_approval')),
-        cancelText: String(this.$t('cancel')),
-        message: String(this.$t('request.request_unapprove_question')),
-        type: 'is-warning',
-        onConfirm: async () => {
-          try {
-            const response = await unapproveRequest(this.requestId);
-            if (response.status === 200) {
-              setTimeout(() => {
-                this.$root.$emit('reload', { id: this.requestId, isCoordinator: true });
-                this.loading = false;
-                this.isOpen = -1;
-              }, 2000);
-            }
-          } catch (error) {
-            console.log(error);
-            this.loading = false;
-            this.errorMessage = `Something went wrong: ${error}`;
-          }
+
+      this.$oruga.modal.open({
+        component: Dialog,
+        props: {
+          confirmText: String(this.$t('undo_approval')),
+          cancelText: String(this.$t('cancel')),
+          message: String(this.$t('request.request_unapprove_question')),
+          type: 'warning',
         },
-        onCancel: () => {
-          this.loading = false;
-        }
+        trapFocus: true,
+        events: {
+          onConfirm: async () => {
+            this.$oruga.modal.closeAll();
+
+            try {
+              const response = await unapproveRequest(this.requestId);
+              if (response.status === 200) {
+                setTimeout(() => {
+                  this.emitter.emit('reload', { id: this.requestId, isCoordinator: true });
+                  this.loading = false;
+                  this.isOpen = -1;
+                }, 2000);
+              }
+            } catch (error) {
+              console.log(error);
+              this.loading = false;
+              this.errorMessage = `Something went wrong: ${error}`;
+            }
+          },
+          onCancel: () => {
+            this.$oruga.modal.closeAll();
+
+            this.loading = false;
+          },
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

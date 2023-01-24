@@ -12,16 +12,16 @@
 
 <script>
 /* eslint-disable global-require */
-import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+import { LMap, LTileLayer, LMarker } from 'vue3-leaflet';
 import L from 'leaflet';
-import Spinner from '@/modules/core/components/ui/Spinner';
+import Spinner from '@/modules/core/components/ui/Spinner.vue';
 import { fetchAddress } from '@/services/apiService';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
 export default {
@@ -29,14 +29,14 @@ export default {
     Spinner,
     LMap,
     LTileLayer,
-    LMarker
+    LMarker,
   },
 
   props: {
     street: String,
     number: [String, Number],
     zip: String,
-    city: String
+    city: String,
   },
 
   data() {
@@ -47,12 +47,12 @@ export default {
         zoomControl: true,
         attributionControl: false,
         dragging: true,
-        scrollWheelZoom: true
+        scrollWheelZoom: true,
       },
       zoom: 17,
       center: L.latLng(47.41322, -1.219482),
       url: '//{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="//osm.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; <a href="//osm.org/copyright">OpenStreetMap</a> contributors',
     };
   },
 
@@ -75,11 +75,10 @@ export default {
           this.loading = false;
         }
       } catch (error) {
-        console.log(error);
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

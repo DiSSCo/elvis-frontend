@@ -9,11 +9,12 @@
       <div class="container">
         <header>
           <h1>
-            {{ $t('requester.requesters') }} <span v-if="filteredData">({{ filteredData.length }})</span>
+            {{ $t('requester.requesters') }}
+            <span v-if="filteredData">({{ filteredData.length }})</span>
           </h1>
         </header>
         <div>
-          <b-table
+          <o-table
             :data="filteredData"
             :row-class="(row, index) => 'row'"
             :mobile-cards="false"
@@ -27,16 +28,20 @@
             @select="showDetails"
             @sort="(field, order) => setSorting(field, order)"
           >
-            <b-table-column class="profile-pic" custom-key="profilePic" width="70" v-slot="props">
+            <o-table-column class="profile-pic" custom-key="profilePic" width="70" v-slot="props">
               <gravatar :initials="getInitials(props.row.firstName, props.row.lastName)" />
-            </b-table-column>
-            <b-table-column field="firstName" label="Name" sortable v-slot="props">
+            </o-table-column>
+            <o-table-column field="firstName" label="Name" sortable v-slot="props">
               <div class="full-name">{{ props.row.firstName }} {{ props.row.lastName }}</div>
-            </b-table-column>
-            <b-table-column field="email" label="Email" sortable v-slot="props">
+            </o-table-column>
+            <o-table-column field="email" label="Email" sortable v-slot="props">
               {{ props.row.email }}
-            </b-table-column>
-            <b-table-column field="attributes.orcId" :label="$t('profile.orcid')" sortable v-slot="props">
+            </o-table-column>
+            <o-table-column field="attributes.orcId"
+              :label="$t('profile.orcid')"
+              sortable
+              v-slot="props"
+            >
               <div class="details">
                 <a
                   v-if="props.row.attributes && props.row.attributes.orcId"
@@ -47,25 +52,27 @@
                 >
                 <span v-else>-</span>
               </div>
-            </b-table-column>
-            <b-table-column field="bannedAt" label="Status" width="130" sortable v-slot="props">
+            </o-table-column>
+            <o-table-column field="bannedAt" label="Status" width="130" sortable v-slot="props">
               <div>
-                <b-tooltip :label="props.row.bannedAt ? 'Disabled' : 'Enabled'" type="is-dark">
+                <o-tooltip :label="props.row.bannedAt ? 'Disabled' : 'Enabled'" variant="primary">
                   <i
                     class="feather is-large"
-                    :class="props.row.bannedAt ? 'icon-x has-text-danger' : 'icon-check has-text-success'"
+                    :class="props.row.bannedAt ?
+                      'icon-x has-text-danger'
+                      : 'icon-check has-text-success'"
                   />
-                </b-tooltip>
+                </o-tooltip>
               </div>
-            </b-table-column>
+            </o-table-column>
 
-            <template slot="empty">
+            <template v-slot:empty>
               {{ $t('requester.no_requesters_found') }}
             </template>
-            <template slot="bottom-left">
+            <template v-slot:bottom-left>
               <pager :total="filteredData.length" :perPage="perPage" @input="setPerPage" />
             </template>
-          </b-table>
+          </o-table>
         </div>
       </div>
     </div>
@@ -76,24 +83,24 @@
 import { sanitizeOrcId, search, setQuery } from '@/modules/core/utils/helpers';
 import { isAllowed } from '@/modules/core/utils/auth';
 import { fetchUsers } from '@/services/usersService';
-import Search from '@/modules/core/components/ui/Search';
-import Gravatar from '@/modules/core/components/ui/Gravatar';
-import Pager from '@/modules/core/components/ui/Pager';
+import Search from '@/modules/core/components/ui/Search.vue';
+import Gravatar from '@/modules/core/components/ui/Gravatar.vue';
+import Pager from '@/modules/core/components/ui/Pager.vue';
 
 export default {
   components: {
     Search,
     Gravatar,
-    Pager
+    Pager,
   },
 
   computed: {
     filteredData() {
       if (this.requesters && this.requesters.length && this.searchTerm) {
-        return this.requesters.filter(d => search(d, this.searchTerm));
+        return this.requesters.filter((d) => search(d, this.searchTerm));
       }
       return this.requesters;
-    }
+    },
   },
 
   data() {
@@ -105,7 +112,7 @@ export default {
       sortIconSize: 'is-small',
       searchTerm: this.$route.query.q || '',
       currentPage: 1,
-      perPage: Number(this.$route.query.perPage) || 10
+      perPage: Number(this.$route.query.perPage) || 10,
     };
   },
 
@@ -145,7 +152,7 @@ export default {
       this.$router.push({
         name: 'requester-details',
         params,
-        query
+        query,
       });
     },
 
@@ -162,7 +169,11 @@ export default {
     setSorting(field, order) {
       this.defaultSort = field;
       this.defaultSortDirection = order;
-      const query = { ...this.$route.query, orderBy: this.defaultSort, direction: this.defaultSortDirection };
+      const query = {
+        ...this.$route.query,
+        orderBy: this.defaultSort,
+        direction: this.defaultSortDirection,
+      };
       setQuery(query);
     },
 
@@ -178,11 +189,11 @@ export default {
         orderBy: this.defaultSort,
         direction: this.defaultSortDirection,
         perPage: this.perPage,
-        q: this.searchTerm
+        q: this.searchTerm,
       };
       setQuery(query);
-    }
-  }
+    },
+  },
 };
 </script>
 

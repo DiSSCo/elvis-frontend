@@ -21,7 +21,10 @@
         <dd>{{ val.country.value[0] }}</dd>
       </dl>
 
-      <div v-for="(address, index) in affiliated" :key="index" :class="{ 'extra-address': index !== 0 }">
+      <div v-for="(address, index) in affiliated"
+        :key="index"
+        :class="{ 'extra-address': index !== 0 }"
+      >
         <h3 v-if="index === 0 && address.street" class="header">Affiliated addresses</h3>
         <dl v-if="address.street">
           <dt>Address:</dt>
@@ -35,7 +38,10 @@
         </dl>
       </div>
       <h3 class="header">{{ $t('institution.coordinators') }}</h3>
-      <dl v-for="(coordinator, i) in uniqueCoordinators" :key="coordinator.email + i" :class="{ coordinator: i }">
+      <dl v-for="(coordinator, i) in uniqueCoordinators"
+        :key="coordinator.email + i"
+        :class="{ coordinator: i }"
+      >
         <dt>{{ $t('profile.name') }}:</dt>
         <dd>{{ coordinator.firstName }} {{ coordinator.lastName }}</dd>
         <dt>{{ $t('profile.email') }}:</dt>
@@ -64,16 +70,17 @@
 </template>
 
 <script>
-import LocationMap from '@/modules/core/components/ui/LocationMap';
+import LocationMap from '@/modules/core/components/ui/LocationMap.vue';
+
 export default {
   components: {
-    LocationMap
+    LocationMap,
   },
 
   props: {
     institution: {
-      type: [Object, Array]
-    }
+      type: [Object, Array],
+    },
   },
 
   computed: {
@@ -82,8 +89,8 @@ export default {
     },
 
     affiliated() {
-      return Object.values(this.val.aff_address).map(addr => {
-        Object.keys(addr).map(key => {
+      return Object.values(this.val.aff_address).map((addr) => {
+        Object.keys(addr).forEach((key) => {
           addr[key] = addr[key]?.value;
         });
         return addr;
@@ -92,24 +99,26 @@ export default {
 
     uniqueCoordinators() {
       return this.institution.coordinators.filter(
-        (coordinator, index, self) => index === self.findIndex(t => t.email === coordinator.email)
+        (coordinator, index, self) => index === self.findIndex(
+          (t) => t.email === coordinator.email,
+        ),
       );
-    }
+    },
   },
 
   methods: {
     getLogo(id) {
       try {
         const logoos = require.context('@/assets/images/institutions', true, /^.*\.(png|svg|jpg|jpeg)$/);
-        const [logoWithExt] = logoos.keys().filter(rx => rx.match(id));
+        const [logoWithExt] = logoos.keys().filter((rx) => rx.match(id));
         const logo = logoWithExt.split('.').splice(1);
         // eslint-disable-next-line global-require
         return require(`@/assets/images/institutions${logo.join('.')}`);
       } catch {
         return '';
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

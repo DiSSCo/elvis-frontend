@@ -6,11 +6,11 @@
     </div>
     <a class="more-info" @click="modalActive = true">{{ $t('more_info') }}</a>
 
-    <b-modal v-model="modalActive">
+    <o-modal v-model="modalActive">
       <div class="box">
         <div v-html="moreText" />
       </div>
-    </b-modal>
+    </o-modal>
   </div>
 </template>
 
@@ -18,14 +18,14 @@
 export default {
   props: {
     text: String,
-    moreText: String
+    moreText: String,
   },
 
   data() {
     return {
-      modalActive: false
+      modalActive: false,
     };
-  }
+  },
 };
 </script>
 

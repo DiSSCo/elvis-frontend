@@ -12,8 +12,8 @@ describe('Welcome', () => {
       computed: {
         isAuthenticated() {
           return false;
-        }
-      }
+        },
+      },
     });
     expect(wrapper.text()).toMatch('Virtual Access applications portal');
     wrapper.destroy();
@@ -25,13 +25,13 @@ describe('Welcome', () => {
       computed: {
         isAuthenticated() {
           return true;
-        }
+        },
       },
       mocks: {
         $router: {
-          push: jest.fn()
-        }
-      }
+          push: jest.fn(),
+        },
+      },
     });
     const routerPush = jest.spyOn(wrapper.vm.$router, 'push');
     expect(routerPush).toHaveBeenCalledWith('/');
@@ -44,13 +44,13 @@ describe('Welcome', () => {
       computed: {
         isAuthenticated() {
           return false;
-        }
+        },
       },
       mocks: {
         $router: {
-          push: jest.fn()
-        }
-      }
+          push: jest.fn(),
+        },
+      },
     });
     const btn = wrapper.find('button');
     btn.trigger('click');

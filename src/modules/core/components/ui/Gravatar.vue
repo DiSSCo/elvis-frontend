@@ -1,6 +1,11 @@
 <template>
   <div class="gravatar">
-    <div class="mask" :style="{ transform: `rotate(${randomRotation()}deg)`, width: `${size}px`, height: `${size}px` }">
+    <div class="mask"
+      :style="{
+        transform: `rotate(${randomRotation()}deg)`,
+        width: `${size}px`,
+        height: `${size}px`
+      }">
       <span
         class="circle circle1"
         :style="{
@@ -40,12 +45,12 @@
 export default {
   props: {
     initials: {
-      type: String
+      type: String,
     },
     size: {
       type: Number,
-      default: 40
-    }
+      default: 40,
+    },
   },
   methods: {
     randomColor() {
@@ -56,8 +61,8 @@ export default {
 
     randomRotation() {
       return Math.floor(Math.random() * 360);
-    }
-  }
+    },
+  },
 };
 </script>
 

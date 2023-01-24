@@ -14,15 +14,19 @@
               <div v-if="facility.images.length" class="label">Facility image</div>
               <div class="facility-image-row">
                 <span @click="removeImage" class="remove-image"><i class="feather icon-x" /></span>
-                <facility-image class="facility-image" :facility="facility" :editable="true" @reload="fetchData" />
+                <facility-image class="facility-image"
+                  :facility="facility"
+                  :editable="true"
+                  @reload="fetchData"
+                />
               </div>
             </div>
 
             <facility-instruments :facility="facility" :editable="true" />
             <div v-if="isAllowed('facility_create')" class="action-btns">
-              <b-button type="is-primary" :loading="loading" @click="saveFacility">
+              <o-button class="primaryButton" :loading="loading" @click="saveFacility">
                 {{ $t('facility.facility_save') }}
-              </b-button>
+              </o-button>
             </div>
           </div>
         </div>
@@ -33,22 +37,24 @@
 
 <script>
 import { isAllowed } from '@/modules/core/utils/auth';
-import { fetchFacilityData, updateField, removeGroup, deleteImage } from '@/services/facilitiesService';
-import FacilityGeneral from './components/FacilityGeneral';
-import FacilityInstruments from './components/FacilityInstruments';
-import FacilityImage from './components/FacilityImage';
+import {
+  fetchFacilityData, updateField, removeGroup, deleteImage,
+} from '@/services/facilitiesService';
+import FacilityGeneral from './components/FacilityGeneral.vue';
+import FacilityInstruments from './components/FacilityInstruments.vue';
+import FacilityImage from './components/FacilityImage.vue';
 
 export default {
   components: {
     FacilityGeneral,
     FacilityInstruments,
-    FacilityImage
+    FacilityImage,
   },
 
   computed: {
     formTitle() {
-      return this.facility?.fieldValues.nameEng?.value || 'No name';
-    }
+      return this.facility?.fieldValues.nameEng?.value || this.facility?.fieldValues.nameEng || 'No name';
+    },
   },
 
   data() {
@@ -57,22 +63,22 @@ export default {
       clickable: true,
       institutionId: null,
       facilityId: null,
-      loading: false
+      loading: false,
     };
   },
 
   created() {
-    this.$root.$on('updateField', this.handleFormField);
-    this.$root.$on('removeGroup', this.handleRemoveGroup);
+    this.emitter.on('updateField', this.handleFormField);
+    this.emitter.on('removeGroup', this.handleRemoveGroup);
 
     this.institutionId = this.$route.params.instId;
     this.facilityId = this.$route.params.id;
     this.fetchData(this.facilityId);
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
-    this.$root.$off('removeGroup');
+  beforeUnmount() {
+    this.emitter.off('updateField');
+    this.emitter.off('removeGroup');
   },
 
   methods: {
@@ -95,7 +101,7 @@ export default {
       setTimeout(() => {
         this.$router.push({
           name: 'institution-details',
-          params: { instId: this.institutionId }
+          params: { instId: this.institutionId },
         });
       }, 2000);
     },
@@ -117,7 +123,7 @@ export default {
     },
 
     removeImage() {
-      this.facility.images.map(async image => {
+      this.facility.images.map(async (image) => {
         try {
           await deleteImage(this.facility.institutionId, this.facility.id, image);
           this.fetchData(this.facilityId);
@@ -125,8 +131,8 @@ export default {
           console.log(error);
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

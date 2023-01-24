@@ -11,7 +11,7 @@
         :context="{ resource: 'requests' }"
         :label="field.label"
         :editable="editable"
-        v-bind="{ ...field.options }"
+        v-bind="{ ...field.options, validation: this.v$.formData.fieldValues[field.id] || this.v$.formData.institutions }"
       />
     </form>
     <div v-if="institutionHosts.length" class="institution-hosts">
@@ -34,15 +34,16 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import { sortArray } from '@/modules/core/utils/helpers';
 
 import data from '../../schemas/fields-ta.json';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   props: {
@@ -50,14 +51,20 @@ export default {
     institutions: Array,
     editable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
+  },
+
+  setup() {
+    const v$ = useVuelidate();
+
+    return { v$: v$ };
   },
 
   data() {
     return {
       fields: data.subject,
-      institutionHosts: []
+      institutionHosts: [],
     };
   },
 
@@ -65,13 +72,13 @@ export default {
     formData: {
       fieldValues: {
         subject: {
-          required
-        }
+          required,
+        },
       },
       institutions: {
-        required
-      }
-    }
+        required,
+      },
+    },
   },
 
   watch: {
@@ -83,54 +90,39 @@ export default {
         }
       },
       deep: true,
-      immediate: true
-    }
-  },
-
-  created() {
-    this.setValidation();
+      immediate: true,
+    },
   },
 
   methods: {
     setAutocompleteData() {
       const [selectedInstitution] = this.formData?.fieldValues.institution?.value;
-      const foundInstitution = this.institutions.find(inst => inst.name === selectedInstitution);
+      const foundInstitution = this.institutions.find((inst) => inst.name === selectedInstitution);
       const [country] = foundInstitution ? foundInstitution.fieldValues.country?.value : '';
 
-      const found = this.fields.find(field => field.id === 'institution');
+      const found = this.fields.find((field) => field.id === 'institution');
       const filteredInstitutions = country
-        ? this.institutions.filter(i => i.fieldValues.country.value.includes(country))
+        ? this.institutions.filter((i) => i.fieldValues.country.value.includes(country))
         : this.institutions;
 
-      found.options.fieldOptions.autoCompleteData = filteredInstitutions.map(inst => inst.name).sort();
+      found.options.fieldOptions.autoCompleteData = filteredInstitutions.map(
+        (inst) => inst.name,
+      ).sort();
     },
 
     setInstitutionsList() {
-      const institutionsList = this.formData?.institutions.map(inst => inst.name);
+      const institutionsList = this.formData?.institutions.map((inst) => inst.name);
       this.formData.fieldValues.institution = { type: 'list', value: institutionsList };
 
-      const found = this.fields.find(field => field.id === 'institution');
+      const found = this.fields.find((field) => field.id === 'institution');
       found.options.fieldOptions.removeable = this.formData.status !== 'approved' && this.formData.status !== 'scoring';
 
       this.setAutocompleteData();
     },
 
-    setValidation() {
-      this.fields = this.fields.map(field => {
-        if (field.options.fieldOptions?.errorMessage) {
-          this.$set(
-            field.options.fieldOptions,
-            'validation',
-            this.$v.formData.fieldValues[field.id] || this.$v.formData.institutions
-          );
-        }
-        return field;
-      });
-    },
-
     getHostFields() {
       this.institutionHosts = [];
-      this.formData.institutions.map(async institution => {
+      this.formData.institutions.map(async (institution) => {
         const hosts = this.buildHostFields(institution);
         if (hosts) {
           this.institutionHosts.push(hosts);
@@ -148,14 +140,14 @@ export default {
         options: {
           field: 'StringField',
           fieldOptions: {
-            placeHolder: 'Enter the name of the host'
-          }
-        }
+            placeHolder: 'Enter the name of the host',
+          },
+        },
       };
-      this.$set(institution.fieldValues, 'host', institution.fieldValues.host?.value || null);
+      institution.fieldValues.host = institution.fieldValues.host?.value || null;
       return row;
-    }
-  }
+    },
+  },
 };
 </script>
 

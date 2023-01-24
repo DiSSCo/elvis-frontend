@@ -8,7 +8,7 @@ localVue.use(Buefy);
 
 beforeEach(() => {
   wrapper = mount(RadioField, {
-    localVue
+    localVue,
   });
 });
 

@@ -8,23 +8,20 @@
 
       <div class="scoring-form">
         <form @submit.prevent>
-          <component
-            v-for="field in fields"
+          <component v-for="field in fields"
             :is="field.type"
             :key="field.id"
             :value="score[field.id]"
             :path="[field.id]"
             :fields="field.fields"
             :context="{ resource: 'requests', type: 'ta' }"
-            :label="field.label"
-            v-bind="{ ...field.options }"
-          />
+            :label="field.label" v-bind="{ ...field.options }" />
         </form>
         <div class="action-btns">
-          <b-button @click="cancel" outlined> {{ $t('cancel') }} </b-button>
-          <b-button type="is-primary" :loading="loading" @click="save">
+          <o-button @click="cancel" outlined class="cancelButton"> {{ $t('cancel') }} </o-button>
+          <o-button variant="primary" :loading="loading" @click="save">
             {{ $t('save') }}
-          </b-button>
+          </o-button>
         </div>
       </div>
     </div>
@@ -32,20 +29,22 @@
 </template>
 
 <script>
-import { fetchRequestData, createScore, updateScore, viewScore } from '@/services/requestsService';
+import {
+  fetchRequestData, createScore, updateScore, viewScore,
+} from '@/services/requestsService';
 import { getProfile } from '@/modules/core/utils/auth';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import fields from './schemas/scoring.json';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   computed: {
     profile() {
       return getProfile();
-    }
+    },
   },
 
   data() {
@@ -58,23 +57,23 @@ export default {
         gains_outputs: null,
         merit: null,
         societal_challenge: null,
-        comments: ''
+        comments: '',
       },
       requestId: null,
       fields: fields.data,
       formData: null,
-      loading: false
+      loading: false,
     };
   },
 
   created() {
-    this.$root.$on('updateField', this.handleFormField);
+    this.emitter.on('updateField', this.handleFormField);
     this.getRequestData();
     this.setOptions();
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
+  beforeUnmount() {
+    this.emitter.off('updateField');
   },
 
   methods: {
@@ -82,7 +81,7 @@ export default {
       this.requestId = this.$route.params.id;
       try {
         this.request = await fetchRequestData(this.requestId);
-        this.request.scoreFormId.map(async score => {
+        this.request.scoreFormId.map(async (score) => {
           const result = await viewScore(this.requestId, score.id);
           if (result.data.scorerId === this.profile.id) {
             this.setScoreValues(result.data.form.values);
@@ -109,32 +108,28 @@ export default {
     },
 
     setOptions() {
-      this.fields.map(field => {
+      this.fields.map((field) => {
         if (field.options.field === 'SelectField') {
-          this.$set(
-            field.options.fieldOptions,
-            'options',
-            Array.from(Array(10), (x, i) => i + 1)
-          );
+          field.options.fieldOptions.options = Array.from(Array(10), (x, i) => i + 1);
         }
         return field;
       });
     },
 
     async save() {
-      const loadingComponent = this.$buefy.loading.open();
+      const loadingComponent = this.$oruga.loading.open();
       try {
         const response = await createScore(this.requestId);
         const { id } = response.data.data;
 
-        const payload = Object.keys(this.score).map(fieldId => {
+        const payload = Object.keys(this.score).map((fieldId) => {
           const value = this.score[fieldId];
           return {
             fieldId,
             value: {
               type: 'string',
-              value
-            }
+              value,
+            },
           };
         });
         await updateScore(this.requestId, id, { list: payload });
@@ -150,8 +145,8 @@ export default {
 
     cancel() {
       this.$router.push({ name: 'request-details-ta', params: { id: this.requestId } });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -159,9 +154,21 @@ export default {
 .action-btns {
   justify-content: flex-end;
 }
-::v-deep {
-  .select-field {
-    flex: 0 1 120px !important;
-  }
+
+:deep(.select-field) {
+  flex: 0 1 120px !important;
+}
+</style>
+
+<style>
+.cancelButton {
+  border-color: #dbdbdb;
+  color: #363636;
+}
+
+.cancelButton:hover {
+  border-color: #dbdbdb;
+  color: #363636;
+  background-color: white;
 }
 </style>

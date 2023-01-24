@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import TagInput from '../TagInput';
+import TagInput from '../TagInput.vue';
 
 export default {
   components: {
-    TagInput
+    TagInput,
   },
 
   props: {
@@ -24,25 +24,25 @@ export default {
     autoCompleteData: Array,
     editable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   computed: {
     val() {
       return this.value?.value || this.value || [];
-    }
+    },
   },
 
   methods: {
     updateField(tags) {
-      this.$emit('input', { path: this.path, type: 'list', value: tags });
+      this.$emit('updateInput', { path: this.path, type: 'list', value: tags });
     },
 
     showLinkedRecord(event) {
       console.log(event);
-    }
-  }
+    },
+  },
 };
 </script>
 

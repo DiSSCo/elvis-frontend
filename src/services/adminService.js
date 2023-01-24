@@ -15,10 +15,10 @@ export async function updateField(payload) {
   const { context, fieldId, value } = payload;
   if (context?.resource === 'settings') {
     const updatedField = { key: fieldId, type: value.type, value: value.value };
-    return axios.post(`/admin/settings`, updatedField);
+    return axios.post('/admin/settings', updatedField);
   }
 }
 
 export async function updateSettings(payload) {
-  return axios.post(`/admin/settings`, payload);
+  return axios.post('/admin/settings', payload);
 }

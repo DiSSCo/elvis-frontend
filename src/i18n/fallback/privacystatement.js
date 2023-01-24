@@ -1,4 +1,4 @@
-export const fallbackPrivacyStatement = `<h1>Your data & SYNTHESYS+</h1>
+const fallbackPrivacyStatement = `<h1>Your data & SYNTHESYS+</h1>
       <p>
         All applicants will need to register user information before making a proposal via the SYNTHESYS+ project
         portal. The project portal is hosted by the Natural History Museum and all data is held by the Natural History
@@ -66,3 +66,5 @@ export const fallbackPrivacyStatement = `<h1>Your data & SYNTHESYS+</h1>
       <p>
         If you have any questions, please contact us at <a href="mailto:synthesys@nhm.ac.uk">synthesys@nhm.ac.uk</a>.
       </p>`;
+
+export default fallbackPrivacyStatement;

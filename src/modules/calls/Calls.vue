@@ -3,9 +3,9 @@
     <div class="action-bar">
       <div class="container">
         <div></div>
-        <b-button v-if="isAllowed('call_create')" type="is-primary" @click.stop="newCall">
+        <o-button v-if="isAllowed('call_create')" class="primaryButton" @click.stop="newCall">
           <span> <i class="feather icon-plus" /> {{ $t('call.new_call') }} </span>
-        </b-button>
+        </o-button>
       </div>
     </div>
     <div class="section">
@@ -16,50 +16,44 @@
           </h1>
         </header>
 
-        <b-table
-          :data="data"
-          :row-class="(row, index) => 'row'"
-          :mobile-cards="false"
-          :default-sort-direction="defaultSortDirection"
-          :sort-icon="sortIcon"
-          :sort-icon-size="sortIconSize"
-          default-sort="title"
-          @select="row => showDetails(row)"
-          hoverable
-          :loading="loading"
-        >
-          <b-table-column field="name" label="Title" sortable v-slot="props">{{ props.row.name }}</b-table-column>
-          <b-table-column field="type" label="Type" sortable v-slot="props">{{
-            $t(`request.${props.row.type}`)
-          }}</b-table-column>
-          <b-table-column field="startDate" label="Start date" sortable :custom-sort="sortByStartDate" v-slot="props">{{
-            setDate(props.row.startDate)
-          }}</b-table-column>
-          <b-table-column field="endDate" label="End date" sortable :custom-sort="sortByEndDate" v-slot="props">{{
-            setDate(props.row.endDate)
-          }}</b-table-column>
-          <b-table-column field="status" label="Status" width="150" sortable v-slot="props">
-            <b-tag class="tag" rounded :class="$t(`status.class.${props.row.status}`)">{{
-              $t(`status.${props.row.status}`)
-            }}</b-tag>
-          </b-table-column>
-          <b-table-column v-if="isAllowed('call_edit')" field="actions" width="125" label="Actions" v-slot="props">
-            <div class="action-btns">
-              <b-tooltip label="edit call" type="is-dark">
-                <b-button class="default-action is-small" @click.stop="editCall(props.row.id)">
-                  <i class="feather icon-edit-1" />
-                </b-button>
-              </b-tooltip>
-              <b-tooltip label="delete call" type="is-dark">
-                <b-button class="delete-action is-small" @click.stop="deleteCall(props.row.id)">
-                  <i class="feather icon-trash-2" />
-                </b-button>
-              </b-tooltip>
-            </div>
-          </b-table-column>
+        <o-table :data="data" hoverable @select="row => showDetails(row)">
+          <o-table-column field="name" label="Title" v-slot:default="props" sortable>
+            {{ props.row.name }}
+          </o-table-column>
 
-          <template slot="empty">{{ $t('call.no_calls_found') }}</template>
-        </b-table>
+          <o-table-column field="type" label="Type" v-slot:default="props" sortable>
+            {{ $t(`request.${props.row.type }`) }}
+          </o-table-column>
+
+          <o-table-column field="startDate" label="Start date" v-slot:default="props" sortable>
+            {{ setDate(props.row.startDate) }}
+          </o-table-column>
+
+          <o-table-column field="endDate" label="End date" v-slot:default="props" sortable>
+            {{ setDate(props.row.endDate) }}
+          </o-table-column>
+
+          <o-table-column field="status" label="Status" v-slot:default="props" sortable>
+            <tag :text="$t(`status.${ props.row.status }`)" :variant="$t(`is-${props.row.status}`)" :rounded="true" />
+          </o-table-column>
+
+          <o-table-column label="Actions" v-slot:default="props">
+            <div class="action-btns">
+              <o-tooltip label="edit call" variant="primary">
+                <o-button class="default-action table-btn tableButton" size="small" outlined
+                  @click.stop="editCall(props.row.id)">
+                  <i class="feather icon-edit-1" />
+                </o-button>
+              </o-tooltip>
+              <o-tooltip label="delete call" variant="primary">
+                <o-button class="delete-action table-btn tableButton" size="small" variant="table" outlined
+                  @click.stop="deleteCall(props.row.id)">
+                  <i class="feather icon-trash-2" />
+                </o-button>
+              </o-tooltip>
+            </div>
+          </o-table-column>
+        </o-table>
       </div>
     </div>
   </div>
@@ -69,15 +63,21 @@
 import { setDate } from '@/modules/core/utils/helpers';
 import { fetchCalls, deleteCall } from '@/services/callsService';
 import { isAllowed } from '@/modules/core/utils/auth';
+import Dialog from '@/modules/core/components/ui/Dialog.vue';
+import Tag from '@/modules/core/components/ui/Tag.vue';
 
 export default {
+  components: {
+    Tag,
+  },
+
   data() {
     return {
       data: [],
       defaultSortDirection: 'asc',
       sortIcon: 'arrow-up',
       sortIconSize: 'is-small',
-      loading: false
+      loading: false,
     };
   },
 
@@ -106,13 +106,13 @@ export default {
       const params = { id: call.id };
       this.$router.push({
         name: 'call-details',
-        params
+        params,
       });
     },
 
     async newCall() {
       this.$router.push({
-        name: 'new-call'
+        name: 'new-call',
       });
     },
 
@@ -120,27 +120,38 @@ export default {
       const params = { id };
       this.$router.push({
         name: 'edit-call',
-        params
+        params,
       });
     },
 
     deleteCall(id) {
       this.loading = true;
-      this.$buefy.dialog.confirm({
-        confirmText: String(this.$t('delete')),
-        cancelText: String(this.$t('cancel')),
-        message: 'Are you sure you want to delete this call?',
-        type: 'is-danger',
-        onConfirm: () => {
-          deleteCall(id);
-          setTimeout(() => {
-            this.getCalls();
-            this.loading = false;
-          }, 1500);
+
+      this.$oruga.modal.open({
+        component: Dialog,
+        props: {
+          confirmText: String(this.$t('delete')),
+          cancelText: String(this.$t('cancel')),
+          message: 'Are you sure you want to delete this call?',
         },
-        onCancel: () => {
-          this.loading = false;
-        }
+        trapFocus: true,
+        events: {
+          onConfirm: () => {
+            this.$oruga.modal.closeAll();
+
+            deleteCall(id);
+
+            setTimeout(() => {
+              this.getCalls();
+              this.loading = false;
+            }, 1500);
+          },
+          onCancel: () => {
+            this.$oruga.modal.closeAll();
+
+            this.loading = false;
+          },
+        },
       });
     },
 
@@ -156,8 +167,8 @@ export default {
       const aDate = new Date(Date.UTC(a[0], a[1] - 1, a[2])).getTime();
       const bDate = new Date(Date.UTC(b[0], b[1] - 1, b[2])).getTime();
       return isAsc ? bDate - aDate : aDate - bDate;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -165,16 +176,37 @@ export default {
 .is-large {
   font-size: 24px;
 }
+
 .edit-call:not([disabled]) {
   transition: 0.2s ease-out;
   pointer-events: auto;
   border-color: $grey-dark;
+
   &:hover {
     background: $blue;
     border-color: $blue;
+
     i {
       color: $white;
     }
   }
+}
+</style>
+
+<style lang="css">
+.available {
+  background-color: #3dca77 !important;
+  color: white !important;
+  border-radius: 9999px !important;
+}
+
+td {
+  font-size: 14px !important;
+  padding-top: 1em !important;
+  padding-bottom: 1em !important;
+}
+
+td:hover {
+  cursor: pointer !important;
 }
 </style>

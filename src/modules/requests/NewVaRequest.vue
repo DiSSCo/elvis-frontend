@@ -14,7 +14,7 @@
               label="Request title"
               :value="form.subject"
               :fieldOptions="{
-                validation: $v.form.subject,
+                validation: v$.form.subject,
                 errorMessage: 'Please fill in a title for this request',
                 placeHolder: 'Fill in a title first and press enter...',
                 maxlength: 500
@@ -28,37 +28,44 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { fetchRequestId, updateField } from '@/services/requestsService';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
+  },
+
+  setup() {
+    const v$ = useVuelidate();
+
+    return { v$: v$ };
   },
 
   data() {
     return {
       form: {
-        subject: ''
-      }
+        subject: '',
+      },
     };
   },
 
   validations: {
     form: {
       subject: {
-        required
-      }
-    }
+        required,
+      },
+    },
   },
 
   created() {
-    this.$root.$on('updateField', this.createNewRequest);
+    this.emitter.on('updateField', this.createNewRequest);
   },
 
-  beforeDestroy() {
-    this.$root.$off('updateField');
+  beforeUnmount() {
+    this.emitter.off('updateField');
   },
 
   methods: {
@@ -75,19 +82,19 @@ export default {
           const payload = {
             context: { resource: 'requests' },
             fieldId: ['subject'],
-            value: { type: 'string', value }
+            value: { type: 'string', value },
           };
           await updateField(reqid, payload);
 
           this.$router.push({
             name: 'calls-edit-va-request',
-            params: { id, reqid }
+            params: { id, reqid },
           });
         }
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+    },
+  },
 };
 </script>

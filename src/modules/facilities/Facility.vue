@@ -31,28 +31,28 @@
 
 <script>
 import { fetchFacilityData } from '@/services/facilitiesService';
-import FacilityGeneral from './components/FacilityGeneral';
-import FacilityImage from './components/FacilityImage';
-import FacilityInstruments from './components/FacilityInstruments';
+import FacilityGeneral from './components/FacilityGeneral.vue';
+import FacilityImage from './components/FacilityImage.vue';
+import FacilityInstruments from './components/FacilityInstruments.vue';
 
 export default {
   components: {
     FacilityGeneral,
     FacilityImage,
-    FacilityInstruments
+    FacilityInstruments,
   },
 
   computed: {
     title() {
       const subject = this.facility ? this.facility.fieldValues.nameEng : {};
       return subject && subject.value ? subject.value : 'New facility';
-    }
+    },
   },
 
   data() {
     return {
       facility: null,
-      loading: false
+      loading: false,
     };
   },
 
@@ -70,8 +70,8 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

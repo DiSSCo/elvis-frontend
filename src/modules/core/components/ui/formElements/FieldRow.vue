@@ -2,23 +2,24 @@
   <div class="field-row" :class="{ error: !isValid }">
     <div class="field-row-body">
       <div v-if="showLabel" class="label">
-        <label>{{ label }} </label>
+        <label> {{ label }} </label>
         <span v-if="isRequired && editable" class="required">*</span>
+
         <span v-if="fieldOptions && fieldOptions.tooltip" class="tooltip">
-          <b-tooltip
-            type="is-dark"
+          <o-tooltip
+            variant="primary"
             multilined
             animated
-            :size="fieldOptions.tooltip.length > 250 ? 'is-large' : 'is-medium'"
+            :size="fieldOptions.tooltip.length > 250 ? 'large' : 'medium'"
           >
-            <b-icon custom-class="is-blue" size="is-small" icon="information" />
+            <o-icon custom-class="is-blue" size="small" icon="information" />
             <template v-slot:content><span v-html="fieldOptions.tooltip" /></template>
-          </b-tooltip>
+          </o-tooltip>
         </span>
       </div>
 
       <div class="form-field">
-        <slot v-if="$slots.default" />
+        <slot v-if="Object.keys($slots).length > 0" />
         <component
           v-else
           :is="field"
@@ -29,7 +30,7 @@
           :editable="fieldOptions.hasOwnProperty('editable') ? fieldOptions.editable : editable"
           v-bind="{ ...fieldOptions }"
           :tabindex="tabindex"
-          @input="updateField($event)"
+          @updateInput="updateField($event)"
         />
         <spinner v-if="showSpinner" />
       </div>
@@ -44,49 +45,63 @@
 </template>
 
 <script>
+import Spinner from '../Spinner.vue';
+import StringField from './StringField.vue';
+import PasswordField from './PasswordField.vue';
+import TextField from './TextField.vue';
+import SelectField from './SelectField.vue';
+import NumberField from './NumberField.vue';
+import CheckboxField from './CheckboxField.vue';
+import RadioField from './RadioField.vue';
+import DateField from './DateField.vue';
+import UploadField from './UploadField.vue';
+import LinkField from './LinkField.vue';
+import AttachmentsField from './AttachmentsField.vue';
+
 export default {
   components: {
-    Spinner: () => import('../Spinner'),
-    StringField: () => import('./StringField'),
-    PasswordField: () => import('./PasswordField'),
-    TextField: () => import('./TextField'),
-    SelectField: () => import('./SelectField'),
-    NumberField: () => import('./NumberField'),
-    CheckboxField: () => import('./CheckboxField'),
-    RadioField: () => import('./RadioField'),
-    DateField: () => import('./DateField'),
-    UploadField: () => import('./UploadField'),
-    LinkField: () => import('./LinkField'),
-    AttachmentsField: () => import('./AttachmentsField')
+    Spinner,
+    StringField,
+    PasswordField,
+    TextField,
+    SelectField,
+    NumberField,
+    CheckboxField,
+    RadioField,
+    DateField,
+    UploadField,
+    LinkField,
+    AttachmentsField,
   },
 
   props: {
     path: [Array, String],
     context: {
       type: Object,
-      default: null
+      default: null,
     },
     value: [String, Number, Boolean, Object, Array],
     label: String,
     field: String,
     fieldOptions: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     showLabel: {
       type: Boolean,
-      default: true
+      default: true,
     },
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
-    tabindex: Number
+    tabindex: Number,
+    validation: Object,
   },
 
   data() {
     return {
-      loading: false
+      loading: false,
     };
   },
 
@@ -100,18 +115,38 @@ export default {
     },
 
     isRequired() {
-      return this.fieldOptions.validation?.$params?.required;
+      let isRequired = false;
+
+      if (this.validation) {
+        isRequired = this.validation?.required.$params;
+      } else if (this.fieldOptions.validation) {
+        isRequired = this.fieldOptions.validation?.required.$params;
+      }
+
+      return isRequired;
     },
 
     isValid() {
-      return !this.fieldOptions.validation?.$error;
-    }
+      let isValid;
+
+      if (this.validation) {
+        isValid = !this.validation?.$error;
+      } else {
+        isValid = !this.fieldOptions.validation?.$error;
+      }
+
+      return isValid;
+    },
   },
 
   methods: {
     updateField(field) {
       this.loading = true;
-      if (this.fieldOptions.validation) {
+
+      if (this.validation) {
+        this.validation.$model = field.value;
+        this.validation.$touch();
+      } else if (this.fieldOptions.validation) {
         this.fieldOptions.validation.$model = field.value;
         this.fieldOptions.validation.$touch();
       }
@@ -120,14 +155,14 @@ export default {
 
       if (this.isValid) {
         this.$emit('updateField', { context: this.context, fieldId: field.path, value });
-        this.$root.$emit('updateField', { context: this.context, fieldId: field.path, value });
+        this.emitter.emit('updateField', { context: this.context, fieldId: field.path, value });
       }
 
       setTimeout(() => {
         this.loading = false;
       }, 500);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -181,8 +216,8 @@ export default {
       .input,
       textarea,
       select,
-      ::v-deep select,
-      ::v-deep input {
+      :deep(select),
+      :deep(input) {
         border: 1px solid $danger;
       }
     }
@@ -231,7 +266,7 @@ export default {
     display: flex;
   }
 }
-::v-deep .is-blue {
+:deep(.is-blue) {
   color: $blue;
 }
 </style>

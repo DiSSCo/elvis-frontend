@@ -12,13 +12,13 @@ export function getKeycloak() {
 
 export function kcLogin() {
   kc.login({
-    redirectUri: process.env.VUE_APP_BASE_URL
+    redirectUri: process.env.VUE_APP_BASE_URL,
   });
 }
 
 export function kcLogout() {
   kc.logout({
-    redirectUri: `${process.env.VUE_APP_BASE_URL}/welcome`
+    redirectUri: `${process.env.VUE_APP_BASE_URL}/welcome`,
   });
 }
 

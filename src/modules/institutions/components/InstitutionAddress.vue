@@ -18,32 +18,32 @@
 </template>
 
 <script>
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import fields from '../schemas/fields.json';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   props: {
     institution: {
-      type: [Object, Array]
+      type: [Object, Array],
     },
     institutionId: {
-      type: String
+      type: String,
     },
     editable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
     return {
-      fields: fields.address
+      fields: fields.address,
     };
-  }
+  },
 };
 </script>
 

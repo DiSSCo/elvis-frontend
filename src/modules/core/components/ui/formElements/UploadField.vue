@@ -1,30 +1,34 @@
 <template>
   <div class="uploader-wrapper">
-    <b-field class="uploader">
-      <b-upload v-model="file" :accept="accept" :drag-drop="dragDrop">
+    <o-field class="uploader">
+      <o-upload v-model="file" :accept="accept" :drag-drop="dragDrop">
         <section v-if="dragDrop" class="section">
           <div class="content has-text-centered">
             <p>
-              <b-icon icon="upload" size="is-large"> </b-icon>
+              <o-icon icon="upload" size="large" />
             </p>
             <p>{{ $t('file_handling.drop_files') }}</p>
           </div>
         </section>
         <a v-else class="button is-secondary">
-          <b-icon icon="upload"></b-icon>
+          <o-icon icon="upload"></o-icon>
           <span>{{ $t('file_handling.choose_file') }}</span>
         </a>
-      </b-upload>
+      </o-upload>
       <span class="file-name" v-if="file">
         <i class="feather icon-paperclip" />
         {{ file.name }}
       </span>
       <span v-if="file" class="remove-file" @click="file = null"><i class="feather icon-x" /></span>
-    </b-field>
+    </o-field>
 
-    <b-button v-if="file && showUploadButton" type="is-primary" @click.prevent="uploadFile" :loading="loadingUpload">{{
-      $t('file_handling.start_upload')
-    }}</b-button>
+    <o-button v-if="file && showUploadButton"
+      variant="primary"
+      @click.prevent="uploadFile"
+      :loading="loadingUpload"
+    >
+      {{ $t('file_handling.start_upload') }}
+    </o-button>
     <div v-if="uploadErrorMessage">
       <span class="has-text-danger">{{ uploadErrorMessage }}</span>
     </div>
@@ -39,14 +43,14 @@ export default {
     url: String,
     maxSize: {
       type: Number,
-      default: 25000000
+      default: 25000000,
     },
     accept: String,
     dragDrop: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    reset: Boolean
+    reset: Boolean,
   },
 
   data() {
@@ -55,7 +59,7 @@ export default {
       uploadErrorMessage: '',
       showUploadButton: !!this.url,
       loading: false,
-      loadingUpload: false
+      loadingUpload: false,
     };
   },
 
@@ -63,7 +67,7 @@ export default {
     file: {
       handler(value) {
         if (!this.url && value) {
-          this.$root.$emit('fileUploaded', value);
+          this.emitter.emit('fileUploaded', value);
         }
         if (value && value.size > this.maxSize) {
           this.uploadErrorMessage = this.$t('file_handling.limit', { limit: this.maxSize / 1000000 });
@@ -72,14 +76,14 @@ export default {
           this.uploadErrorMessage = '';
           this.showUploadButton = !!this.url;
         }
-      }
+      },
     },
     reset: {
       handler() {
         this.file = null;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -94,7 +98,7 @@ export default {
           setTimeout(() => {
             this.loadingUpload = false;
             this.file = null;
-            this.$root.$emit('fileUploaded', this.file);
+            this.emitter.emit('fileUploaded', this.file);
           }, 2000);
         } catch (error) {
           console.log('error: ', error);
@@ -105,29 +109,33 @@ export default {
       } else {
         setTimeout(() => {
           this.loadingUpload = false;
-          this.$root.$emit('fileUploaded', this.file);
+          this.emitter.emit('fileUploaded', this.file);
           this.file = null;
         }, 2000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-::v-deep .control {
+:deep(.control) {
   margin-bottom: 0;
 }
-::v-deep .file-name {
+
+:deep(.file-name) {
   border-radius: 0;
 }
+
 .uploader-wrapper {
   width: 100%;
 }
+
 .uploader {
   display: flex;
   align-items: center;
 }
+
 .upload-file {
   display: flex;
   flex-flow: column nowrap;
@@ -135,12 +143,14 @@ export default {
   flex: 1;
   cursor: pointer;
 }
+
 form {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
   padding: 0.5em;
+
   .browse-file {
     display: flex;
     flex: 1;
@@ -151,15 +161,18 @@ form {
       align-self: center;
       cursor: pointer;
     }
+
     input {
       opacity: 0;
       width: 0;
       max-width: 0;
     }
   }
+
   .submit-file {
     margin-left: 0.5em;
   }
+
   .remove-file {
     cursor: pointer;
     padding: 5px;
@@ -171,6 +184,7 @@ form {
     display: flex;
     align-items: center;
     background: $grey;
+
     &:hover {
       background: $grey-dark;
       color: $white;

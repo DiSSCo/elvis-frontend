@@ -1,42 +1,44 @@
 <template>
   <div v-if="editable" class="date-picker">
-    <b-datepicker
+    <o-datepicker
+      v-model="selected"
       :value="date"
       :placeholder="placeHolder"
       icon="calendar-today"
-      position="is-top-right"
+      position="top-right"
       trap-focus
-      @input="input"
+      @update:modelValue="handleInput"
       :min-date="minDate"
     >
-    </b-datepicker>
+    </o-datepicker>
   </div>
   <div v-else>{{ val ? (val.value ? setDate(val.value) : setDate(val)) : '-' }}</div>
 </template>
 
 <script>
 import { setDate } from '@/modules/core/utils/helpers';
+
 export default {
   props: {
     path: {
-      type: Array
+      type: Array,
     },
     value: [String, Object, Array],
     placeHolder: {
-      type: String
+      type: String,
     },
     loading: {
-      type: Boolean
+      type: Boolean,
     },
     editable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    minDate: Date
+    minDate: Date,
   },
 
   computed: {
@@ -55,12 +57,12 @@ export default {
       }
 
       return newDate;
-    }
+    },
   },
 
   data() {
     return {
-      val: this.value?.value || this.value
+      val: this.value?.value || this.value,
     };
   },
 
@@ -71,12 +73,12 @@ export default {
           this.val = value;
         }
       },
-      immediate: true
+      immediate: true,
     },
 
     value(val) {
       this.val = val;
-    }
+    },
   },
 
   methods: {
@@ -84,11 +86,12 @@ export default {
       return setDate(date);
     },
 
-    input(event) {
+    handleInput(event) {
       const value = [event.getFullYear(), event.getMonth() + 1, event.getDate(), 0, 0];
-      this.$emit('input', { path: this.path, type: 'string', value });
-    }
-  }
+
+      this.$emit('updateInput', { path: this.path, type: 'string', value });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

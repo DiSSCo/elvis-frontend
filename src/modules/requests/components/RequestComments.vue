@@ -2,7 +2,9 @@
   <div class="comments-container">
     <p>{{ $t('request.comments') }}</p>
     <p>
-      <small v-if="requestStatus === 'approved'">({{ $t('request.comments_section_closed') }})</small>
+      <small v-if="requestStatus === 'approved'">
+        ({{ $t('request.comments_section_closed') }})
+      </small>
     </p>
     <form @submit.prevent class="form">
       <field-row
@@ -14,17 +16,23 @@
       />
 
       <div class="action-btns" :class="{ 'status-approved': requestStatus === 'approved' }">
-        <b-tooltip size="is-large" type="is-dark" label="Download all comments for this request." animated multilined>
-          <b-button
+        <o-tooltip size="large"
+          variant="primary"
+          label="Download all comments for this request."
+          animated multilined
+        >
+          <o-button class="secondaryButton"
             v-if="comments.messages && comments.messages.length"
-            type="is-secondary"
             @click.prevent="downLoadComments"
             ><i class="feather icon-download"
-          /></b-button>
-        </b-tooltip>
-        <b-button v-if="requestStatus !== 'approved'" type="is-primary" @click="submit" :loading="loading">{{
+          /></o-button>
+        </o-tooltip>
+        <o-button v-if="requestStatus !== 'approved'"
+          variant="primary" @click="submit"
+          :loading="loading"
+        >{{
           $t('request.add_comment')
-        }}</b-button>
+        }}</o-button>
       </div>
     </form>
 
@@ -40,16 +48,16 @@
 <script>
 import { setDateTime } from '@/modules/core/utils/helpers';
 import { fetchComments, downLoadAllComments, postComments } from '@/services/requestsService';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   props: {
     requestId: String,
-    requestStatus: String
+    requestStatus: String,
   },
 
   data() {
@@ -57,17 +65,17 @@ export default {
       comment: '',
       comments: [],
       loading: false,
-      reset: false
+      reset: false,
     };
   },
 
   created() {
-    this.$root.$on('updateField', this.handleFormField);
+    this.emitter.on('updateField', this.handleFormField);
     this.getComments(this.requestId);
   },
 
-  destroyed() {
-    this.$root.$off('updateField');
+  unmounted() {
+    this.emitter.off('updateField');
   },
 
   methods: {
@@ -109,7 +117,7 @@ export default {
       if (!this.comment.length) return;
       this.loading = true;
       const payload = {
-        body: this.comment
+        body: this.comment,
       };
       try {
         await postComments(this.requestId, payload);
@@ -122,8 +130,8 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

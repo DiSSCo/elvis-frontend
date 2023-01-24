@@ -1,19 +1,19 @@
 <template>
   <div v-if="attachments.length">
     <div v-for="(file, index) in attachments" :key="index" class="tags">
-      <b-taglist attached>
-        <b-tag type="is-light" ellipsis>
+      <div class="attached">
+        <tag type="is-light" ellipsis>
           <i class="feather icon-paperclip" />
           <span class="attachment" @click="openAttachment(file)">{{ file.fileName }}</span>
-        </b-tag>
-        <b-tag type="is-light">
+        </tag>
+        <tag type="is-light">
           <small>{{ $t('file_handling.by') }}:</small>
           {{ file.owner.fullName }}
-        </b-tag>
-        <b-tag type="is-light" :closable="closable" @close="deleteAttachment(file)">{{
+        </tag>
+        <tag type="is-light" :closable="closable" @close="deleteAttachment(file)">{{
           setDateTime(file.addedAt)
-        }}</b-tag>
-      </b-taglist>
+        }}</tag>
+      </div>
     </div>
   </div>
   <div v-else>-</div>
@@ -26,22 +26,22 @@ import { fetchAttachments, downloadAttachment, deleteAttachment } from '@/servic
 export default {
   props: {
     fetchUrl: {
-      type: String
+      type: String,
     },
     baseUrl: {
-      type: String
+      type: String,
     },
     closable: {
-      type: Boolean
+      type: Boolean,
     },
     reload: {
-      type: Number
-    }
+      type: Number,
+    },
   },
 
   data() {
     return {
-      attachments: []
+      attachments: [],
     };
   },
 
@@ -50,8 +50,8 @@ export default {
       handler() {
         this.fetchAttachments();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -91,8 +91,8 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -6,7 +6,7 @@ const localVue = createLocalVue();
 
 beforeEach(() => {
   wrapper = shallowMount(TextField, {
-    localVue
+    localVue,
   });
 });
 

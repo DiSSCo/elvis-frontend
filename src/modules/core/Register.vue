@@ -28,7 +28,7 @@
                 <field-row
                   :label="$t('profile.birthday')"
                   :fieldOptions="{
-                    validation: $v.form.birthday,
+                    validation: v$.form.birthday,
                     errorMessage: `Please enter a valid date of birth`
                   }"
                   :style="{ order: 5 }"
@@ -38,12 +38,12 @@
                       <input
                         type="text"
                         v-model.trim="part.value"
-                        @blur="$v.form.birthday[index].$touch()"
+                        @blur="v$.form.birthday[index].$touch()"
                         ref="birthday"
                         tabindex="5"
                         :maxlength="part.maxLength"
                         :placeholder="part.placeHolder"
-                        :class="{ 'is-danger': $v.form.birthday[index].$dirty && $v.form.birthday[index].$error }"
+                        :class="{ 'is-danger': v$.form.birthday[index].$dirty && v$.form.birthday[index].$error }"
                       />
                     </div>
                   </div>
@@ -52,7 +52,7 @@
                 <field-row
                   :label="$t('profile.orcid')"
                   :fieldOptions="{
-                    validation: $v.form.orcId,
+                    validation: v$.form.orcId,
                     errorMessage: `Please enter a valid ${$t('profile.orcid')}`,
                     tooltip: `The ${$t(
                       'profile.orcid'
@@ -67,7 +67,7 @@
                       <input
                         type="text"
                         v-model.trim="id.part"
-                        @blur="index === form.orcId.length - 1 ? $v.form.orcId.$touch() : null"
+                        @blur="index === form.orcId.length - 1 ? v$.form.orcId.$touch() : null"
                         @keyup="keyup($event, 4)"
                         maxlength="4"
                         ref="orcId"
@@ -85,12 +85,12 @@
                     :showLabel="false"
                   />
 
-                  <b-button :loading="loading" class="is-primary" @click.prevent="register" :disabled="disabled">{{
+                  <o-button :loading="loading" class="primaryButton" @click.prevent="register" :disabled="disabled">{{
                     $t('registration.register')
-                  }}</b-button>
+                  }}</o-button>
                 </div>
                 <div v-if="message.text" class="response-message" :style="{ order: 21 }">
-                  <b-message :type="message.type" has-icon>{{ message.text }}</b-message>
+                  <o-notification :variant="message.type" has-icon>{{ message.text }}</o-notification>
                 </div>
                 <div class="is-size-7" :style="{ order: 22 }">
                   (Here you can read the <a href="#" @click="showPrivacyStatement = true">Privacy Statement</a>)
@@ -114,53 +114,66 @@
         </div>
       </div>
     </div>
-    <b-modal :active.sync="showPrivacyStatement">
+    <o-modal :active.sync="showPrivacyStatement">
       <PrivacyStatement />
-    </b-modal>
+    </o-modal>
   </section>
 </template>
 
 <script>
-import { required, email, sameAs, maxLength, minLength, minValue, maxValue, numeric } from 'vuelidate/lib/validators';
+import { useVuelidate } from '@vuelidate/core';
+import {
+  required,
+  email,
+  sameAs,
+  maxLength,
+  minLength,
+  minValue,
+  maxValue,
+  numeric,
+} from '@vuelidate/validators';
 import { checkIfUserExists, createNewUser } from '@/services/usersService';
 import { fetchInstitutionsNoToken } from '@/services/institutionsService';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
-import fields from './schemas/register.json';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import countries from '@/modules/core/schemas/country-list.json';
+import fields from './schemas/register.json';
 
 export default {
   components: {
     FieldRow,
-    PrivacyStatement: () => import('./PrivacyStatement')
+    PrivacyStatement: () => import('./PrivacyStatement.vue'),
   },
-
   watch: {
-    '$v.form.email': {
+    'v$.form.email': {
       handler(value) {
-        const emailField = this.fields.find(field => field.id === 'email');
-        emailField.options.fieldOptions.errorMessage = !value.required
+        const emailField = this.fields.find((field) => field.id === 'email');
+        emailField.options.fieldOptions.errorMessage = !value
           ? 'Please enter an email address'
           : !value.email
-          ? 'Please enter a valid email address'
-          : this.emailExists
-          ? 'User with the specified address already exists'
-          : '';
+            ? 'Please enter a valid email address'
+            : this.emailExists
+              ? 'User with the specified address already exists'
+              : '';
       },
       immediate: true,
-      deep: true
+      deep: true,
     },
-    '$v.form.password': {
+    'v$.form.password': {
       handler(value) {
-        const passwordField = this.fields.find(field => field.id === 'password');
-        passwordField.options.fieldOptions.errorMessage = !value.required
+        const passwordField = this.fields.find((field) => field.id === 'password');
+        passwordField.options.fieldOptions.errorMessage = !value
           ? 'Please enter a password'
           : value.required && !value.strength
-          ? 'Password is too weak. Please check the rules under the (i)'
-          : '';
+            ? 'Password is too weak. Please check the rules under the (i)'
+            : '';
       },
       immediate: true,
-      deep: true
-    }
+      deep: true,
+    },
+  },
+
+  setup() {
+    return { v$: useVuelidate() };
   },
 
   data() {
@@ -174,48 +187,46 @@ export default {
           day: {
             value: '',
             placeHolder: 'dd',
-            maxLength: 2
+            maxLength: 2,
           },
           month: {
             value: '',
             placeHolder: 'mm',
-            maxLength: 2
+            maxLength: 2,
           },
           year: {
             value: '',
             placeHolder: 'yyyy',
-            maxLength: 4
-          }
+            maxLength: 4,
+          },
         },
-
         orcId: [{ part: '' }, { part: '' }, { part: '' }, { part: '' }],
         email: '',
         institution: '',
         nationality: '',
         countryOtherInstitution: '',
         password: '',
-        passWordVerified: ''
+        passWordVerified: '',
       },
       message: {
         type: '',
-        text: ''
+        text: '',
       },
       emailExists: false,
       loading: false,
       showThankYou: false,
       disabled: true,
       showPrivacyStatement: false,
-      institutions: null
+      institutions: null,
     };
   },
-
   validations: {
     form: {
       firstName: {
-        required
+        required,
       },
       lastName: {
-        required
+        required,
       },
       birthday: {
         required,
@@ -226,8 +237,8 @@ export default {
             minLength: minLength(2),
             maxLength: maxLength(2),
             minValue: minValue(1),
-            maxValue: maxValue(31)
-          }
+            maxValue: maxValue(31),
+          },
         },
         month: {
           value: {
@@ -236,8 +247,8 @@ export default {
             minLength: minLength(2),
             maxLength: maxLength(2),
             minValue: minValue(1),
-            maxValue: maxValue(12)
-          }
+            maxValue: maxValue(12),
+          },
         },
         year: {
           value: {
@@ -246,9 +257,9 @@ export default {
             minLength: minLength(4),
             maxLength: maxLength(4),
             minValue: minValue(1900),
-            maxValue: maxValue(new Date().getFullYear())
-          }
-        }
+            maxValue: maxValue(new Date().getFullYear()),
+          },
+        },
       },
       orcId: {
         required,
@@ -256,9 +267,9 @@ export default {
           part: {
             required,
             maxLength: maxLength(4),
-            minLength: minLength(4)
-          }
-        }
+            minLength: minLength(4),
+          },
+        },
       },
       email: {
         required,
@@ -268,42 +279,38 @@ export default {
           const response = await checkIfUserExists(value);
           this.emailExists = !!response.data.exists;
           return !response.data.exists;
-        }
+        },
       },
       password: {
         required,
-        strength: password =>
-          password.length >= 8 &&
-          password.length < 20 &&
-          /[a-z]/.test(password) &&
-          /[A-Z]/.test(password) &&
-          /[0-9]/.test(password)
+        strength: (password) =>
+          password.length >= 8
+          && password.length < 20
+          && /[a-z]/.test(password)
+          && /[A-Z]/.test(password)
+          && /\d/.test(password),
       },
       passWordVerified: {
         required,
-        sameAsPassword: sameAs('password')
-      }
-    }
+        sameAsPassword: sameAs('password'),
+      },
+    },
   },
-
   created() {
-    this.$root.$on('updateField', this.handleFormField);
+    this.emitter.on('updateField', this.handleFormField);
     this.setFields();
   },
-
-  destroyed() {
-    this.$root.$off('updateField');
+  unmounted() {
+    this.emitter.off('updateField');
     this.showThankYou = false;
   },
-
   methods: {
     async setFields() {
       const response = await fetchInstitutionsNoToken();
       this.institutions = response.data.data;
-
       this.fields = this.fields.map(field => {
         if (field.options.fieldOptions?.errorMessage) {
-          this.$set(field.options.fieldOptions, 'validation', this.$v.form[field.id]);
+          field.options.fieldOptions.validation = this.v$.form[field.id];
         }
         if (field.id === 'institution') {
           field.options.fieldOptions.options = this.institutions.map(inst => inst.name).sort();
@@ -317,37 +324,31 @@ export default {
         return field;
       });
     },
-
     handleFormField(event) {
       this.form[event.fieldId] = event.value.value;
       if (event.fieldId && event.fieldId === 'agreement') {
         this.disabled = !event.value.value;
       }
     },
-
     async register() {
-      this.$v.form.$touch();
-      if (!this.$v.$invalid) {
+      this.v$.form.$touch();
+      if (!this.v$.$invalid) {
         this.createUser();
       }
     },
-
     async createUser() {
       this.loading = true;
       let orcId = 'https://orcid.org/';
-      this.form.orcId.map((id, index) => {
+      this.form.orcId.forEach((id, index) => {
         orcId += index ? `-${id.part}` : id.part;
       });
-
       const birthDate = `${this.form.birthday.year.value}-${this.form.birthday.month.value}-${this.form.birthday.day.value}`;
       const relatedInstitutionId = this.form.institution
         ? this.institutions.find(institution => institution.name === this.form.institution).id
         : null;
-
       const nationality = this.form.nationality
         ? countries.find(country => country.name === this.form.nationality).name
         : null;
-
       const countryOtherInstitution = this.form.countryOtherInstitution
         ? countries.find(country => country.name === this.form.countryOtherInstitution).name
         : null;
@@ -362,9 +363,8 @@ export default {
         orcId,
         nationality,
         homeInstitutionId: this.form.homeInstitutionName,
-        countryOtherInstitution
+        countryOtherInstitution,
       };
-
       try {
         const response = await createNewUser(newUser);
         if (response) {
@@ -376,22 +376,20 @@ export default {
       } catch (error) {
         this.loading = false;
         this.message.type = 'is-danger';
-        this.message.text =
-          error.response.data?.data?.email || error.response.data?.description || 'Something went wrong';
+        this.message.text = error.response.data?.data?.email
+          || error.response.data?.description || 'Something went wrong';
       }
     },
-
     keyup(event, maxlength) {
       if (event.target.value.length === maxlength) {
         if (event.target.parentNode.nextElementSibling) {
           event.target.parentNode.nextElementSibling.firstChild.focus();
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
-
 <style lang="scss" scoped>
 .registration-form {
   display: flex;
@@ -402,7 +400,6 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
 .column {
   display: flex;
   .box {
@@ -448,33 +445,30 @@ export default {
     bottom: -200px;
     left: 13px;
   }
-
   .response-message {
     display: flex;
     justify-content: center;
   }
 }
-::v-deep i {
+:deep(i) {
   font-size: 18px;
 }
-::v-deep .media {
+:deep(.media) {
   display: flex;
   align-items: center;
 }
 .grey-bg {
   background: $grey-xlight;
 }
-::v-deep .is-blue {
+:deep(.is-blue) {
   color: $blue;
 }
 .multiple-inputs {
   display: flex;
   flex-flow: row wrap;
-
   .single-input {
     display: flex;
     flex-direction: column;
-
     label {
       margin-left: 7px;
       margin-bottom: 3px;
@@ -495,7 +489,6 @@ export default {
     }
   }
 }
-
 .is-3 {
   width: 25%;
 }
@@ -508,7 +501,6 @@ export default {
 .is-9 {
   width: 75%;
 }
-
 .hidden {
   opacity: 0;
   visibility: hidden;

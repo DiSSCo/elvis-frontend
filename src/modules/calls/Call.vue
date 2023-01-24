@@ -2,14 +2,16 @@
   <div>
     <div class="action-bar">
       <div class="container">
-        <b-button v-if="creatable" type="is-primary" @click="createNewRequest">
+        <o-button v-if="creatable" variant="primary" @click="createNewRequest">
           <span> <i class="feather icon-plus" /> {{ $t('call.new_request') }} </span>
-        </b-button>
+        </o-button>
       </div>
     </div>
     <div class="section">
       <div class="container">
-        <router-link :to="'/calls'"> <i class="feather icon-arrow-left" /> {{ $t('call.back_to_calls') }} </router-link>
+        <router-link :to="'/calls'">
+          <i class="feather icon-arrow-left" /> {{ $t('call.back_to_calls') }}
+        </router-link>
         <h1 class="title-link">{{ title }}</h1>
         <div class="columns request-wrapper">
           <div class="column is-8">
@@ -57,14 +59,14 @@
 </template>
 
 <script>
-import fields from './schemas/fields.json';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import { fetchCallData } from '@/services/callsService';
 import { isAllowed } from '@/modules/core/utils/auth';
+import fields from './schemas/fields.json';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   computed: {
@@ -78,7 +80,7 @@ export default {
 
     creatable() {
       return this.isAllowed('request_create') && this.status === 'available';
-    }
+    },
   },
 
   data() {
@@ -86,7 +88,7 @@ export default {
       call: null,
       fields: fields.data,
       scoringFields: fields.scoring,
-      showScoring: false
+      showScoring: false,
     };
   },
 
@@ -103,6 +105,7 @@ export default {
       const { id } = this.$route.params;
       try {
         const response = await fetchCallData(id);
+
         [this.call] = response.data.data.rows;
         this.call.type = this.$t(`call.${this.call.type}`);
         this.call.scoring.weight.scoringEndDate = this.call.scoring.endDate;
@@ -115,11 +118,11 @@ export default {
     createNewRequest() {
       if (this.call.type.toLowerCase() === 'va' || this.call.type.toLowerCase() === 'virtual access') {
         return this.$router.push({
-          name: `calls-new-va-request`
+          name: 'calls-new-va-request',
         });
       }
       this.$router.push({
-        name: `calls-new-ta-request`
+        name: 'calls-new-ta-request',
       });
     },
 
@@ -128,8 +131,8 @@ export default {
       if (payload.fieldId.includes('startDate')) {
         this.setStartDate();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

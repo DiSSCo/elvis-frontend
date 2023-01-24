@@ -10,35 +10,42 @@
         :context="{ resource: 'requests' }"
         :label="field.label"
         :editable="editable"
-        v-bind="{ ...field.options }"
+        v-bind="{ ...field.options, validation: v$.formData.fieldValues[field.id] }"
       />
     </form>
   </div>
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators';
-import FieldRow from '@/modules/core/components/ui/formElements/FieldRow';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import FieldRow from '@/modules/core/components/ui/formElements/FieldRow.vue';
 import data from '../../schemas/fields-va.json';
 
 export default {
   components: {
-    FieldRow
+    FieldRow,
   },
 
   props: {
     formData: {
-      type: Object
+      type: Object,
     },
     editable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
+  },
+
+  setup() {
+    const v$ = useVuelidate();
+
+    return { v$: v$ };
   },
 
   data() {
     return {
-      fields: data.general
+      fields: data.general,
     };
   },
 
@@ -46,26 +53,11 @@ export default {
     formData: {
       fieldValues: {
         subject: {
-          required
-        }
-      }
-    }
+          required,
+        },
+      },
+    },
   },
-
-  created() {
-    this.setValidation();
-  },
-
-  methods: {
-    setValidation() {
-      this.fields = this.fields.map(field => {
-        if (field.options.fieldOptions?.errorMessage) {
-          this.$set(field.options.fieldOptions, 'validation', this.$v.formData.fieldValues[field.id]);
-        }
-        return field;
-      });
-    }
-  }
 };
 </script>
 

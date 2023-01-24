@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { search } from './searchService';
 import { parseField } from '@/modules/core/utils/helpers';
+import { search } from './searchService';
 
 export async function fetchFacilities(q = '') {
   const queries = [
@@ -10,10 +10,10 @@ export async function fetchFacilities(q = '') {
         {
           field: 'deleted_at',
           type: 'eq',
-          value: null
-        }
-      ]
-    }
+          value: null,
+        },
+      ],
+    },
   ];
 
   if (q) {
@@ -23,9 +23,9 @@ export async function fetchFacilities(q = '') {
         {
           field: 'title',
           type: 'like',
-          value: q
-        }
-      ]
+          value: q,
+        },
+      ],
     });
   }
   return search('facilities', queries);
@@ -39,10 +39,10 @@ export async function fetchFacilityData(id) {
         {
           field: 'id',
           type: 'eq',
-          value: id
-        }
-      ]
-    }
+          value: id,
+        },
+      ],
+    },
   ];
   return search('facilities', queries);
 }
@@ -55,15 +55,15 @@ export async function fetchFacilitiesByInstitutionId(id) {
         {
           field: 'deleted_at',
           type: 'eq',
-          value: null
+          value: null,
         },
         {
           field: 'institution_id',
           type: 'eq',
-          value: id
-        }
-      ]
-    }
+          value: id,
+        },
+      ],
+    },
   ];
 
   return search('facilities', queries);
@@ -90,7 +90,7 @@ export async function deleteFacility(payload) {
 export async function removeGroup(institutionId, facilityId, payload) {
   const { path, key } = payload;
   return axios.post(`/institutions/${institutionId}/facilities/${facilityId}/delete-group`, {
-    groupId: `${path}[${key}]`
+    groupId: `${path}[${key}]`,
   });
 }
 

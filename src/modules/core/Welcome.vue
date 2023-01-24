@@ -3,13 +3,19 @@
     <section class="hero">
       <div class="hero-body">
         <div>
-          <img class="logo" src="@/assets/images/logo/logo-elvis-white-compact.svg" />
+          <img class="logo" src="@/assets/images/logo/logo-elvis-white-compact.svg"
+            alt="Elvis logo"
+          />
           <div class="hero-text">
             <h1>Virtual and Transnational Access</h1>
-            <p>Towards smoother, faster and better access to natural history collections across Europe.</p>
+            <p>Towards smoother, faster and better access to natural
+              history collections across Europe
+            </p>
           </div>
         </div>
-        <b-button class="is-primary" @click="register">{{ $t('registration.register_now') }}</b-button>
+        <o-button class="primaryButton" @click="register">
+          {{ $t('registration.register_now') }}
+        </o-button>
       </div>
       <div class="map" />
 
@@ -29,7 +35,6 @@
         <a href="https://www.dissco.eu/" target="_blank"
           ><img :src="require('@/assets/images/logo/logo-dissco.png')" alt="DISSCO"
         /></a>
-        <!--<div class="banner-text">Building the future of European Natural Science Collections</div>-->
         <a href="https://www.synthesys.info/" target="_blank" class="logo-synthesys"
           ><img :src="require('@/assets/images/logo/logo-synthesys.png')" alt="Synthesys"
         /></a>
@@ -38,8 +43,8 @@
             ><img :src="require('@/assets/images/logo/EU-flag.png')" alt="European Union"
           /></a>
           <div class="eu-text">
-            Developed in the SYNTHESYS+ project with funding from the European Union’s Horizon 2020 research and
-            innovation programme under grant agreement ID:
+            Developed in the SYNTHESYS+ project with funding from the European
+            Union’s Horizon 2020 research and innovation programme under grant agreement ID:
             <a href="https://cordis.europa.eu/project/id/823827" tagret="_blank">823827</a>.
           </div>
         </div>
@@ -51,19 +56,19 @@
 <script>
 import { isAuthenticated } from '@/modules/core/utils/auth';
 import { fetchSettingsByKey } from '@/services/adminService';
-import { fallbackHomepage } from '@/i18n/fallback/homepage';
+import fallbackHomepage from '@/i18n/fallback/homepage';
 
 export default {
   data() {
     return {
-      content: null
+      content: null,
     };
   },
 
   computed: {
     homepageText() {
       return this.content;
-    }
+    },
   },
 
   created() {
@@ -86,8 +91,8 @@ export default {
         console.log('error: ', error);
         this.content = fallbackHomepage;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
