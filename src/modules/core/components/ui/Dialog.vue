@@ -8,7 +8,6 @@
         <o-button class="cancelButton" @click="cancelDialog">
             {{ $t(cancelText) }}
         </o-button>
-        {{ type }}
         <o-button v-if="confirmText" :class="!type && 'removeButton'" :variant="type && type" @click="confirmDialog">
             {{ $t(confirmText) }}
         </o-button>

@@ -113,8 +113,6 @@ export default {
 
   methods: {
     async getRequestData(id) {
-      console.log(id);
-
       try {
         this.formData = await fetchRequestData(id);
       } catch (error) {}

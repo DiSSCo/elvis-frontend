@@ -78,6 +78,8 @@ export default {
     },
 
     async handleFormField(payload) {
+      console.log(payload);
+
       if (payload.fieldId.includes('cetaf')) {
         const cetafPayload = {
           context: { resource: 'institutions', institutionId: this.institution.id },

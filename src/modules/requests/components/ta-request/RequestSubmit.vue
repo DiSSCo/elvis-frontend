@@ -3,7 +3,7 @@
     <div v-if="isBeingHandled" class="submit-form">
       <h1>{{ $t('request.submit_update_title') }}</h1>
       <p>{{ $t('request.submit_update_text_ta') }}</p>
-      <o-button variant="primary"
+      <o-button class="primaryButton"
         size="large"
         @click.prevent="submit('updateRequest')"
         :loading="loading"
@@ -14,7 +14,7 @@
     <div v-else class="submit-form">
       <h3 class="header">Finish</h3>
       <p>Ready to submit your Transnational Access request?</p>
-      <o-button variant="primary"
+      <o-button class="primaryButton"
         size="large"
         @click.prevent="submit('submitRequest')"
         :loading="loading"
