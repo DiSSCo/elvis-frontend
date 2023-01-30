@@ -28,7 +28,7 @@
           /></o-button>
         </o-tooltip>
         <o-button v-if="requestStatus !== 'approved'"
-          variant="primary" @click="submit"
+          class="primaryButton" @click="submit"
           :loading="loading"
         >{{
           $t('request.add_comment')

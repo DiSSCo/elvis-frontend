@@ -14,7 +14,8 @@
         v-bind="{ ...field.options, validation: this.v$.formData.fieldValues[field.id] || this.v$.formData.institutions }"
       />
     </form>
-    <div v-if="institutionHosts.length" class="institution-hosts">
+
+    <div v-if="institutionHosts.length && formData.institutions.length" class="institution-hosts">
       <div v-for="(host, index) in institutionHosts" :key="index" class="hosts">
         <form @submit.prevent>
           <component

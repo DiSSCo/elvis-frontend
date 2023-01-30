@@ -85,6 +85,12 @@ export default {
   background-color: #f6bb00 !important;
 }
 
+.secondaryButton {
+  background-color: #0c86c6 !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
 .tableButton {
   background-color: white;
   border-color: gray;

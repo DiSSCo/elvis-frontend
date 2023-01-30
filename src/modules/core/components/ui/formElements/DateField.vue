@@ -1,7 +1,7 @@
 <template>
   <div v-if="editable" class="date-picker">
     <o-datepicker
-      :value="date"
+      :modelValue="date"
       :placeholder="placeHolder"
       icon="calendar-today"
       position="top-right"
